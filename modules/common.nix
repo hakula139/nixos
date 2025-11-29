@@ -3,7 +3,7 @@
 {
   networking = {
     domain = "hakula.xyz";
-    useDHCP = true;
+    # useDHCP = true; # CloudCone requires Static IP
     firewall.enable = true;
   };
 

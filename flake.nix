@@ -19,12 +19,12 @@
     }@inputs:
     {
       nixosConfigurations = {
-        us = nixpkgs.lib.nixosSystem {
+        cloudcone-sc2 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = { inherit inputs; };
           modules = [
             disko.nixosModules.disko
-            ./hosts/us
+            ./hosts/cloudcone-sc2
           ];
         };
       };
