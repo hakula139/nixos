@@ -1,4 +1,4 @@
-{ modulesPath, ... }:
+{ modulesPath, pkgs, ... }:
 
 {
   imports = [
@@ -12,10 +12,10 @@
     device = "/dev/vda";
     configurationLimit = 10;
     extraInstallCommands = ''
-      ln -sfn /nix/var/nix/profiles/system/kernel /boot/vmlinuz
-      ln -sfn /nix/var/nix/profiles/system/initrd /boot/initrd
+      ${pkgs.coreutils}/bin/ln -sfn /nix/var/nix/profiles/system/kernel /boot/vmlinuz
+      ${pkgs.coreutils}/bin/ln -sfn /nix/var/nix/profiles/system/initrd /boot/initrd
 
-      cat <<EOF >/boot/grub/grub.conf
+      ${pkgs.coreutils}/bin/cat <<EOF >/boot/grub/grub.conf
       default=0
       timeout=1
       title NixOS
