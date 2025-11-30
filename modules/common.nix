@@ -57,6 +57,8 @@
     curl
     git
     htop
+    nil
+    nixfmt-rfc-style
     vim
   ];
 
