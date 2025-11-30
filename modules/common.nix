@@ -7,6 +7,9 @@
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
 
+  # ============================================================================
+  # Nix Settings
+  # ============================================================================
   nix.gc = {
     automatic = true;
     dates = "weekly";
@@ -24,6 +27,8 @@
   # ============================================================================
   # Users & Security
   # ============================================================================
+  users.defaultUserShell = pkgs.zsh;
+
   users.users.hakula = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
@@ -51,18 +56,37 @@
   };
 
   # ============================================================================
-  # Programs & Packages
+  # Shell Configuration
+  # ============================================================================
+  programs.zsh.enable = true;
+  environment.shells = [ pkgs.zsh ];
+
+  # ============================================================================
+  # Fonts
+  # Nerd Fonts provide icons for terminal tools like eza and starship
+  # ============================================================================
+  fonts.packages = [
+    pkgs.nerd-fonts.meslo-lg
+  ];
+
+  # ============================================================================
+  # System Packages
   # ============================================================================
   environment.systemPackages = with pkgs; [
     curl
     git
     htop
+    vim
+
+    # Nix tooling
     nil
     nixfmt-rfc-style
-    vim
   ];
 
-  # Enable nix-ld for running unpatched binaries.
+  # ============================================================================
+  # Nix-LD
+  # Enables running unpatched dynamically linked binaries
+  # ============================================================================
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
     curl
