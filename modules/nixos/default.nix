@@ -19,13 +19,7 @@ let
 
   subconverterPort = 25500;
   subconverterPkg = pkgs.callPackage ../../pkgs/subconverter.nix { };
-  subconverterPref = pkgs.writeText "subconverter-pref.ini" ''
-    [common]
-    api_mode = true
-    api_access_token = ""
-    listen = 127.0.0.1
-    port = ${toString subconverterPort}
-  '';
+  subconverterPref = ./subconverter-pref.ini;
 in
 {
   # ============================================================================
@@ -131,6 +125,13 @@ in
     mode = "0440";
   };
 
+  age.secrets.subconverter-nodes = {
+    file = ../../secrets/subconverter-nodes.age;
+    owner = "subconverter";
+    group = "subconverter";
+    mode = "0440";
+  };
+
   # ============================================================================
   # Services
   # ============================================================================
@@ -175,6 +176,11 @@ in
   # ----------------------------------------------------------------------------
   # Clash Subscription Converter (subconverter)
   # ----------------------------------------------------------------------------
+  systemd.tmpfiles.rules = [
+    "d /var/lib/subconverter 0755 subconverter subconverter -"
+    "L+ /var/lib/subconverter/nodes.txt - - - - ${config.age.secrets.subconverter-nodes.path}"
+  ];
+
   systemd.services.subconverter = {
     description = "clash subscription converter";
     after = [ "network-online.target" ];
@@ -234,7 +240,16 @@ in
       enableACME = true;
       forceSSL = true;
       acmeRoot = null;
-      locations."/".proxyPass = "http://127.0.0.1:${toString subconverterPort}";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString subconverterPort}";
+        extraConfig = ''
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+        '';
+      };
+      locations."/clash" = {
+        return = "302 /sub?target=clash&url=file:///var/lib/subconverter/nodes.txt";
+      };
     };
   };
 
