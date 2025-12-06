@@ -12,4 +12,5 @@ in
 {
   "cloudflare-credentials.age".publicKeys = allUsers ++ allHosts;
   "sing-box-config.age".publicKeys = allUsers ++ allHosts;
+  "subconverter-nodes.age".publicKeys = allUsers ++ allHosts;
 }
