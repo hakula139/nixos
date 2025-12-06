@@ -84,11 +84,7 @@
   # ============================================================================
   # Virtualization
   # ============================================================================
-  # Note: QEMU Guest Agent service is disabled because CloudCone does not expose
-  # the required virtio-serial channel (/dev/virtio-ports/...).
-  # However, the qemu-guest.nix profile (imported above) is kept for
-  # virtio drivers and udev rules.
-  # services.qemuGuest.enable = true;
+  services.qemuGuest.enable = true;
 
   # ============================================================================
   # System State
