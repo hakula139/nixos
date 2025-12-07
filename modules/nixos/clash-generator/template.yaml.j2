@@ -13,6 +13,14 @@ proxies:
       public-key: f1lSb7MxAlJNoUavDBDC2CVM3nFmX0FSWTOQM8mfXzM
       short-id: {{ short_id }}
     client-fingerprint: chrome
+    smux:
+      enabled: true
+      protocol: h2mux
+      padding: true
+      brutal-opts:
+        enabled: true
+        up: 200
+        down: 200
 
   - name: 🇺🇸 US-2 (gRPC)
     type: vmess
@@ -47,17 +55,17 @@ proxy-groups:
       - 🇺🇸 US-2 (CDN)
 
 rule-providers:
-  Reject:
-    type: http
-    behavior: domain
-    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
-    path: ./ruleset/reject.yaml
-    interval: 86400
   LAN:
     type: http
     behavior: ipcidr
     url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt
     path: ./ruleset/lancidr.yaml
+    interval: 86400
+  Reject:
+    type: http
+    behavior: domain
+    url: https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt
+    path: ./ruleset/reject.yaml
     interval: 86400
   iCloud:
     type: http
@@ -110,8 +118,8 @@ rule-providers:
 
 rules:
   - DOMAIN-SUFFIX,hakula.xyz,DIRECT
-  - RULE-SET,Reject,REJECT
   - RULE-SET,LAN,DIRECT,no-resolve
+  - RULE-SET,Reject,REJECT
   - RULE-SET,iCloud,DIRECT
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Google,PROXY
