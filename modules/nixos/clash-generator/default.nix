@@ -8,7 +8,7 @@ in
 pkgs.writeShellScript "clash-generator" ''
   set -euo pipefail
   ${pythonEnv}/bin/python3 ${generator} \
-    "${config.age.secrets.clash-users.path}" \
-    "${template}" \
-    "/var/lib/clash-subscriptions"
+    -u "${config.age.secrets.clash-users.path}" \
+    -t "${template}" \
+    -o "/var/lib/clash-subscriptions"
 ''
