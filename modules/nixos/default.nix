@@ -81,13 +81,25 @@ in
   # ============================================================================
   users.defaultUserShell = pkgs.zsh;
 
+  users.users.root.openssh.authorizedKeys.keys = [ shared.sshKeys.hakula ];
+
   users.users.hakula = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [ shared.sshKeys.hakula ];
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [ shared.sshKeys.hakula ];
+  users.users.xray = {
+    isSystemUser = true;
+    group = "xray";
+  };
+  users.groups.xray = { };
+
+  users.users.clashgen = {
+    isSystemUser = true;
+    group = "clashgen";
+  };
+  users.groups.clashgen = { };
 
   users.users.acme = {
     isSystemUser = true;
@@ -95,11 +107,15 @@ in
   };
   users.groups.acme = { };
 
-  users.users.xray = {
+  users.users.nginx = {
     isSystemUser = true;
-    group = "xray";
+    group = "nginx";
+    extraGroups = [
+      "acme"
+      "clashgen"
+    ];
   };
-  users.groups.xray = { };
+  users.groups.nginx = { };
 
   security.sudo.wheelNeedsPassword = false;
 
@@ -117,12 +133,14 @@ in
     file = ../../secrets/xray-config.json.age;
     owner = "xray";
     group = "xray";
-    mode = "0440";
+    mode = "0400";
   };
 
   age.secrets.clash-users = {
     file = ../../secrets/clash-users.json.age;
-    mode = "0444";
+    owner = "clashgen";
+    group = "clashgen";
+    mode = "0400";
   };
 
   # ============================================================================
@@ -175,18 +193,25 @@ in
       Type = "oneshot";
       ExecStart = clashGenerator;
       RemainAfterExit = true;
+      User = "clashgen";
+      Group = "clashgen";
+      NoNewPrivileges = true;
+      ProtectSystem = "strict";
+      ProtectHome = true;
+      PrivateTmp = true;
+      StateDirectory = "clash-subscriptions";
+      StateDirectoryMode = "0750";
+      WorkingDirectory = "/var/lib/clash-subscriptions";
     };
   };
-
-  systemd.tmpfiles.rules = [
-    "d /var/lib/clash-subscriptions 0755 root root -"
-  ];
 
   # ----------------------------------------------------------------------------
   # Web Server (nginx + ACME)
   # ----------------------------------------------------------------------------
   services.nginx = {
     enable = true;
+    user = "nginx";
+    group = "nginx";
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     recommendedProxySettings = true;

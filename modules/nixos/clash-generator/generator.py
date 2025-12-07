@@ -59,16 +59,6 @@ def load_template(path: Path) -> Template | None:
     return None
 
 
-def ensure_output_dir(output_dir: Path) -> bool:
-    try:
-        output_dir.mkdir(parents=True, exist_ok=True)
-        output_dir.chmod(0o755)
-        return True
-    except OSError as e:
-        logging.error('Failed to prepare output directory %s: %s', output_dir, e)
-        return False
-
-
 def main() -> int:
     args = parse_args()
     users = load_users(args.users_path)
@@ -77,9 +67,6 @@ def main() -> int:
 
     template = load_template(args.template_path)
     if template is None:
-        return 1
-
-    if not ensure_output_dir(args.output_dir):
         return 1
 
     success_count = 0
@@ -108,7 +95,7 @@ def main() -> int:
         output_path: Path = args.output_dir / f'{uuid}.yaml'
         try:
             output_path.write_text(config)
-            output_path.chmod(0o644)
+            output_path.chmod(0o640)
         except OSError as e:
             logging.error('Failed to write config for %s: %s', name, e)
             failure_count += 1
