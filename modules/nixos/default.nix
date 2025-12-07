@@ -198,11 +198,11 @@ in
     '';
 
     # SNI-based routing: Route traffic based on TLS Server Name Indication
-    # - cn.bing.com (REALITY) → xray (port 8444)
+    # - www.microsoft.com (REALITY) → xray (port 8444)
     # - Everything else → nginx HTTPS (port 8443)
     streamConfig = ''
       map $ssl_preread_server_name $backend {
-        cn.bing.com 127.0.0.1:8444;
+        www.microsoft.com 127.0.0.1:8444;
         default 127.0.0.1:8443;
       }
 

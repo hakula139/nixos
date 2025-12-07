@@ -8,13 +8,13 @@ proxies:
     tls: true
     udp: true
     flow: xtls-rprx-vision
-    servername: cn.bing.com
+    servername: www.microsoft.com
     reality-opts:
       public-key: bHzc9AjLZiUGoZBGvDmo7XBcewkh9Vqukvzb8CTBnVQ
       short-id: {{ short_id }}
     client-fingerprint: chrome
 
-  - name: 🇺🇸 US-2 (gRPC)
+  - name: 🇺🇸 US-2
     type: vmess
     server: us.hakula.xyz
     port: 443
@@ -43,7 +43,7 @@ proxy-groups:
     type: select
     proxies:
       - 🇺🇸 US-1
-      - 🇺🇸 US-2 (gRPC)
+      - 🇺🇸 US-2
       - 🇺🇸 US-2 (CDN)
 
 rule-providers:
