@@ -17,7 +17,10 @@ let
     cloudflareIPs.ipv4 ++ cloudflareIPs.ipv6
   );
 
-  clashGenerator = import ./clash-generator { inherit config pkgs; };
+  # REALITY SNI Host
+  # If you change this, also update secrets/xray-config.json.age.
+  realitySniHost = "www.microsoft.com";
+  clashGenerator = import ./clash-generator { inherit config pkgs realitySniHost; };
 in
 {
   # ============================================================================
@@ -198,11 +201,11 @@ in
     '';
 
     # SNI-based routing: Route traffic based on TLS Server Name Indication
-    # - www.microsoft.com (REALITY) → xray (port 8444)
+    # - REALITY → Xray (port 8444)
     # - Everything else → nginx HTTPS (port 8443)
     streamConfig = ''
       map $ssl_preread_server_name $backend {
-        www.microsoft.com 127.0.0.1:8444;
+        ${realitySniHost} 127.0.0.1:8444;
         default 127.0.0.1:8443;
       }
 

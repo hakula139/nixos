@@ -8,7 +8,7 @@ proxies:
     tls: true
     udp: true
     flow: xtls-rprx-vision
-    servername: www.microsoft.com
+    servername: {{ sni_host }}
     reality-opts:
       public-key: bHzc9AjLZiUGoZBGvDmo7XBcewkh9Vqukvzb8CTBnVQ
       short-id: {{ short_id }}

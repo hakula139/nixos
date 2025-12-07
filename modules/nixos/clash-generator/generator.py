@@ -25,6 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--users-path', type=Path, required=True)
     parser.add_argument('-t', '--template-path', type=Path, required=True)
+    parser.add_argument('-s', '--sni-host', type=str, required=True)
     parser.add_argument('-o', '--output-dir', type=Path, required=True)
     return parser.parse_args()
 
@@ -94,7 +95,11 @@ def main() -> int:
             continue
 
         try:
-            config = template.render(uuid=uuid, short_id=short_id)
+            config = template.render(
+                uuid=uuid,
+                short_id=short_id,
+                sni_host=args.sni_host,
+            )
         except Exception as e:
             logging.error('Failed to render template for %s: %s', name, e)
             failure_count += 1

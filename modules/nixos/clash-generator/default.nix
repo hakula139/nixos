@@ -1,4 +1,12 @@
-{ config, pkgs }:
+{
+  config,
+  pkgs,
+  realitySniHost,
+}:
+
+# ============================================================================
+# Clash Subscription Generator
+# ============================================================================
 
 let
   pythonEnv = pkgs.python3.withPackages (ps: [ ps.jinja2 ]);
@@ -10,5 +18,6 @@ pkgs.writeShellScript "clash-generator" ''
   ${pythonEnv}/bin/python3 ${generator} \
     -u "${config.age.secrets.clash-users.path}" \
     -t "${template}" \
+    -s "${realitySniHost}" \
     -o "/var/lib/clash-subscriptions"
 ''
