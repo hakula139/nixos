@@ -38,5 +38,6 @@ in
     ];
     keep-outputs = true;
     keep-derivations = true;
+    download-buffer-size = 536870912;
   };
 }
