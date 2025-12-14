@@ -29,10 +29,10 @@
   };
 
   # ----------------------------------------------------------------------------
-  # systemd service
+  # Systemd service
   # ----------------------------------------------------------------------------
   systemd.services.xray = {
-    description = "xray service";
+    description = "Xray service";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {

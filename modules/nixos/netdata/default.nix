@@ -5,9 +5,9 @@
   ...
 }:
 
-# ============================================================================
+# ==============================================================================
 # Netdata (Monitoring Service)
-# ============================================================================
+# ==============================================================================
 
 let
   netdataPkgsUnstable = import inputs.nixpkgs-unstable {
@@ -41,6 +41,9 @@ let
   '';
 in
 {
+  # ----------------------------------------------------------------------------
+  # Secrets (agenix)
+  # ----------------------------------------------------------------------------
   age.secrets.qq-smtp-authcode = {
     file = ../../../secrets/qq-smtp-authcode.age;
     owner = "netdata";
@@ -48,6 +51,9 @@ in
     mode = "0400";
   };
 
+  # ----------------------------------------------------------------------------
+  # Netdata service
+  # ----------------------------------------------------------------------------
   services.netdata = {
     enable = true;
     package = netdataPkgUnstable;
@@ -75,6 +81,27 @@ in
     };
   };
 
+  # ----------------------------------------------------------------------------
+  # Systemd service
+  # ----------------------------------------------------------------------------
+  environment.systemPackages = [
+    systemdCatNative
+    sendmail
+  ];
+
+  systemd.services.netdata = {
+    path = [
+      pkgs.systemd
+      systemdCatNative
+      pkgs.msmtp
+      sendmail
+    ];
+    environment.NETDATA_PREFIX = "${netdataPkgUnstable}";
+  };
+
+  # ----------------------------------------------------------------------------
+  # Email notification
+  # ----------------------------------------------------------------------------
   environment.etc."msmtprc" = {
     mode = "0444";
     text = ''
@@ -101,20 +128,5 @@ in
       SEND_EMAIL="YES"
       DEFAULT_RECIPIENT_EMAIL="hakula139@qq.com"
     '';
-  };
-
-  environment.systemPackages = [
-    systemdCatNative
-    sendmail
-  ];
-
-  systemd.services.netdata = {
-    path = [
-      pkgs.systemd
-      systemdCatNative
-      pkgs.msmtp
-      sendmail
-    ];
-    environment.NETDATA_PREFIX = "${netdataPkgUnstable}";
   };
 }
