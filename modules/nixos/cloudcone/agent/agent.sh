@@ -111,6 +111,8 @@ collect_processes() {
   ps -e -o pid=,ppid=,rss=,vsz=,uname=,pmem=,pcpu=,comm=,cmd= --sort=-pcpu,-pmem 2>/dev/null \
     | awk '
         BEGIN { out="" }
+        # Skip processes owned by ccagent
+        $5 == "ccagent" { next }
         {
           cmd=$9
           for (i=10; i<=NF; i++) cmd=cmd " " $i
