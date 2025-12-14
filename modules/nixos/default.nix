@@ -256,6 +256,33 @@ in
     };
   };
 
+  systemd.services.netdata =
+    let
+      systemdCatNative = pkgs.writeShellScriptBin "systemd-cat-native" ''
+        tag=""
+        out=()
+        for arg in "$@"; do
+          if [ "$arg" = "--log-as-netdata" ]; then
+            tag="netdata"
+          else
+            out+=("$arg")
+          fi
+        done
+
+        if [ -n "$tag" ]; then
+          exec ${pkgs.systemd}/bin/systemd-cat -t "$tag" "''${out[@]}"
+        else
+          exec ${pkgs.systemd}/bin/systemd-cat "''${out[@]}"
+        fi
+      '';
+    in
+    {
+      path = [
+        pkgs.systemd
+        systemdCatNative
+      ];
+    };
+
   # ----------------------------------------------------------------------------
   # Web Server (nginx + ACME)
   # ----------------------------------------------------------------------------
