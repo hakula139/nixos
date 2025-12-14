@@ -136,6 +136,13 @@ in
   # ============================================================================
   # Secrets (agenix)
   # ============================================================================
+  age.secrets.cachix-auth-token = {
+    file = ../../secrets/cachix-auth-token.age;
+    owner = "hakula";
+    group = "users";
+    mode = "0400";
+  };
+
   age.secrets.cloudflare-credentials = {
     file = ../../secrets/cloudflare-credentials.age;
     owner = "acme";

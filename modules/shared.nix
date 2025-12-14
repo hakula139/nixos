@@ -30,8 +30,12 @@ in
 
   # Nix development tools
   nixTooling = with pkgs; [
+    cachix
     nil
+    nix-tree
     nixfmt-rfc-style
+    nom
+    nvd
   ];
 
   # Nix settings

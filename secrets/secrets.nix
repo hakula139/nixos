@@ -8,6 +8,7 @@ let
   publicKeys = builtins.attrValues keys.users ++ builtins.attrValues keys.hosts;
 in
 {
+  "cachix-auth-token.age".publicKeys = publicKeys;
   "cloudflare-credentials.age".publicKeys = publicKeys;
   "xray-config.json.age".publicKeys = publicKeys;
   "clash-users.json.age".publicKeys = publicKeys;
