@@ -22,7 +22,7 @@
   # Secrets (agenix)
   # ----------------------------------------------------------------------------
   age.secrets.xray-config = {
-    file = ../../../secrets/xray-config.json.age;
+    file = ../../../secrets/shared/xray-config.json.age;
     owner = "xray";
     group = "xray";
     mode = "0400";
