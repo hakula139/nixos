@@ -17,8 +17,9 @@ let
 in
 {
   imports = [
-    ./ssh
+    ./cachix
     ./netdata
+    ./ssh
     ./xray
     (import ./clash { inherit realitySniHost; })
     (import ./nginx { inherit realitySniHost; })
@@ -97,16 +98,6 @@ in
   };
 
   security.sudo.wheelNeedsPassword = false;
-
-  # ============================================================================
-  # Secrets (agenix)
-  # ============================================================================
-  age.secrets.cachix-auth-token = {
-    file = ../../secrets/cachix-auth-token.age;
-    owner = "hakula";
-    group = "users";
-    mode = "0400";
-  };
 
   # ============================================================================
   # Environment

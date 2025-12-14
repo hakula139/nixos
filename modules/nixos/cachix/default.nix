@@ -1,19 +1,17 @@
 { ... }:
 
 # ==============================================================================
-# OpenSSH (Remote Access)
+# Cachix (Binary Cache Tooling)
 # ==============================================================================
 
 {
   # ----------------------------------------------------------------------------
-  # SSH
+  # Secrets (agenix)
   # ----------------------------------------------------------------------------
-  services.openssh = {
-    enable = true;
-    ports = [ 35060 ];
-    settings = {
-      PermitRootLogin = "prohibit-password";
-      PasswordAuthentication = false;
-    };
+  age.secrets.cachix-auth-token = {
+    file = ../../../secrets/cachix-auth-token.age;
+    owner = "hakula";
+    group = "users";
+    mode = "0400";
   };
 }
