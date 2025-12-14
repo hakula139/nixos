@@ -95,7 +95,13 @@ in
     '';
   };
 
-  environment.etc."netdata/health_alarm_notify.conf".source = ./health_alarm_notify.conf;
+  environment.etc."netdata/health_alarm_notify.conf" = {
+    mode = "0444";
+    text = ''
+      SEND_EMAIL="YES"
+      DEFAULT_RECIPIENT_EMAIL="hakula139@qq.com"
+    '';
+  };
 
   environment.systemPackages = [
     systemdCatNative
