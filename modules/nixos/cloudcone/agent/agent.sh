@@ -13,6 +13,11 @@ readonly PING_TARGET='1.1.1.1'
 readonly DEFAULT_SERVER_KEY_FILE='/run/agenix/cloudcone-sc2-server-key'
 readonly SERVER_KEY_FILE="${CLOUDCONE_SERVER_KEY_FILE:-${DEFAULT_SERVER_KEY_FILE}}"
 
+# If set to 1, do not send to gateway; print the payload to stdout instead.
+readonly DRY_RUN="${CLOUDCONE_DRY_RUN:-0}"
+# If set to 1, redact the server key from output. Defaults to DRY_RUN value.
+readonly REDACT_SERVERKEY="${CLOUDCONE_REDACT_SERVERKEY:-${DRY_RUN}}"
+
 # ==============================================================================
 # Utility Functions
 # ==============================================================================
@@ -103,8 +108,21 @@ collect_ipv6_addresses() {
 }
 
 collect_processes() {
-  ps -e -o pid,ppid,rss,vsz,uname,pmem,pcpu,comm,cmd --sort=-pcpu,-pmem 2>/dev/null \
-    | awk 'BEGIN {out=""} {out=out $1","$2","$3","$4","$5","$6","$7","$8","$9";"} END {print out}' \
+  ps -e -o pid=,ppid=,rss=,vsz=,uname=,pmem=,pcpu=,comm=,cmd= --sort=-pcpu,-pmem 2>/dev/null \
+    | awk '
+        BEGIN { out="" }
+        {
+          cmd=$9
+          for (i=10; i<=NF; i++) cmd=cmd " " $i
+          gsub(/[\r\n\t]/, " ", cmd)
+          gsub(/[ ]+/, " ", cmd)
+          gsub(/%/, "%25", cmd)
+          gsub(/,/, "%2C", cmd)
+          gsub(/;/, "%3B", cmd)
+          out=out $1","$2","$3","$4","$5","$6","$7","$8","cmd";"
+        }
+        END { print out }
+      ' \
     || true
 }
 
@@ -120,7 +138,11 @@ main() {
 
   # Agent metadata
   append_metric "agent_version" "${AGENT_VERSION}"
-  append_metric "serverkey" "${server_key}"
+  if [[ "${REDACT_SERVERKEY}" == "1" ]]; then
+    append_metric "serverkey" "<redacted>"
+  else
+    append_metric "serverkey" "${server_key}"
+  fi
   append_metric "gateway" "${GATEWAY}"
   append_metric "time" "$(date +%s)"
 
@@ -179,6 +201,11 @@ main() {
 
   # Process list
   append_metric "processes" "$(collect_processes)"
+
+  if [[ "${DRY_RUN}" == "1" ]]; then
+    printf 'data=%s\n' "${POST}"
+    return 0
+  fi
 
   # Send to CloudCone gateway
   echo "data=${POST}" | curl -m 50 -k -s -d @- "${GATEWAY}" >/dev/null || {
