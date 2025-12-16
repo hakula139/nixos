@@ -5,19 +5,18 @@
   # Inputs
   # ============================================================================
   inputs = {
-    # Nixpkgs - NixOS 25.05 stable release
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Nixpkgs - NixOS 25.11 stable release
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     # macOS system configuration
     nix-darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-25.05";
+      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # User environment management
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -47,7 +46,6 @@
     {
       self,
       nixpkgs,
-      nixpkgs-unstable,
       disko,
       home-manager,
       nix-darwin,

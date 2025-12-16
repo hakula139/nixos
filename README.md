@@ -44,7 +44,7 @@ curl -fsSL https://install.determinate.systems/nix | sh -s -- install
 Bootstrap with [nix-darwin](https://github.com/LnL7/nix-darwin) (first switch):
 
 ```bash
-sudo nix run nix-darwin/nix-darwin-25.05#darwin-rebuild -- switch --flake ".#hakula-macbook"
+sudo nix run nix-darwin/nix-darwin-25.11#darwin-rebuild -- switch --flake ".#hakula-macbook"
 ```
 
 ### Apply Darwin Configuration
