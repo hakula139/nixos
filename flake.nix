@@ -139,6 +139,7 @@
                 useUserPackages = true;
                 users.hakula = import ./home/hakula.nix;
                 backupFileExtension = "bak";
+                extraSpecialArgs.isNixOS = false;
               };
             }
             ./hosts/hakula-macbook
