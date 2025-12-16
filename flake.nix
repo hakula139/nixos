@@ -85,6 +85,9 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.hakula = import ./home/hakula.nix;
+                extraSpecialArgs = {
+                  isNixOS = true;
+                };
                 backupFileExtension = "bak";
               };
             }
@@ -127,7 +130,10 @@
         # ----------------------------------------------------------------------
         hakula-linux = home-manager.lib.homeManagerConfiguration {
           pkgs = pkgsFor "x86_64-linux";
-          extraSpecialArgs = { inherit inputs; };
+          extraSpecialArgs = {
+            inherit inputs;
+            isNixOS = false;
+          };
           modules = [
             ./home/hakula.nix
           ];

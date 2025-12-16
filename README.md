@@ -81,6 +81,12 @@ If Home Manager is installed globally:
 home-manager switch --flake ".#hakula-linux"
 ```
 
+After setting up the alias:
+
+```bash
+nixsw hakula-linux
+```
+
 ## Update
 
 ```bash
