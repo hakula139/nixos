@@ -98,7 +98,23 @@ nix flake update
 This repository uses [nixfmt-rfc-style](https://github.com/NixOS/nixfmt). Format all Nix files with:
 
 ```bash
-nix fmt
+git ls-files '*.nix' -z | xargs -0 nix fmt
+```
+
+## Pre-commit
+
+This repository uses a Nix-native pre-commit setup (via `git-hooks.nix`).
+
+Enable hooks locally (installs into `.git/hooks`):
+
+```bash
+nix develop -c zsh
+```
+
+CI-style check (does not modify your working tree; fails if formatting would change files):
+
+```bash
+nix flake check
 ```
 
 ## Secrets

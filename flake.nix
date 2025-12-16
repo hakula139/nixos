@@ -32,6 +32,12 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Pre-commit hooks
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # ============================================================================
@@ -46,6 +52,7 @@
       home-manager,
       nix-darwin,
       agenix,
+      git-hooks-nix,
       ...
     }@inputs:
     let
@@ -63,6 +70,19 @@
           overlays = [
             agenix.overlays.default
           ];
+        };
+
+      preCommitCheckFor =
+        system:
+        git-hooks-nix.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            check-added-large-files.enable = true;
+            check-yaml.enable = true;
+            end-of-file-fixer.enable = true;
+            trim-trailing-whitespace.enable = true;
+            nixfmt-rfc-style.enable = true;
+          };
         };
     in
     {
@@ -85,10 +105,10 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.hakula = import ./home/hakula.nix;
+                backupFileExtension = "bak";
                 extraSpecialArgs = {
                   isNixOS = true;
                 };
-                backupFileExtension = "bak";
               };
             }
             ./hosts/cloudcone-sc2
@@ -130,15 +150,36 @@
         # ----------------------------------------------------------------------
         hakula-linux = home-manager.lib.homeManagerConfiguration {
           pkgs = pkgsFor "x86_64-linux";
+          modules = [
+            ./home/hakula.nix
+          ];
           extraSpecialArgs = {
             inherit inputs;
             isNixOS = false;
           };
-          modules = [
-            ./home/hakula.nix
-          ];
         };
       };
+
+      # ========================================================================
+      # Pre-commit Hooks (git-hooks.nix)
+      # ========================================================================
+      checks = forAllSystems (system: {
+        pre-commit = preCommitCheckFor system;
+      });
+
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = pkgsFor system;
+          preCommitCheck = preCommitCheckFor system;
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = preCommitCheck.enabledPackages;
+            shellHook = preCommitCheck.shellHook;
+          };
+        }
+      );
 
       # ========================================================================
       # Formatter (nix fmt)
