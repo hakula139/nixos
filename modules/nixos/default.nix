@@ -19,6 +19,7 @@ in
   imports = [
     ./cachix
     ./cloudcone
+    ./cloudreve
     ./netdata
     ./ssh
     ./xray

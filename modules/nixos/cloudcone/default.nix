@@ -22,11 +22,13 @@ in
     serverKeyAgeFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
+      description = "Path to the CloudCone server key file";
     };
 
     intervalSeconds = lib.mkOption {
       type = lib.types.ints.positive;
       default = 60;
+      description = "Interval in seconds between CloudCone agent runs";
     };
   };
 
