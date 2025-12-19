@@ -77,7 +77,8 @@ in
 
         timestamp=$(date +%Y%m%d-%H%M%S)
         backupDir="$STATE_DIRECTORY/$timestamp"
-        toPath="${lib.escapeShellArg cfg.backup.toPath}/$timestamp"
+        toPathBase=${lib.escapeShellArg cfg.backup.toPath}
+        toPath="$toPathBase/$timestamp"
 
         install -d -m 0700 "$backupDir"
 
