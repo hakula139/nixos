@@ -11,60 +11,20 @@
 
 let
   cfg = config.hakula.services.cloudreve;
+  serviceName = "cloudreve";
+  redisSocket = "/run/redis-${serviceName}/redis.sock";
 
-  serviceUser = "cloudreve";
-  serviceGroup = "cloudreve";
-
-  stateDirName = "cloudreve";
-
-  dbName = "cloudreve";
-  dbUser = "cloudreve";
-  dbSocketDir = "/run/postgresql";
-
-  redisInstance = "cloudreve";
-  redisSocket = "/run/redis-cloudreve/redis.sock";
-  redisGroup = "redis-${redisInstance}";
-
-  cloudreve = pkgs.stdenv.mkDerivation rec {
-    pname = "cloudreve";
-    version = "4.10.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/cloudreve/cloudreve/releases/download/${version}/cloudreve_${version}_linux_amd64.tar.gz";
-      hash = "sha256-tNZg+ocgr65vyBkRDQhyX0DmLQuO0JwbXUzTeL4hSAc=";
-    };
-
-    sourceRoot = ".";
-
-    nativeBuildInputs = [ pkgs.autoPatchelfHook ];
-    buildInputs = [ pkgs.stdenv.cc.cc.lib ];
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm755 cloudreve $out/bin/cloudreve
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Self-hosted file management and sharing system";
-      homepage = "https://cloudreve.org";
-      license = lib.licenses.gpl3Plus;
-      platforms = [ "x86_64-linux" ];
-      mainProgram = "cloudreve";
-    };
-  };
-
-  cloudreveConfTemplate = pkgs.writeText "cloudreve-conf.ini" ''
+  configFile = pkgs.writeText "cloudreve-conf.ini" ''
     [System]
     Mode = master
     Listen = :${toString cfg.port}
 
     [Database]
     Type = postgres
-    Host = ${dbSocketDir}
+    Host = /run/postgresql
     Port = 5432
-    User = ${dbUser}
-    Name = ${dbName}
+    User = ${serviceName}
+    Name = ${serviceName}
     UnixSocket = true
 
     [Redis]
@@ -91,14 +51,12 @@ in
     # ----------------------------------------------------------------------------
     # Users & Groups
     # ----------------------------------------------------------------------------
-    users.users.${serviceUser} = {
+    users.users.${serviceName} = {
       isSystemUser = true;
-      group = serviceGroup;
-      extraGroups = [ redisGroup ];
-      home = "/var/lib/${stateDirName}";
-      createHome = false;
+      group = serviceName;
+      extraGroups = [ "redis-${serviceName}" ];
     };
-    users.groups.${serviceGroup} = { };
+    users.groups.${serviceName} = { };
 
     # ----------------------------------------------------------------------------
     # PostgreSQL (local)
@@ -106,16 +64,16 @@ in
     services.postgresql = {
       enable = true;
       enableTCPIP = false;
-      ensureDatabases = [ dbName ];
+      ensureDatabases = [ serviceName ];
       ensureUsers = [
         {
-          name = dbUser;
+          name = serviceName;
           ensureDBOwnership = true;
         }
       ];
       authentication = lib.mkForce ''
         local all postgres peer
-        local ${dbName} ${dbUser} peer
+        local ${serviceName} ${serviceName} peer
         local all all reject
       '';
     };
@@ -123,7 +81,7 @@ in
     # ----------------------------------------------------------------------------
     # Redis (local)
     # ----------------------------------------------------------------------------
-    services.redis.servers.${redisInstance} = {
+    services.redis.servers.${serviceName} = {
       enable = true;
       port = 0;
       unixSocket = redisSocket;
@@ -140,29 +98,29 @@ in
       after = [
         "network.target"
         "postgresql.service"
-        "redis-${redisInstance}.service"
+        "redis-${serviceName}.service"
       ];
       requires = [
         "postgresql.service"
-        "redis-${redisInstance}.service"
+        "redis-${serviceName}.service"
       ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        install -m 0755 ${lib.getExe cloudreve} "$STATE_DIRECTORY/cloudreve"
+        install -m 0755 ${lib.getExe pkgs.cloudreve} "$STATE_DIRECTORY/cloudreve"
         install -d -m 0750 "$STATE_DIRECTORY/data"
         if [ ! -f "$STATE_DIRECTORY/data/conf.ini" ]; then
-          install -m 0600 ${cloudreveConfTemplate} "$STATE_DIRECTORY/data/conf.ini"
+          install -m 0600 ${configFile} "$STATE_DIRECTORY/data/conf.ini"
         fi
       '';
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "%S/${stateDirName}/cloudreve";
+        ExecStart = "%S/${serviceName}/cloudreve";
         Restart = "on-failure";
         RestartSec = "5s";
-        User = serviceUser;
-        Group = serviceGroup;
+        User = serviceName;
+        Group = serviceName;
         NoNewPrivileges = true;
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -172,11 +130,11 @@ in
         ProtectKernelModules = true;
         RestrictSUIDSGID = true;
         LockPersonality = true;
-        StateDirectory = stateDirName;
+        StateDirectory = serviceName;
         StateDirectoryMode = "0750";
         UMask = "0077";
-        WorkingDirectory = "%S/${stateDirName}";
-        ReadWritePaths = [ "%S/${stateDirName}" ];
+        WorkingDirectory = "%S/${serviceName}";
+        ReadWritePaths = [ "%S/${serviceName}" ];
       };
     };
   };
