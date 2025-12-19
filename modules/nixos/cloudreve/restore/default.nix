@@ -37,8 +37,8 @@ in
     # --------------------------------------------------------------------------
     age.secrets.cloudreve-rclone-config = lib.mkIf isRemote {
       file = ../../../../secrets/shared/cloudreve-rclone-config.age;
-      owner = "root";
-      group = "root";
+      owner = serviceName;
+      group = serviceName;
       mode = "0400";
     };
 
