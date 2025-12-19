@@ -91,6 +91,7 @@ in
         echo "==> Creating Redis data archive..."
         redis-cli -s ${lib.escapeShellArg redisSocket} --rdb "$backupDir/dump.rdb"
         tar -czf "$backupDir/redis_data.tgz" -C "$backupDir" dump.rdb
+        rm -f "$backupDir/dump.rdb"
 
         ${lib.optionalString isRemote ''
           echo "==> Uploading snapshot to remote storage..."
