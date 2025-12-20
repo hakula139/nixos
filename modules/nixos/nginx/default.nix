@@ -211,7 +211,8 @@ in
         };
       };
 
-      # Xray WebSocket proxy
+      # Xray WebSocket proxy (with Cloudflare CDN)
+      # Note: We use WebSocket instead of gRPC to avoid Cloudflare's DDoS protection false positives.
       virtualHosts."us-1-cdn.hakula.xyz" = lib.mkIf config.hakula.services.xray.ws.enable (
         commonVhostConfig
         // {
