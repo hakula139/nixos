@@ -211,34 +211,20 @@ in
         };
       };
 
-      # Xray gRPC proxy
-      virtualHosts."us-1-cdn.hakula.xyz" = lib.mkIf config.hakula.services.xray.grpc.enable (
+      # Xray WebSocket proxy
+      virtualHosts."us-1-cdn.hakula.xyz" = lib.mkIf config.hakula.services.xray.ws.enable (
         commonVhostConfig
         // {
-          locations."~ ^/grpc(/.*)?$" = {
+          http2 = false;
+          locations."/ws" = {
+            proxyPass = "http://127.0.0.1:${toString config.hakula.services.xray.ws.port}";
+            proxyWebsockets = true;
             extraConfig = ''
-              grpc_pass grpc://127.0.0.1:${toString config.hakula.services.xray.grpc.port};
-              error_page 502 = /error502grpc;
-
-              grpc_set_header Host $host;
-              grpc_set_header X-Real-IP $remote_addr;
-              grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              grpc_set_header X-Forwarded-Proto $scheme;
-              grpc_set_header X-Forwarded-Host $server_name;
-
-              grpc_connect_timeout 60s;
-              grpc_send_timeout 60s;
-              grpc_read_timeout 300s;
+              proxy_redirect off;
+              proxy_connect_timeout 60s;
+              proxy_send_timeout 60s;
+              proxy_read_timeout 300s;
             '';
-          };
-          locations."= /error502grpc" = {
-            extraConfig = ''
-              internal;
-              default_type application/grpc;
-              add_header grpc-status 14;
-              add_header content-length 0;
-            '';
-            return = "204";
           };
           # Redirect all other requests to main site
           locations."/" = {

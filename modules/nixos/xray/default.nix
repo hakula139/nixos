@@ -5,7 +5,7 @@
 }:
 
 # ==============================================================================
-# Xray (VLESS + REALITY / gRPC)
+# Xray (VLESS + REALITY / WebSocket)
 # ==============================================================================
 
 let
@@ -18,13 +18,13 @@ in
   options.hakula.services.xray = {
     enable = lib.mkEnableOption "Xray proxy server";
 
-    grpc = {
-      enable = lib.mkEnableOption "VLESS + gRPC mode";
+    ws = {
+      enable = lib.mkEnableOption "VLESS + WebSocket mode";
 
       port = lib.mkOption {
         type = lib.types.port;
         default = 8445;
-        description = "Local port for Xray gRPC inbound";
+        description = "Local port for Xray WebSocket inbound";
       };
     };
   };

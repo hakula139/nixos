@@ -108,7 +108,7 @@
   hakula.services.postgresql.enable = true;
   hakula.services.xray = {
     enable = true;
-    grpc.enable = true;
+    ws.enable = true;
   };
   services.qemuGuest.enable = true;
 
