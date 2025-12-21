@@ -41,7 +41,19 @@ in
       group = serviceName;
       home = stateDir;
       createHome = true;
-      linger = false;
+      linger = true;
+      subUidRanges = [
+        {
+          startUid = 100000;
+          count = 65536;
+        }
+      ];
+      subGidRanges = [
+        {
+          startGid = 100000;
+          count = 65536;
+        }
+      ];
     };
     users.groups.${serviceName} = { };
 
