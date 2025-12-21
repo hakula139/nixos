@@ -99,6 +99,7 @@
       toPath = "b2:hakula-backup/cloudcone-sc2/cloudreve";
     };
   };
+  hakula.services.piclist.enable = true;
   hakula.services.netdata.enable = true;
   hakula.services.nginx.enable = true;
   hakula.services.openssh = {

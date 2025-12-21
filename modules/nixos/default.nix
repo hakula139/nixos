@@ -19,14 +19,15 @@ in
   imports = [
     ./aria2
     ./cachix
+    (import ./clash { inherit realitySniHost; })
     ./cloudcone
     ./cloudreve
     ./netdata
+    (import ./nginx { inherit realitySniHost; })
+    ./piclist
     ./postgresql
     ./ssh
     ./xray
-    (import ./clash { inherit realitySniHost; })
-    (import ./nginx { inherit realitySniHost; })
   ];
 
   # ============================================================================
