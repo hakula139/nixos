@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   lib,
   ...
 }:
@@ -43,6 +44,7 @@ in
       home = stateDir;
       createHome = true;
       linger = true;
+      shell = pkgs.bashInteractive;
       subUidRanges = [
         {
           startUid = 100000;
@@ -117,9 +119,13 @@ in
     # --------------------------------------------------------------------------
     # Systemd service
     # --------------------------------------------------------------------------
-    systemd.services."podman-${containerName}".restartTriggers = [
-      config.age.secrets.piclist-config.file
-      config.age.secrets.piclist-token.file
-    ];
+    systemd.services."podman-${containerName}" = {
+      unitConfig.RequiresMountsFor = lib.mkForce "/run/user/${serviceName}/containers";
+
+      restartTriggers = [
+        config.age.secrets.piclist-config.file
+        config.age.secrets.piclist-token.file
+      ];
+    };
   };
 }
