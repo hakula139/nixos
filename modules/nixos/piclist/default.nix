@@ -11,9 +11,13 @@
 
 let
   cfg = config.hakula.services.piclist;
-  version = "2.0.4";
-  picgoServerBin = "node_modules/.bin/picgo-server";
-  piclistPkgJson = "node_modules/piclist/package.json";
+
+  piclistServer = import ./server {
+    inherit pkgs;
+    nodejs = cfg.nodejs;
+    configPath = config.age.secrets.piclist-config.path;
+    tokenPath = config.age.secrets.piclist-token.path;
+  };
 in
 {
   # ----------------------------------------------------------------------------
@@ -72,30 +76,9 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ cfg.nodejs ];
-
-      preStart = ''
-        cd "$STATE_DIRECTORY"
-
-        installedVersion="$(${lib.getExe cfg.nodejs} -p "require('./${piclistPkgJson}').version" 2>/dev/null || true)"
-
-        if [ ! -x "${picgoServerBin}" ] || [ "$installedVersion" != "${version}" ]; then
-          rm -rf node_modules package.json package-lock.json
-          npm init -y
-          npm install piclist@${version}
-        fi
-
-        install -m 0600 ${config.age.secrets.piclist-config.path} config.json
-      '';
-
-      script = ''
-        cd "$STATE_DIRECTORY"
-        SECRET_KEY=$(cat ${config.age.secrets.piclist-token.path})
-        exec "${picgoServerBin}" -c config.json -k "$SECRET_KEY"
-      '';
-
       serviceConfig = {
         Type = "simple";
+        ExecStart = lib.getExe piclistServer;
         Restart = "on-failure";
         RestartSec = "5s";
         User = "piclist";
