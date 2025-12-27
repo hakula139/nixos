@@ -8,5 +8,12 @@
         command = [ "${pkgs.nixfmt-rfc-style}/bin/nixfmt" ];
       };
     };
+    nix = {
+      binary = "${pkgs.nix}/bin/nix";
+      flake = {
+        autoArchive = true;
+        autoEvalInputs = true;
+      };
+    };
   };
 }
