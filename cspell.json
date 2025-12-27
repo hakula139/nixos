@@ -1,7 +1,8 @@
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en,en-GB",
   "useGitignore": true,
+  "allowCompoundWords": true,
   "dictionaryDefinitions": [
     {
       "name": "project-words",
