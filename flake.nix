@@ -80,6 +80,7 @@
         import nixpkgs {
           inherit overlays;
           localSystem = system;
+          config.allowUnfree = true;
         };
 
       preCommitCheckFor =

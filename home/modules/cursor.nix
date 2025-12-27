@@ -65,16 +65,16 @@ let
     # --------------------------------------------------------------------------
     # C/C++
     # --------------------------------------------------------------------------
-    marketplace.anysphere.cpptools
+    ms-vscode.cpptools
     llvm-vs-code-extensions.vscode-clangd
-    ms-vscode.cmake-tools
     vadimcn.vscode-lldb
+    ms-vscode.cmake-tools
 
     # --------------------------------------------------------------------------
     # Python
     # --------------------------------------------------------------------------
-    marketplace.anysphere.cursorpyright
     ms-python.python
+    ms-python.vscode-pylance
     ms-python.debugpy
     charliermarsh.ruff
 
