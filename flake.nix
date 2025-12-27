@@ -37,6 +37,12 @@
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # VS Code / Cursor extensions
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # ============================================================================
@@ -51,6 +57,7 @@
       nix-darwin,
       agenix,
       git-hooks-nix,
+      nix-vscode-extensions,
       ...
     }@inputs:
     let
@@ -112,7 +119,10 @@
                 useUserPackages = true;
                 users.hakula = import ./home/hakula.nix;
                 backupFileExtension = "bak";
-                extraSpecialArgs.isNixOS = true;
+                extraSpecialArgs = {
+                  isNixOS = true;
+                  inherit inputs;
+                };
               };
             }
             ./hosts/cloudcone-sc2
@@ -140,7 +150,10 @@
                 useUserPackages = true;
                 users.hakula = import ./home/hakula.nix;
                 backupFileExtension = "bak";
-                extraSpecialArgs.isNixOS = false;
+                extraSpecialArgs = {
+                  isNixOS = false;
+                  inherit inputs;
+                };
               };
             }
             ./hosts/hakula-macbook
@@ -160,7 +173,10 @@
           modules = [
             ./home/hakula.nix
           ];
-          extraSpecialArgs.isNixOS = false;
+          extraSpecialArgs = {
+            isNixOS = false;
+            inherit inputs;
+          };
         };
       };
 
