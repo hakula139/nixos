@@ -17,9 +17,7 @@ let
   # ----------------------------------------------------------------------------
   # Settings Generation
   # ----------------------------------------------------------------------------
-  settingsBase = builtins.fromJSON (builtins.readFile ./settings.json);
-  settingsOverrides = import ./settings.nix { inherit pkgs; };
-  settings = lib.recursiveUpdate settingsBase settingsOverrides;
+  settings = builtins.fromJSON (builtins.readFile ./settings.json);
   settingsJson = (pkgs.formats.json { }).generate "cursor-settings.json" settings;
 
   # ----------------------------------------------------------------------------
