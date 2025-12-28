@@ -28,6 +28,7 @@ eamodio
 elif
 env
 envrc
+esac
 esbenp
 findutils
 geoip
@@ -89,6 +90,7 @@ psql
 pulumi
 pushd
 pyright
+pytest
 qdisc
 raku
 recents

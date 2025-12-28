@@ -1,52 +1,21 @@
 {
-  config,
   pkgs,
   lib,
   inputs,
-  ...
+  homeDirectory,
 }:
 
 # ==============================================================================
-# Cursor Configuration
+# Cursor Extensions
 # ==============================================================================
 
 let
-  cfg = config.hakula.cursor;
-  isDarwin = pkgs.stdenv.isDarwin;
-
   marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
   vscExtLib = pkgs.vscode-extensions;
 
-  # ----------------------------------------------------------------------------
-  # Settings Generation
-  # ----------------------------------------------------------------------------
-  cursorSettingsBase = builtins.fromJSON (builtins.readFile ../cursor/settings.json);
-  cursorSettingsOverrides = import ../cursor/settings.nix { inherit pkgs; };
-  cursorSettings = lib.recursiveUpdate cursorSettingsBase cursorSettingsOverrides;
-  cursorSettingsJson = (pkgs.formats.json { }).generate "cursor-settings.json" cursorSettings;
-
-  # ----------------------------------------------------------------------------
-  # User Files (settings, keybindings, snippets)
-  # ----------------------------------------------------------------------------
-  cursorUserFiles =
-    if isDarwin then
-      # ~/...
-      {
-        "Library/Application Support/Cursor/User/settings.json".source = cursorSettingsJson;
-        "Library/Application Support/Cursor/User/keybindings.json".source = ../cursor/keybindings.json;
-        "Library/Application Support/Cursor/User/snippets".source = ../cursor/snippets;
-      }
-    else
-      # ~/.config/...
-      {
-        "Cursor/User/settings.json".source = cursorSettingsJson;
-        "Cursor/User/keybindings.json".source = ../cursor/keybindings.json;
-        "Cursor/User/snippets".source = ../cursor/snippets;
-      };
-
-  # ----------------------------------------------------------------------------
+  # ============================================================================
   # Extension List
-  # ----------------------------------------------------------------------------
+  # ============================================================================
   extensions = with vscExtLib; [
     # --------------------------------------------------------------------------
     # C/C++
@@ -145,16 +114,50 @@ let
     pkief.material-icon-theme
   ];
 
-  # ----------------------------------------------------------------------------
-  # Extension Installation Scripts
-  # ----------------------------------------------------------------------------
+  # ============================================================================
+  # Extension Helpers
+  # ============================================================================
+  getExtId = ext: ext.vscodeExtPublisher + "." + ext.vscodeExtName;
+  getExtDir = ext: "${getExtId ext}-${ext.version}";
+  getExtPath = ext: "${homeDirectory}/.cursor/extensions/${getExtDir ext}";
+
+  # ============================================================================
+  # Extensions Metadata (.cursor/extensions/extensions.json)
+  # ============================================================================
+  mkExtensionMetadata = ext: {
+    identifier.id = getExtId ext;
+    version = ext.version;
+    location = {
+      "$mid" = 1;
+      scheme = "file";
+      path = getExtPath ext;
+      fsPath = getExtPath ext;
+    };
+    relativeLocation = getExtDir ext;
+    metadata = {
+      isBuiltin = false;
+      isApplicationScoped = false;
+      isMachineScoped = false;
+      isPreReleaseVersion = false;
+      preRelease = false;
+      hasPreReleaseVersion = false;
+      pinned = true;
+      source = "gallery";
+    };
+  };
+
+  extensionsMetadata = map mkExtensionMetadata extensions;
+  extensionsJson = (pkgs.formats.json { }).generate "cursor-extensions.json" extensionsMetadata;
+
+  # ============================================================================
+  # Extension Installation Scripts (copying to .cursor/extensions)
+  # ============================================================================
   mkExtensionCopyScript =
     ext:
     let
-      extId = ext.vscodeExtPublisher + "." + ext.vscodeExtName;
-      version = ext.version;
+      extId = getExtId ext;
       src = "${ext}/share/vscode/extensions/${extId}";
-      dest = "$HOME/.cursor/extensions/${extId}-${version}";
+      dest = "$HOME/.cursor/extensions/${getExtDir ext}";
     in
     ''
       # Remove old versions of this extension
@@ -172,34 +175,15 @@ let
     '';
 
   extensionCopyScripts = lib.concatMapStringsSep "\n\n" mkExtensionCopyScript extensions;
+
+  declaredExtensions = map getExtDir extensions;
+  declaredExtensionsPattern = lib.concatStringsSep "|" declaredExtensions;
 in
 {
-  # ----------------------------------------------------------------------------
-  # Module options
-  # ----------------------------------------------------------------------------
-  options.hakula.cursor = {
-    enable = lib.mkEnableOption "Cursor configuration";
-
-    enableExtensions = lib.mkEnableOption "Cursor extensions";
-  };
-
-  config = lib.mkIf cfg.enable {
-    # --------------------------------------------------------------------------
-    # User Configuration Files
-    # --------------------------------------------------------------------------
-    xdg.configFile = lib.optionalAttrs (!isDarwin) cursorUserFiles;
-    home.file = lib.optionalAttrs isDarwin cursorUserFiles;
-
-    # --------------------------------------------------------------------------
-    # Extension Installation (Home Manager Activation)
-    # --------------------------------------------------------------------------
-    home.activation.cursorExtensions = lib.mkIf cfg.enableExtensions (
-      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        base="$HOME/.cursor/extensions"
-        mkdir -p "$base"
-
-        ${extensionCopyScripts}
-      ''
-    );
-  };
+  inherit
+    extensions
+    extensionsJson
+    extensionCopyScripts
+    declaredExtensionsPattern
+    ;
 }

@@ -13,7 +13,7 @@ in
   imports = [
     ./modules/shared.nix
     ./modules/darwin.nix
-    ./modules/cursor.nix
+    ./modules/cursor
     ./modules/git.nix
     ./modules/zsh.nix
   ];
