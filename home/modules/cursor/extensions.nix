@@ -20,7 +20,6 @@ let
     # --------------------------------------------------------------------------
     # C/C++
     # --------------------------------------------------------------------------
-    ms-vscode.cpptools
     llvm-vs-code-extensions.vscode-clangd
     vadimcn.vscode-lldb
     ms-vscode.cmake-tools
@@ -29,7 +28,6 @@ let
     # Python
     # --------------------------------------------------------------------------
     ms-python.python
-    ms-python.vscode-pylance
     ms-python.debugpy
     charliermarsh.ruff
 
@@ -115,6 +113,48 @@ let
   ];
 
   # ============================================================================
+  # Anysphere Extensions (Manual Installation)
+  # ============================================================================
+  anysphereExtensions = [
+    # --------------------------------------------------------------------------
+    # C/C++
+    # --------------------------------------------------------------------------
+    {
+      vscodeExtPublisher = "anysphere";
+      vscodeExtName = "cpptools";
+      version = "2.0.2";
+    }
+
+    # --------------------------------------------------------------------------
+    # Python
+    # --------------------------------------------------------------------------
+    {
+      vscodeExtPublisher = "anysphere";
+      vscodeExtName = "cursorpyright";
+      version = "1.0.10";
+    }
+
+    # --------------------------------------------------------------------------
+    # Remote Development
+    # --------------------------------------------------------------------------
+    {
+      vscodeExtPublisher = "anysphere";
+      vscodeExtName = "remote-containers";
+      version = "1.0.29";
+    }
+    {
+      vscodeExtPublisher = "anysphere";
+      vscodeExtName = "remote-ssh";
+      version = "1.0.36";
+    }
+    {
+      vscodeExtPublisher = "anysphere";
+      vscodeExtName = "remote-wsl";
+      version = "1.0.12";
+    }
+  ];
+
+  # ============================================================================
   # Extension Helpers
   # ============================================================================
   getExtId = ext: ext.vscodeExtPublisher + "." + ext.vscodeExtName;
@@ -146,7 +186,9 @@ let
     };
   };
 
-  extensionsMetadata = map mkExtensionMetadata extensions;
+  nixExtensionsMetadata = map mkExtensionMetadata extensions;
+  anysphereExtensionsMetadata = map mkExtensionMetadata anysphereExtensions;
+  extensionsMetadata = nixExtensionsMetadata ++ anysphereExtensionsMetadata;
   extensionsJson = (pkgs.formats.json { }).generate "cursor-extensions.json" extensionsMetadata;
 
   # ============================================================================
