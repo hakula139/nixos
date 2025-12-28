@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v21
+        uses: cachix/install-nix-action@v31
 
       - name: Setup Nix cache
         uses: nix-community/cache-nix-action@v6
@@ -24,7 +24,6 @@ jobs:
           primary-key: nix-${{ runner.os }}-flake-check-${{ hashFiles('**/*.nix', '**/flake.lock') }}
           restore-prefixes-first-match: |
             nix-${{ runner.os }}-flake-check-
-            nix-${{ runner.os }}-
 
       - name: Run flake check
         run: nix flake check --all-systems
@@ -66,7 +65,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v21
+        uses: cachix/install-nix-action@v31
 
       - name: Setup Cachix
         uses: cachix/cachix-action@v16
@@ -81,8 +80,7 @@ jobs:
           primary-key: nix-${{ runner.os }}-${{ matrix.config.id }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
           restore-prefixes-first-match: |
             nix-${{ runner.os }}-${{ matrix.config.id }}-
-            nix-${{ runner.os }}-
-          gc-max-store-size-linux: 8G
+          gc-max-store-size-linux: 10G
 
       - name: Build configuration
         run: |
