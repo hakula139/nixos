@@ -63,7 +63,7 @@ jobs:
           cache_prefix: ${{ matrix.config.id }}
           cachix_name: ${{ env.CACHIX_NAME }}
           cachix_auth_token: ${{ secrets.CACHIX_AUTH_TOKEN }}
-          cachix_skip_push: ${{ github.ref != 'refs/heads/main' }}
+          cachix_skip_push: ${{ !(github.ref == 'refs/heads/main' || github.actor == 'hakula139') }}
 
       - name: Build configuration
         run: |
