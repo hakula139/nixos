@@ -35,23 +35,3 @@ runs:
         name: ${{ inputs.cachix_name }}
         authToken: ${{ inputs.cachix_auth_token }}
         skipPush: ${{ inputs.cachix_skip_push }}
-
-    - name: Setup Nix cache
-      uses: nix-community/cache-nix-action@v6
-      env:
-        CACHE_KEY_PREFIX: nix-${{ runner.os }}-${{ inputs.cache_prefix }}-v3-
-      with:
-        primary-key: ${{ env.CACHE_KEY_PREFIX }}${{ hashFiles('**/*.nix', '**/flake.lock') }}
-        restore-prefixes-first-match: ${{ env.CACHE_KEY_PREFIX }}
-        nix: ${{ runner.os == 'Linux' }}
-        paths-macos: |
-          ~/.cache/nix
-        paths-linux: |
-          /nix
-          !/nix/_temp
-          !/nix/_temp/**
-        gc-max-store-size: 8G
-        purge: true
-        purge-prefixes: ${{ env.CACHE_KEY_PREFIX }}
-        purge-created: 604800 # 7 days
-        purge-last-accessed: 604800 # 7 days
