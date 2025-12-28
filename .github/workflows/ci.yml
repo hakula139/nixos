@@ -54,24 +54,6 @@ jobs:
             target: .#darwinConfigurations.hakula-macbook.system
 
     steps:
-      - name: General cleanup
-        if: ${{ runner.os == 'Linux' }}
-        run: |
-          cleanup() {
-            local dir="$1"
-            if [ -d "$dir" ]; then
-              local size="$(du -sh "$dir" | awk '{print $1}')"
-              sudo rm -rf "$dir"
-              echo "Cleaned up $dir, size: $size"
-            fi
-          }
-
-          cleanup /usr/lib/jvm
-          cleanup /usr/local/.ghcup
-          cleanup /usr/local/share/powershell
-          cleanup /usr/share/dotnet
-          cleanup /usr/share/swift
-
       - name: Checkout repository
         uses: actions/checkout@v6
 

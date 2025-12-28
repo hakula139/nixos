@@ -16,6 +16,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: General cleanup
+      if: ${{ runner.os == 'Linux' }}
+      uses: wimpysworld/nothing-but-nix@v6
+
     - name: Install Nix
       uses: cachix/install-nix-action@v31
       with:
@@ -32,10 +36,12 @@ runs:
     - name: Setup Nix cache
       uses: nix-community/cache-nix-action@v6
       env:
-        CACHE_KEY_PREFIX: nix-${{ runner.os }}-${{ inputs.cache_prefix }}-
+        CACHE_KEY_PREFIX: nix-${{ runner.os }}-${{ inputs.cache_prefix }}-v1-
       with:
         primary-key: ${{ env.CACHE_KEY_PREFIX }}${{ hashFiles('**/*.nix', '**/flake.lock') }}
         restore-prefixes-first-match: ${{ env.CACHE_KEY_PREFIX }}
+        paths-macos: |
+          ~/.cache/nix
         gc-max-store-size-linux: 8G
         purge: true
         purge-prefixes: ${{ env.CACHE_KEY_PREFIX }}
