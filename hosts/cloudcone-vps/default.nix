@@ -53,6 +53,7 @@
   # ============================================================================
   networking = {
     inherit hostName;
+    enableIPv6 = false;
     useDHCP = false; # CloudCone requires static IP configuration
 
     interfaces.eth0 = {
@@ -62,24 +63,9 @@
           prefixLength = 26;
         }
       ];
-      ipv6.addresses = [
-        {
-          address = "2607:f130:0:17d::c846:e4d6";
-          prefixLength = 64;
-        }
-        {
-          address = "2607:f130:0:17d::e7d6:430d";
-          prefixLength = 64;
-        }
-        {
-          address = "2607:f130:0:17d::c052:3aa1";
-          prefixLength = 64;
-        }
-      ];
     };
 
     defaultGateway = "74.48.189.129";
-    defaultGateway6 = "2607:f130:0:17d::1";
 
     nameservers = [
       "8.8.8.8"

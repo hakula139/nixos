@@ -140,7 +140,7 @@ in
 
         server {
           listen 443;
-          listen [::]:443;
+          ${lib.optionalString config.networking.enableIPv6 "listen [::]:443;"}
           error_log /var/log/nginx/stream-error.log crit;
           ssl_preread on;
           proxy_pass $backend;
@@ -154,10 +154,12 @@ in
       virtualHosts."_" = {
         default = true;
         locations."/" = {
-          proxyPass = "https://${realitySniHost}";
+          proxyPass = "https://$reality_upstream";
           extraConfig = ''
+            set $reality_upstream ${realitySniHost};
             proxy_ssl_server_name on;
             proxy_ssl_name ${realitySniHost};
+            resolver 8.8.8.8 1.1.1.1;
           '';
         };
       };
