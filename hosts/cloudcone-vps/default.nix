@@ -93,6 +93,7 @@
   # Services
   # ============================================================================
   hakula.services.cachix.enable = true;
+  hakula.services.netdata.enable = true;
   hakula.services.nginx.enable = true;
   hakula.services.openssh = {
     enable = true;
