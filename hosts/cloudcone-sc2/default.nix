@@ -1,4 +1,9 @@
-{ modulesPath, pkgs, ... }:
+{
+  modulesPath,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -15,7 +20,7 @@
   # We shim this by creating a static grub.conf that points to our NixOS kernel.
   boot.loader.grub = {
     enable = true;
-    device = "/dev/vda";
+    devices = lib.mkForce [ "/dev/vda" ];
     configurationLimit = 20;
 
     extraInstallCommands = ''
