@@ -14,7 +14,6 @@ proxies:
       public-key: bHzc9AjLZiUGoZBGvDmo7XBcewkh9Vqukvzb8CTBnVQ
       short-id: {{ short_id }}
     client-fingerprint: chrome
-
   - name: 🇺🇸 US-{{ i }} (WS + CDN)
     type: vless
     server: us-{{ i }}-cdn.hakula.xyz
@@ -28,7 +27,6 @@ proxies:
       headers:
         User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
     client-fingerprint: chrome
-
 {%- endfor %}
 
 proxy-groups:
