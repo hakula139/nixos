@@ -80,6 +80,7 @@
   "cSpell.language": "en,en-GB",
   "cSpell.userWords": ["hakula"],
   "cursor.composer.textSizeScale": 1.15,
+  "cursor.cpp.disabledLanguages": [],
   "cursor.cpp.enablePartialAccepts": true,
   "cursorpyright.analysis.autoImportCompletions": true,
   "cursorpyright.analysis.inlayHints.callArgumentNames": true,
