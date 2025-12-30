@@ -1,5 +1,8 @@
 { hostName, ... }:
 
+let
+  keys = import ../../secrets/keys.nix;
+in
 {
   imports = [
     ../_profiles/tencent-lighthouse
@@ -12,6 +15,11 @@
     inherit hostName;
     useDHCP = true;
   };
+
+  # ============================================================================
+  # Access (SSH)
+  # ============================================================================
+  hakula.access.ssh.authorizedKeys = [ keys.users.hakula-tencent ];
 
   # ============================================================================
   # Services
