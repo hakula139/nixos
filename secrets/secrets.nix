@@ -16,11 +16,9 @@ in
   "shared/aria2-rpc-secret.age".publicKeys = sharedKeys;
   "shared/backup-env.age".publicKeys = sharedKeys;
   "shared/backup-restic-password.age".publicKeys = sharedKeys;
-  "shared/brave-api-key.age".publicKeys = sharedKeys;
   "shared/cachix-auth-token.age".publicKeys = sharedKeys;
   "shared/clash-users.json.age".publicKeys = sharedKeys;
   "shared/cloudflare-credentials.age".publicKeys = sharedKeys;
-  "shared/context7-api-key.age".publicKeys = sharedKeys;
   "shared/dockerhub-token.age".publicKeys = sharedKeys;
   "shared/piclist-config.json.age".publicKeys = sharedKeys;
   "shared/piclist-token.age".publicKeys = sharedKeys;
@@ -34,4 +32,6 @@ in
   "cloudcone-sc2/server-keys/us-1.age".publicKeys = allUserKeys ++ [ keys.hosts.us-1 ];
   # TODO: Create us-3.age after adding us-3 host key
   # "cloudcone-sc2/server-keys/us-3.age".publicKeys = allUserKeys ++ [ keys.hosts.us-3 ];
+  "hakula-macbook/brave-api-key.age".publicKeys = allUserKeys ++ [ keys.hosts.hakula-macbook ];
+  "hakula-macbook/context7-api-key.age".publicKeys = allUserKeys ++ [ keys.hosts.hakula-macbook ];
 }
