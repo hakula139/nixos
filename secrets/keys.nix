@@ -5,7 +5,8 @@
 {
   # User SSH keys (~/.ssh/id_ed25519.pub)
   users = {
-    hakula = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPqd9HS6uF0h0mXMbIwCv9yrkvvdl3o1wUgQWVkjKuiJ";
+    hakula-cloudcone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPqd9HS6uF0h0mXMbIwCv9yrkvvdl3o1wUgQWVkjKuiJ cloudcone";
+    hakula-tencent = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICc3XQ37RuIqVgQYED0HDU3RVSACPHmr/JoE7w/cvJzu tencent";
   };
 
   # Server SSH host keys (/etc/ssh/ssh_host_ed25519_key.pub)
