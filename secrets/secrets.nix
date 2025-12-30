@@ -20,6 +20,7 @@ in
   "shared/cachix-auth-token.age".publicKeys = sharedKeys;
   "shared/clash-users.json.age".publicKeys = sharedKeys;
   "shared/cloudflare-credentials.age".publicKeys = sharedKeys;
+  "shared/context7-api-key.age".publicKeys = sharedKeys;
   "shared/dockerhub-token.age".publicKeys = sharedKeys;
   "shared/piclist-config.json.age".publicKeys = sharedKeys;
   "shared/piclist-token.age".publicKeys = sharedKeys;
