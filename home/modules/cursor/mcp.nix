@@ -1,6 +1,5 @@
 {
   config,
-  osConfig,
   pkgs,
   ...
 }:
@@ -16,7 +15,7 @@ let
   # ----------------------------------------------------------------------------
   # Brave Search MCP
   # ----------------------------------------------------------------------------
-  braveApiKeyFile = osConfig.age.secrets.brave-api-key.path;
+  braveApiKeyFile = config.age.secrets.brave-api-key.path;
 
   braveSearch = pkgs.writeShellScriptBin "brave-search-mcp" ''
     if [ -f "${braveApiKeyFile}" ]; then
@@ -28,13 +27,13 @@ let
   # ----------------------------------------------------------------------------
   # Context7 MCP
   # ----------------------------------------------------------------------------
-  context7ApiKeyFile = osConfig.age.secrets.context7-api-key.path;
+  context7ApiKeyFile = config.age.secrets.context7-api-key.path;
 
   context7 = pkgs.writeShellScriptBin "context7-mcp" ''
     if [ -f "${context7ApiKeyFile}" ]; then
       export CONTEXT7_API_KEY="$(cat ${context7ApiKeyFile})"
     fi
-    exec ${pkgs.nodejs}/bin/npx -y @upstash/context7-mcp --transport stdio "$@"
+    exec ${pkgs.nodejs}/bin/npx -y @upstash/context7-mcp "$@"
   '';
 
   # ----------------------------------------------------------------------------

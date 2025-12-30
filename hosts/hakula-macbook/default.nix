@@ -11,25 +11,6 @@
   system.primaryUser = "hakula";
 
   # ============================================================================
-  # Secrets (agenix)
-  # ============================================================================
-  age.identityPaths = [
-    "/Users/hakula/.ssh/id_ed25519"
-  ];
-
-  age.secrets.brave-api-key = {
-    file = ../../secrets/hakula-macbook/brave-api-key.age;
-    owner = "hakula";
-    mode = "0400";
-  };
-
-  age.secrets.context7-api-key = {
-    file = ../../secrets/hakula-macbook/context7-api-key.age;
-    owner = "hakula";
-    mode = "0400";
-  };
-
-  # ============================================================================
   # Host-Specific Configuration
   # ============================================================================
   networking.hostName = "Hakula-MacBook";

@@ -1,7 +1,9 @@
 {
   pkgs,
   lib,
+  inputs,
   isNixOS,
+  isWorkstation,
   ...
 }:
 
@@ -11,6 +13,7 @@ let
 in
 {
   imports = [
+    inputs.agenix.homeManagerModules.default
     ./modules/shared.nix
     ./modules/darwin.nix
     ./modules/cursor
@@ -68,7 +71,7 @@ in
   # Custom Modules
   # ============================================================================
   hakula.cursor = {
-    enable = !isNixOS;
-    enableExtensions = !isNixOS;
+    enable = isWorkstation;
+    enableExtensions = isWorkstation;
   };
 }

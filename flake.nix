@@ -113,8 +113,9 @@
                 users.hakula = import ./home/hakula.nix;
                 backupFileExtension = "bak";
                 extraSpecialArgs = {
-                  isNixOS = true;
                   inherit inputs;
+                  isNixOS = true;
+                  isWorkstation = false;
                 };
               };
             }
@@ -176,6 +177,7 @@
                 extraSpecialArgs = {
                   inherit inputs;
                   isNixOS = false;
+                  isWorkstation = true;
                 };
               };
             }
@@ -197,8 +199,9 @@
             ./home/hakula.nix
           ];
           extraSpecialArgs = {
-            isNixOS = false;
             inherit inputs;
+            isNixOS = false;
+            isWorkstation = true;
           };
         };
       };
