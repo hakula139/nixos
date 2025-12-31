@@ -13,7 +13,9 @@ in
   # ============================================================================
   nix = {
     enable = true;
-    settings = shared.nixSettings;
+    settings = shared.nixSettings // {
+      trusted-users = [ "hakula" ];
+    };
     optimise.automatic = true;
     gc = {
       automatic = true;
