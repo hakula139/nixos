@@ -26,12 +26,6 @@ let
   # Upstreams
   # ----------------------------------------------------------------------------
   cloudreveUpstream = "http://127.0.0.1:${toString config.hakula.services.cloudreve.port}";
-  cloudreveNoBufferingExtra = ''
-    proxy_buffering off;
-    proxy_request_buffering off;
-    proxy_max_temp_file_size 0;
-  '';
-
   piclistUpstream = "http://127.0.0.1:${toString config.hakula.services.piclist.port}";
 
   # ----------------------------------------------------------------------------
@@ -59,6 +53,18 @@ let
       ssl_verify_client on;
     '';
   };
+
+  noBufferingExtraConfig = ''
+    proxy_buffering off;
+    proxy_request_buffering off;
+    proxy_max_temp_file_size 0;
+  '';
+
+  noCacheExtraConfig = ''
+    add_header Cache-Control 'no-cache, no-store, must-revalidate' always;
+    add_header Pragma 'no-cache' always;
+    add_header Expires '0' always;
+  '';
 in
 {
   # ----------------------------------------------------------------------------
@@ -180,7 +186,7 @@ in
           extraConfig = ''
             default_type application/x-yaml;
             add_header Content-Disposition 'attachment; filename="clash.yaml"';
-            add_header Cache-Control 'no-cache, no-store, must-revalidate';
+            ${noCacheExtraConfig}
           '';
         };
         locations."= /" = {
@@ -198,21 +204,33 @@ in
           proxy_send_timeout 600s;
           proxy_read_timeout 600s;
         '';
+        locations."= /index.html" = {
+          proxyPass = "${cloudreveUpstream}/index.html";
+          extraConfig = noCacheExtraConfig;
+        };
+        locations."= /sw.js" = {
+          proxyPass = "${cloudreveUpstream}/sw.js";
+          extraConfig = noCacheExtraConfig;
+        };
+        locations."= /manifest.json" = {
+          proxyPass = "${cloudreveUpstream}/manifest.json";
+          extraConfig = noCacheExtraConfig;
+        };
         locations."/api/v4/ws" = {
           proxyPass = cloudreveUpstream;
           proxyWebsockets = true;
         };
         locations."/api/v4/file/download" = {
           proxyPass = cloudreveUpstream;
-          extraConfig = cloudreveNoBufferingExtra;
+          extraConfig = noBufferingExtraConfig;
         };
         locations."/api/v4/file/upload" = {
           proxyPass = cloudreveUpstream;
-          extraConfig = cloudreveNoBufferingExtra;
+          extraConfig = noBufferingExtraConfig;
         };
         locations."/dav" = {
           proxyPass = "${cloudreveUpstream}/dav";
-          extraConfig = cloudreveNoBufferingExtra;
+          extraConfig = noBufferingExtraConfig;
         };
         locations."/" = {
           proxyPass = "${cloudreveUpstream}/";
