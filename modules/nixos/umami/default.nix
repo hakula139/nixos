@@ -54,7 +54,7 @@ in
     age.secrets.umami-env = {
       file = ../../../secrets/shared/umami-env.age;
       owner = "root";
-      group = "postgres"; # umami-db-init needs to read this file
+      group = "postgres"; # postgresql postStart needs to read this file
       mode = "0440";
     };
 
@@ -71,6 +71,18 @@ in
       ];
       authentication = lib.mkAfter ''
         host ${dbName} ${serviceName} 127.0.0.1/32 scram-sha-256
+      '';
+    };
+
+    systemd.services.postgresql = {
+      postStart = lib.mkAfter ''
+        set -euo pipefail
+        source ${config.age.secrets.umami-env.path}
+
+        $PSQL \
+          -v ON_ERROR_STOP=1 \
+          -v db_password="$DB_PASSWORD" \
+          -c "ALTER ROLE ${serviceName} WITH PASSWORD :'db_password';"
       '';
     };
 
@@ -97,53 +109,11 @@ in
     };
 
     # --------------------------------------------------------------------------
-    # Systemd services
+    # Systemd service
     # --------------------------------------------------------------------------
-    systemd.services.umami-db-init = {
-      description = "Initialize Umami PostgreSQL password";
-
+    systemd.services."podman-${serviceName}" = {
       after = [ "postgresql.service" ];
       requires = [ "postgresql.service" ];
-      before = [ "podman-${serviceName}.service" ];
-      requiredBy = [ "podman-${serviceName}.service" ];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "postgres";
-        Group = "postgres";
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        ProtectControlGroups = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-      };
-
-      restartTriggers = [ config.age.secrets.umami-env.file ];
-
-      path = [
-        config.services.postgresql.package
-      ];
-
-      script = ''
-        set -euo pipefail
-        source ${config.age.secrets.umami-env.path}
-        psql -c "ALTER USER ${serviceName} WITH PASSWORD '$DB_PASSWORD';"
-      '';
-    };
-
-    systemd.services."podman-${serviceName}" = {
-      after = [
-        "postgresql.service"
-        "umami-db-init.service"
-      ];
-      requires = [
-        "postgresql.service"
-        "umami-db-init.service"
-      ];
     };
   };
 }
