@@ -6,6 +6,15 @@
   const WORKER_HOST = '__WORKER_HOST__'; // Cloudflare Worker host for B2 downloads
   const FILE_URL_API = '/api/v4/file/url'; // Cloudreve API endpoint for signed download URLs
 
+  const getPathname = (url) => {
+    try {
+      return new URL(url, window.location.href).pathname;
+    } catch (error) {
+      console.warn('Failed to get pathname from URL:', url, error);
+      return null;
+    }
+  };
+
   // Convert Cloudreve's custom URI (e.g. cloudreve://token@share/<encoded_path>) into a clean path
   // like "/My Folder/File.ext" used for attribution.
   const extractLogicalPath = (uri) => {
@@ -13,8 +22,8 @@
       const url = new URL(uri);
       const path = decodeURIComponent(url.pathname);
       return path.startsWith('/') ? path : `/${path}`;
-    } catch {
-      console.warn('Failed to extract logical path from URI:', uri);
+    } catch (error) {
+      console.warn('Failed to extract logical path from URI:', uri, error);
       return null;
     }
   };
@@ -31,66 +40,97 @@
         return downloadUrl;
       }
 
-      const separator = downloadUrl.includes('?') ? '&' : '?';
-      return `${downloadUrl}${separator}logical_path=${encodeURIComponent(logicalPath)}`;
-    } catch {
-      console.warn('Failed to append logical path to download URL:', downloadUrl);
-      return downloadUrl;
+      url.searchParams.set('logical_path', logicalPath);
+      return url.toString();
+    } catch (error) {
+      console.warn(
+        'Failed to append logical path to download URL:',
+        downloadUrl,
+        logicalPath,
+        error,
+      );
+      return null;
     }
   };
 
-  const originalFetch = window.fetch;
-  // Hook fetch to patch the JSON response from /api/v4/file/url before Cloudreve consumes it.
-  window.fetch = function (input, init) {
-    const requestUrl =
-      typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
-    const pathname = new URL(requestUrl, window.location.href).pathname;
-    const isFileUrlApi = pathname === FILE_URL_API;
+  // Hook XMLHttpRequest to intercept Cloudreve's /api/v4/file/url requests.
+  const OriginalXHR = window.XMLHttpRequest;
+  const originalOpen = OriginalXHR.prototype.open;
+  const originalSend = OriginalXHR.prototype.send;
 
-    let requestBody = null;
-    if (isFileUrlApi && init?.body) {
+  OriginalXHR.prototype.open = function (_method, url) {
+    this._cloudreve_url = url;
+    return originalOpen.apply(this, arguments);
+  };
+
+  OriginalXHR.prototype.send = function (body) {
+    const isFileUrlApi = getPathname(this._cloudreve_url) === FILE_URL_API;
+
+    if (isFileUrlApi && typeof body === 'string') {
       try {
-        requestBody = JSON.parse(init.body);
-      } catch {
-        console.warn('Failed to parse request body:', init.body);
+        const parsed = JSON.parse(body);
+        if (Array.isArray(parsed?.uris)) {
+          this._cloudreve_uris = parsed.uris;
+        }
+      } catch (error) {
+        console.warn('Failed to parse JSON body for file URL API:', body, error);
       }
     }
 
-    return originalFetch.apply(this, arguments).then(async (response) => {
-      if (!requestBody?.uris) {
-        return response;
-      }
+    if (isFileUrlApi && this._cloudreve_uris) {
+      this.addEventListener('load', () => {
+        try {
+          const json =
+            typeof this.response === 'object' && this.response !== null
+              ? this.response
+              : JSON.parse(this.responseText);
 
-      const { uris } = requestBody;
+          if (!Array.isArray(json?.data?.urls)) {
+            console.warn('Invalid response for file URL API:', json);
+            return;
+          }
 
-      try {
-        const data = await response.clone().json();
-        if (!Array.isArray(data?.data)) {
-          return response;
+          // Patch each download URL in the response with its corresponding logical path.
+          let changed = false;
+          json.data.urls.forEach((item, index) => {
+            if (!item?.url || !this._cloudreve_uris[index]) {
+              console.warn('Invalid item for file URL API:', item, this._cloudreve_uris[index]);
+              return;
+            }
+
+            const logicalPath = extractLogicalPath(this._cloudreve_uris[index]);
+            if (!logicalPath) {
+              console.warn('Failed to extract logical path from URI:', this._cloudreve_uris[index]);
+              return;
+            }
+
+            const newUrl = appendLogicalPath(item.url, logicalPath);
+            if (newUrl !== item.url) {
+              console.debug('Patched URL:', item.url, '->', newUrl);
+              item.url = newUrl;
+              changed = true;
+            }
+          });
+
+          // Return a patched response by overriding the response / responseText getters.
+          if (changed) {
+            Object.defineProperty(this, 'response', {
+              configurable: true,
+              get: () => json,
+            });
+
+            const patchedText = JSON.stringify(json);
+            Object.defineProperty(this, 'responseText', {
+              configurable: true,
+              get: () => patchedText,
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to patch response for file URL API:', error);
         }
+      });
+    }
 
-        data.data.forEach((item, index) => {
-          if (!item.url) {
-            return;
-          }
-
-          const logicalPath = uris[index] ? extractLogicalPath(uris[index]) : null;
-          if (!logicalPath) {
-            return;
-          }
-
-          item.url = appendLogicalPath(item.url, logicalPath);
-        });
-
-        return new Response(JSON.stringify(data), {
-          status: response.status,
-          statusText: response.statusText,
-          headers: response.headers,
-        });
-      } catch {
-        console.warn('Failed to append logical path to download URLs');
-        return response;
-      }
-    });
+    return originalSend.apply(this, arguments);
   };
 })();
