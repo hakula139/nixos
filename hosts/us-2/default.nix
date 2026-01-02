@@ -1,8 +1,4 @@
-{
-  pkgs,
-  hostName,
-  ...
-}:
+{ hostName, ... }:
 
 let
   keys = import ../../secrets/keys.nix;
@@ -63,30 +59,20 @@ in
   };
 
   # ============================================================================
-  # IPv6 Fix: Disable SLAAC and Router Advertisements
+  # IPv6 Configuration: Disable SLAAC and Router Advertisements
   # ============================================================================
   # CloudCone assigns static IPv6 addresses, but the kernel was creating
   # additional SLAAC / autoconf addresses via router advertisements and using
   # them as the default source for outbound traffic. This broke IPv6
   # connectivity because the provider only routes the static addresses.
   #
-  # Solution: Disable autoconf and RA processing, then flush any dynamic
-  # addresses that may have been created before the sysctl took effect.
+  # Solution: Disable autoconf and RA processing on eth0. These sysctls are
+  # applied early in the boot process (before networking starts), preventing
+  # dynamic addresses from being created in the first place.
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.eth0.autoconf" = 0;
     "net.ipv6.conf.eth0.accept_ra" = 0;
-  };
-
-  systemd.services.flush-ipv6-dynamic-addresses-eth0 = {
-    description = "Flush dynamic IPv6 addresses on eth0";
-    after = [ "network-addresses-eth0.service" ];
-    requires = [ "network-addresses-eth0.service" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.iproute2}/bin/ip -6 addr flush dev eth0 scope global dynamic";
-    };
   };
 
   # ============================================================================
