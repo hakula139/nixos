@@ -71,6 +71,7 @@ in
       ];
       authentication = lib.mkAfter ''
         host ${dbName} ${serviceName} 127.0.0.1/32 scram-sha-256
+        host ${dbName} ${serviceName} 10.88.0.0/16 scram-sha-256
       '';
     };
 
@@ -93,6 +94,10 @@ in
 
     virtualisation.oci-containers.containers.${serviceName} = {
       image = cfg.image;
+
+      extraOptions = [
+        "--add-host=host.containers.internal:host-gateway"
+      ];
 
       ports = [
         "127.0.0.1:${toString cfg.port}:3000"
