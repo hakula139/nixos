@@ -28,7 +28,7 @@ let
     [Database]
     Type = postgres
     Host = /run/postgresql
-    Port = 5432
+    Port = ${toString config.hakula.services.postgresql.port}
     Name = ${dbName}
     User = ${serviceName}
     UnixSocket = true

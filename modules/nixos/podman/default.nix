@@ -10,7 +10,7 @@
   # ----------------------------------------------------------------------------
   options.hakula.podman = {
     network = {
-      bridgeInterface = lib.mkOption {
+      interface = lib.mkOption {
         type = lib.types.str;
         default = "podman0";
         description = "Default Podman bridge network interface";
