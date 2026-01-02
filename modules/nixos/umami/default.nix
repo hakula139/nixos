@@ -93,7 +93,6 @@ in
 
     virtualisation.oci-containers.containers.${serviceName} = {
       image = cfg.image;
-      login = config.hakula.dockerHub.ociLogin;
 
       ports = [
         "127.0.0.1:${toString cfg.port}:3000"
