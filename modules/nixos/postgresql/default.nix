@@ -24,12 +24,6 @@ in
       default = pkgs.postgresql_17;
       description = "PostgreSQL package / version to use for this host";
     };
-
-    listenOnPodman = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Allow PostgreSQL connections from Podman containers via bridge network";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -40,11 +34,17 @@ in
       enable = true;
       package = cfg.package;
       settings = {
+        listen_addresses = lib.mkForce "*";
         password_encryption = lib.mkDefault "scram-sha-256";
-      }
-      // lib.optionalAttrs cfg.listenOnPodman {
-        listen_addresses = lib.mkForce "127.0.0.1,${config.hakula.podman.network.gateway}";
       };
     };
+
+    # --------------------------------------------------------------------------
+    # Firewall
+    # --------------------------------------------------------------------------
+    # Allow podman containers to reach PostgreSQL via the podman bridge.
+    networking.firewall.interfaces.${config.hakula.podman.network.bridgeInterface}.allowedTCPPorts = [
+      5432
+    ];
   };
 }

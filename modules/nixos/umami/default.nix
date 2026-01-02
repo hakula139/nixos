@@ -60,8 +60,6 @@ in
     # --------------------------------------------------------------------------
     # PostgreSQL
     # --------------------------------------------------------------------------
-    hakula.services.postgresql.listenOnPodman = true;
-
     services.postgresql = {
       ensureDatabases = [ dbName ];
       ensureUsers = [
