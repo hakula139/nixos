@@ -1,4 +1,8 @@
-{ lib, ... }:
+{
+  lib,
+  prune ? false,
+  ...
+}:
 
 # ==============================================================================
 # Cursor Extensions
@@ -109,38 +113,29 @@ let
     "pkief.material-icon-theme"
   ];
 
-  deprecatedExtensions = [
-    "foxundermoon.shell-format"
-  ];
-
   # ============================================================================
   # Installation Script
   # ============================================================================
   installScript = ''
-    installed="$(cursor --list-extensions --show-versions 2>/dev/null || true)"
+    expected="${lib.concatStringsSep "\n" extensions}"
+    get_installed() { cursor --list-extensions 2>/dev/null || true; }
+    installed=$(get_installed)
 
-    is_installed() {
-      case "$1" in
-        *@*) printf '%s\n' "$installed" | grep -qFx "$1" ;;
-        *) printf '%s\n' "$installed" | cut -d@ -f1 | grep -qFx "$1" ;;
-      esac
-    }
-
+    # Install missing extensions
     while IFS= read -r ext; do
-      if [ -n "$ext" ] && ! is_installed "$ext"; then
-        cursor --install-extension "$ext" || echo "Failed to install $ext"
-      fi
-    done <<EOF
-    ${lib.concatStringsSep "\n" extensions}
-    EOF
+      [ -z "$ext" ] && continue
+      echo "$installed" | cut -d@ -f1 | grep -qFx "$ext" && continue
+      cursor --install-extension "$ext" || echo "Failed to install $ext"
+    done < <(printf '%s\n' "$expected")
 
-    while IFS= read -r ext; do
-      if [ -n "$ext" ] && is_installed "$ext"; then
-        cursor --uninstall-extension "$ext" >/dev/null 2>&1 || true
-      fi
-    done <<EOF
-    ${lib.concatStringsSep "\n" deprecatedExtensions}
-    EOF
+    # Prune non-provisioned extensions
+    if ${lib.boolToString prune}; then
+      while IFS= read -r ext; do
+        [ -z "$ext" ] && continue
+        printf '%s\n' "$expected" | grep -qFx "$ext" && continue
+        cursor --uninstall-extension "$ext" 2>/dev/null || true
+      done < <(get_installed | cut -d@ -f1)
+    fi
   '';
 in
 {

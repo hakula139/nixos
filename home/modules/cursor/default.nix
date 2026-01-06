@@ -15,8 +15,11 @@ let
   cfg = config.hakula.cursor;
   isDarwin = pkgs.stdenv.isDarwin;
 
-  ext = import ./extensions.nix { inherit lib; };
   settings = import ./settings.nix { inherit pkgs; };
+  ext = import ./extensions.nix {
+    inherit lib;
+    prune = cfg.extensions.prune;
+  };
 
   # ----------------------------------------------------------------------------
   # Cursor Paths
@@ -40,7 +43,10 @@ in
   options.hakula.cursor = {
     enable = lib.mkEnableOption "Cursor configuration";
 
-    enableExtensions = lib.mkEnableOption "Cursor extensions";
+    extensions = {
+      enable = lib.mkEnableOption "Cursor extensions";
+      prune = lib.mkEnableOption "Prune Cursor extensions not in the provisioned list";
+    };
   };
 
   # ============================================================================
@@ -113,7 +119,7 @@ in
       # --------------------------------------------------------------------------
       # Extension Management
       # --------------------------------------------------------------------------
-      home.activation.cursorExtensions = lib.mkIf cfg.enableExtensions (
+      home.activation.cursorExtensions = lib.mkIf cfg.extensions.enable (
         lib.hm.dag.entryAfter [ "writeBoundary" ] ''
           export PATH="${lib.concatStringsSep ":" paths}:$PATH"
 
