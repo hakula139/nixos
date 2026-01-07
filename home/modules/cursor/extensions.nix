@@ -117,6 +117,9 @@ let
     "anysphere.remote-containers"
     "anysphere.remote-ssh"
     "anysphere.remote-wsl"
+    "ms-vscode.remote-explorer"
+    "ms-vscode.remote-server"
+    "ms-vscode-remote.remote-ssh-edit"
   ];
 
   extensions = baseExtensions ++ lib.optionals isDesktop remoteExtensions;
