@@ -1,5 +1,6 @@
 {
   lib,
+  isDesktop ? false,
   prune ? false,
   ...
 }:
@@ -12,7 +13,7 @@ let
   # ============================================================================
   # Extension List
   # ============================================================================
-  extensions = [
+  baseExtensions = [
     # --------------------------------------------------------------------------
     # C/C++
     # --------------------------------------------------------------------------
@@ -51,7 +52,7 @@ let
     # Haskell
     # --------------------------------------------------------------------------
     "haskell.haskell"
-    "phoityne.phoityne-vscode"
+    "justusadam.language-haskell"
 
     # --------------------------------------------------------------------------
     # Other Languages
@@ -65,21 +66,13 @@ let
     "myriad-dreamin.tinymist"
     "zxh404.vscode-proto3"
 
-    # --------------------------------------------------------------------------
-    # Remote Development
-    # --------------------------------------------------------------------------
-    "anysphere.remote-containers"
-    "anysphere.remote-ssh"
-    "anysphere.remote-wsl"
-    "ms-vscode-remote.vscode-remote-extensionpack"
-    "ms-vscode-remote.remote-ssh-edit"
-    "ms-vscode.remote-explorer"
     "ms-vscode.live-server"
 
     # --------------------------------------------------------------------------
     # Containers & Kubernetes
     # --------------------------------------------------------------------------
     "docker.docker"
+    "ms-azuretools.vscode-containers"
     "ms-azuretools.vscode-docker"
     "ms-kubernetes-tools.vscode-kubernetes-tools"
 
@@ -113,19 +106,37 @@ let
     "pkief.material-icon-theme"
   ];
 
+  remoteExtensions = [
+    # --------------------------------------------------------------------------
+    # Remote Development
+    # --------------------------------------------------------------------------
+    "anysphere.remote-containers"
+    "anysphere.remote-ssh"
+    "anysphere.remote-wsl"
+  ];
+
+  extensions = baseExtensions ++ lib.optionals isDesktop remoteExtensions;
+
   # ============================================================================
   # Installation Script
   # ============================================================================
   installScript = ''
     expected="${lib.concatStringsSep "\n" extensions}"
-    get_installed() { cursor --list-extensions 2>/dev/null || true; }
-    installed=$(get_installed)
+
+    get_installed_ids() {
+      cursor --list-extensions --show-versions 2>/dev/null \
+        | sed 's/\r$//' \
+        | grep -E '^[[:alnum:]_-]+\.[[:alnum:]_-]+(@[^[:space:]]+)?$' \
+        | cut -d@ -f1
+    }
+
+    installed_ids="$(get_installed_ids)"
 
     # Install missing extensions
     while IFS= read -r ext; do
       [ -z "$ext" ] && continue
-      echo "$installed" | cut -d@ -f1 | grep -qFx "$ext" && continue
-      cursor --install-extension "$ext" || echo "Failed to install $ext"
+      printf '%s\n' "$installed_ids" | grep -qFx "$ext" && continue
+      cursor --install-extension "$ext" || true
     done < <(printf '%s\n' "$expected")
 
     # Prune non-provisioned extensions
@@ -134,7 +145,7 @@ let
         [ -z "$ext" ] && continue
         printf '%s\n' "$expected" | grep -qFx "$ext" && continue
         cursor --uninstall-extension "$ext" 2>/dev/null || true
-      done < <(get_installed | cut -d@ -f1)
+      done < <(get_installed_ids)
     fi
   '';
 in

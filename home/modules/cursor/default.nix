@@ -17,7 +17,7 @@ let
 
   settings = import ./settings.nix { inherit pkgs; };
   ext = import ./extensions.nix {
-    inherit lib;
+    inherit lib isDesktop;
     prune = cfg.extensions.prune;
   };
 
