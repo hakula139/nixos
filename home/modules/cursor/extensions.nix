@@ -29,6 +29,10 @@ let
     "ms-python.python"
     "ms-python.debugpy"
     "charliermarsh.ruff"
+    "ms-toolsai.jupyter"
+    "ms-toolsai.jupyter-renderers"
+    "ms-toolsai.vscode-jupyter-cell-tags"
+    "ms-toolsai.vscode-jupyter-slideshow"
 
     # --------------------------------------------------------------------------
     # Web Development
@@ -37,6 +41,7 @@ let
     "dbaeumer.vscode-eslint"
     "esbenp.prettier-vscode"
     "bradlc.vscode-tailwindcss"
+    "ms-vscode.live-server"
 
     # --------------------------------------------------------------------------
     # Go
@@ -59,14 +64,13 @@ let
     # --------------------------------------------------------------------------
     "jnoortheen.nix-ide"
     "mads-hartmann.bash-ide-vscode"
-    "redhat.vscode-yaml"
-    "tamasfe.even-better-toml"
     "mechatroner.rainbow-csv"
-    "samuelcolvin.jinjahtml"
     "myriad-dreamin.tinymist"
+    "redhat.vscode-xml"
+    "redhat.vscode-yaml"
+    "samuelcolvin.jinjahtml"
+    "tamasfe.even-better-toml"
     "zxh404.vscode-proto3"
-
-    "ms-vscode.live-server"
 
     # --------------------------------------------------------------------------
     # Containers & Kubernetes
@@ -135,7 +139,7 @@ let
     # Install missing extensions
     while IFS= read -r ext; do
       [ -z "$ext" ] && continue
-      printf '%s\n' "$installed_ids" | grep -qFx "$ext" && continue
+      printf '%s\n' "$installed_ids" | grep -iqFx "$ext" && continue
       cursor --install-extension "$ext" || true
     done < <(printf '%s\n' "$expected")
 
@@ -143,7 +147,7 @@ let
     if ${lib.boolToString prune}; then
       while IFS= read -r ext; do
         [ -z "$ext" ] && continue
-        printf '%s\n' "$expected" | grep -qFx "$ext" && continue
+        printf '%s\n' "$expected" | grep -iqFx "$ext" && continue
         cursor --uninstall-extension "$ext" 2>/dev/null || true
       done < <(get_installed_ids)
     fi
