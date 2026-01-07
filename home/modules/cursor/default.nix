@@ -64,16 +64,22 @@ in
           ;
       };
 
-      darwinXdgFiles = {
+      darwinFiles = {
         "Library/Application Support/Cursor/User/settings.json".source = settings.settingsJson;
         "Library/Application Support/Cursor/User/keybindings.json".source = ./keybindings.json;
         "Library/Application Support/Cursor/User/snippets".source = ./snippets;
       };
 
-      linuxXdgFiles = {
+      linuxFiles = {
         "Cursor/User/settings.json".source = settings.settingsJson;
         "Cursor/User/keybindings.json".source = ./keybindings.json;
         "Cursor/User/snippets".source = ./snippets;
+      };
+
+      remoteFiles = {
+        ".cursor-server/data/User/settings.json".source = settings.settingsJson;
+        ".cursor-server/data/User/keybindings.json".source = ./keybindings.json;
+        ".cursor-server/data/User/snippets".source = ./snippets;
       };
     in
     {
@@ -112,9 +118,10 @@ in
       home.file = {
         ".cursor/mcp.json".source = mcp.mcpJson;
       }
-      // (lib.optionalAttrs (isDesktop && isDarwin) darwinXdgFiles);
+      // (lib.optionalAttrs (isDesktop && isDarwin) darwinFiles)
+      // (lib.optionalAttrs (!isDesktop) remoteFiles);
 
-      xdg.configFile = lib.optionalAttrs (isDesktop && !isDarwin) linuxXdgFiles;
+      xdg.configFile = lib.optionalAttrs (isDesktop && !isDarwin) linuxFiles;
 
       # --------------------------------------------------------------------------
       # Extension Management
