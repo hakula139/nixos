@@ -2,31 +2,31 @@
   config,
   pkgs,
   lib,
+  secretsDir ? "${config.home.homeDirectory}/.secrets",
   isNixOS ? false,
   isDesktop ? false,
-  secretsDir ? "${config.home.homeDirectory}/.secrets",
   ...
 }:
 
 # ==============================================================================
-# Cursor MCP (Model Context Protocol)
+# Cursor MCP (Model Context Protocol) Configuration
 # ==============================================================================
 
 let
   isDarwin = pkgs.stdenv.isDarwin;
   homeDir = config.home.homeDirectory;
-  mcp = import ../mcp {
+  mcp = import ../mcp.nix {
     inherit
       config
       pkgs
       lib
-      isNixOS
       secretsDir
+      isNixOS
       ;
   };
 
   # ----------------------------------------------------------------------------
-  # GitKraken MCP
+  # GitKraken
   # ----------------------------------------------------------------------------
   gitKrakenPath =
     if isDesktop then
@@ -44,21 +44,9 @@ let
   # ----------------------------------------------------------------------------
   mcpConfig = {
     mcpServers = {
-      BraveSearch = {
-        name = "BraveSearch";
-        inherit (mcp.servers.braveSearch) command type;
-      };
-
-      Context7 = {
-        name = "Context7";
-        inherit (mcp.servers.context7) command type;
-      };
-
-      DeepWiki = {
-        name = "DeepWiki";
-        inherit (mcp.servers.deepwiki) command type;
-      };
-
+      BraveSearch = mcp.servers.braveSearch;
+      Context7 = mcp.servers.context7;
+      DeepWiki = mcp.servers.deepwiki;
       GitKraken = {
         name = "GitKraken";
         command = gitKrakenPath;

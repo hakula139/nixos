@@ -57,9 +57,9 @@ in
           config
           pkgs
           lib
+          secretsDir
           isNixOS
           isDesktop
-          secretsDir
           ;
       };
 

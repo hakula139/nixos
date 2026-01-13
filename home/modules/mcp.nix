@@ -7,12 +7,12 @@
 }:
 
 # ==============================================================================
-# MCP (Model Context Protocol)
+# MCP (Model Context Protocol) Configuration
 # ==============================================================================
 
 let
   # ----------------------------------------------------------------------------
-  # Brave Search MCP
+  # Brave Search
   # ----------------------------------------------------------------------------
   braveApiKeyFile = "${secretsDir}/brave-api-key";
   braveSearchBin = pkgs.writeShellScriptBin "brave-search-mcp" ''
@@ -23,7 +23,7 @@ let
   '';
 
   # ----------------------------------------------------------------------------
-  # Context7 MCP
+  # Context7
   # ----------------------------------------------------------------------------
   context7ApiKeyFile = "${secretsDir}/context7-api-key";
   context7Bin = pkgs.writeShellScriptBin "context7-mcp" ''
@@ -34,25 +34,31 @@ let
   '';
 
   # ----------------------------------------------------------------------------
-  # DeepWiki MCP
+  # DeepWiki
   # ----------------------------------------------------------------------------
   deepwikiBin = pkgs.writeShellScriptBin "deepwiki-mcp" ''
     exec ${pkgs.nodejs}/bin/npx -y mcp-remote https://mcp.deepwiki.com/sse --transport sse-first "$@"
   '';
 in
 {
+  # ----------------------------------------------------------------------------
+  # MCP servers
+  # ----------------------------------------------------------------------------
   servers = {
     braveSearch = {
+      name = "BraveSearch";
       command = "${braveSearchBin}/bin/brave-search-mcp";
       type = "stdio";
     };
 
     context7 = {
+      name = "Context7";
       command = "${context7Bin}/bin/context7-mcp";
       type = "stdio";
     };
 
     deepwiki = {
+      name = "DeepWiki";
       command = "${deepwikiBin}/bin/deepwiki-mcp";
       type = "stdio";
     };
@@ -70,13 +76,13 @@ in
 
     age.secrets = {
       brave-api-key = {
-        file = ../../../secrets/shared/brave-api-key.age;
+        file = ../../secrets/shared/brave-api-key.age;
         path = "${secretsDir}/brave-api-key";
         mode = "0400";
       };
 
       context7-api-key = {
-        file = ../../../secrets/shared/context7-api-key.age;
+        file = ../../secrets/shared/context7-api-key.age;
         path = "${secretsDir}/context7-api-key";
         mode = "0400";
       };
