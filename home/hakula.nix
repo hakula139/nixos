@@ -16,6 +16,7 @@ in
     ./modules/shared.nix
     ./modules/darwin.nix
     ./modules/cursor
+    ./modules/claude-code.nix
     ./modules/git.nix
     ./modules/ssh.nix
     ./modules/zsh.nix
