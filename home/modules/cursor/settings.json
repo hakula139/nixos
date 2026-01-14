@@ -77,6 +77,8 @@
   "C_Cpp.experimentalFeatures": "enabled",
   "C_Cpp.inlayHints.referenceOperator.enabled": true,
   "clangd.checkUpdates": true,
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.useTerminal": true,
   "cmake.allowCommentsInPresetsFile": true,
   "cmake.configureOnOpen": false,
   "cmake.ctest.allowParallelJobs": true,
