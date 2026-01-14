@@ -37,11 +37,11 @@ get_git_divergence() {
   # Get commits ahead / behind from tracking branch
   read -r ahead behind < <(git -C "${cwd}" --no-optional-locks rev-list --left-right --count '@{upstream}...HEAD' 2>/dev/null || echo "0 0")
 
-  local divergence=""
-  [[ "${ahead}" -gt 0 ]] && divergence="${divergence} »${ahead}"
-  [[ "${behind}" -gt 0 ]] && divergence="${divergence} «${behind}"
+  local divergence=()
+  [[ "${ahead}" -gt 0 ]] && divergence+=("»${ahead}")
+  [[ "${behind}" -gt 0 ]] && divergence+=("«${behind}")
 
-  echo "${divergence}"
+  [[ ${#divergence[@]} -gt 0 ]] && printf ' %s' "${divergence[@]}"
 }
 
 get_git_status_counts() {
@@ -58,12 +58,12 @@ get_git_status_counts() {
   modified="$(echo "${status_output}" | grep -c '^ M' || true)"
   untracked="$(echo "${status_output}" | grep -c '^??' || true)"
 
-  local status_parts=""
-  [[ "${staged}" -gt 0 ]] && status_parts="${status_parts} +${staged}"
-  [[ "${modified}" -gt 0 ]] && status_parts="${status_parts} !${modified}"
-  [[ "${untracked}" -gt 0 ]] && status_parts="${status_parts} ?${untracked}"
+  local status_parts=()
+  [[ "${staged}" -gt 0 ]] && status_parts+=("+${staged}")
+  [[ "${modified}" -gt 0 ]] && status_parts+=("!${modified}")
+  [[ "${untracked}" -gt 0 ]] && status_parts+=("?${untracked}")
 
-  echo "${status_parts}"
+  [[ ${#status_parts[@]} -gt 0 ]] && printf ' %s' "${status_parts[@]}"
 }
 
 format_git_info() {
@@ -90,6 +90,13 @@ format_git_info() {
   printf ' %s ' "${git_display}"
 }
 
+format_cost() {
+  local input="$1"
+  local cost_usd
+  cost_usd="$(echo "${input}" | jq -r '.cost.total_cost_usd // 0')"
+  printf '%b$%.3f%b' "${GREEN}" "${cost_usd}" "${RESET}"
+}
+
 # ------------------------------------------------------------------------------
 # Main
 # ------------------------------------------------------------------------------
@@ -99,15 +106,16 @@ main() {
   input="$(cat)"
   cwd="$(echo "${input}" | jq -r '.workspace.current_dir')"
 
-  local dir_display git_info prompt_symbol current_time
+  local dir_display git_info prompt_symbol current_time cost
   dir_display="$(get_directory_display "${cwd}")"
   git_info="$(format_git_info "${cwd}")"
   prompt_symbol="$(printf '%b❯%b' "${BOLD_GREEN}" "${RESET}")"
   current_time="$(date +%H:%M)"
+  cost="$(format_cost "${input}")"
 
   local left_side right_side
   left_side="$(printf '%b%s%b%s%s' "${BOLD_BLUE}" "${dir_display}" "${RESET}" "${git_info}" "${prompt_symbol}")"
-  right_side="$(printf '%b%s%b' "${DIMMED_WHITE}" "${current_time}" "${RESET}")"
+  right_side="$(printf '%b%s%b  %s' "${DIMMED_WHITE}" "${current_time}" "${RESET}" "${cost}")"
 
   printf '%s  %s' "${left_side}" "${right_side}"
 }
