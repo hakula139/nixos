@@ -5,6 +5,7 @@ set -euo pipefail
 # Claude Code Status Line Command
 # ==============================================================================
 
+readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
 readonly BOLD_GREEN='\033[1;32m'
 readonly YELLOW='\033[0;33m'
@@ -90,6 +91,37 @@ format_git_info() {
   printf ' %s ' "${git_display}"
 }
 
+format_context_usage() {
+  local input="$1"
+  local usage context_size
+
+  usage="$(echo "${input}" | jq '.context_window.current_usage')"
+  context_size="$(echo "${input}" | jq -r '.context_window.context_window_size // 0')"
+
+  if [[ "${usage}" == "null" ]] || [[ "${context_size}" -eq 0 ]]; then
+    printf '%b0%%%b' "${GREEN}" "${RESET}"
+    return
+  fi
+
+  # Calculate total current tokens: input + cache_creation + cache_read
+  local current_tokens percent_used
+  current_tokens="$(echo "${usage}" | jq '
+    (.input_tokens // 0) +
+    (.cache_creation_input_tokens // 0) +
+    (.cache_read_input_tokens // 0)
+  ')"
+  percent_used=$((current_tokens * 100 / context_size))
+
+  local color="${GREEN}"
+  if [[ "${percent_used}" -ge 80 ]]; then
+    color="${RED}"
+  elif [[ "${percent_used}" -ge 50 ]]; then
+    color="${YELLOW}"
+  fi
+
+  printf '%b%d%% (%dk/%dk)%b' "${color}" "${percent_used}" "$((current_tokens / 1000))" "$((context_size / 1000))" "${RESET}"
+}
+
 format_cost() {
   local input="$1"
   local cost_usd
@@ -106,16 +138,17 @@ main() {
   input="$(cat)"
   cwd="$(echo "${input}" | jq -r '.workspace.current_dir')"
 
-  local dir_display git_info prompt_symbol current_time cost
+  local dir_display git_info prompt_symbol current_time context_usage cost
   dir_display="$(get_directory_display "${cwd}")"
   git_info="$(format_git_info "${cwd}")"
   prompt_symbol="$(printf '%b❯%b' "${BOLD_GREEN}" "${RESET}")"
-  current_time="$(date +%H:%M)"
+  context_usage="$(format_context_usage "${input}")"
   cost="$(format_cost "${input}")"
+  current_time="$(date +%H:%M)"
 
   local left_side right_side
   left_side="$(printf '%b%s%b%s%s' "${BOLD_BLUE}" "${dir_display}" "${RESET}" "${git_info}" "${prompt_symbol}")"
-  right_side="$(printf '%b%s%b  %s' "${DIMMED_WHITE}" "${current_time}" "${RESET}" "${cost}")"
+  right_side="$(printf '%s  %s  %b%s%b' "${context_usage}" "${cost}" "${DIMMED_WHITE}" "${current_time}" "${RESET}")"
 
   printf '%s  %s' "${left_side}" "${right_side}"
 }
