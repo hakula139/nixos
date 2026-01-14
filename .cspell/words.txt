@@ -89,6 +89,7 @@ phoityne
 picgo
 pkgs
 pkief
+pkill
 pmem
 pname
 psql

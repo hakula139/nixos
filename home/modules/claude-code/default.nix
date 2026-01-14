@@ -102,10 +102,23 @@ lib.mkMerge [
             # Local shell
             "Bash(sudo:*)"
             "Bash(rm:*)"
+            "Bash(chmod:*)"
+            "Bash(chown:*)"
+            "Bash(kill:*)"
+            "Bash(pkill:*)"
             "Bash(nix:*::*)"
             "Bash(home-manager:*)"
             "Bash(nixos-rebuild:*)"
             "Bash(darwin-rebuild:*)"
+            "Bash(git commit:*)"
+            "Bash(git reset:*)"
+            "Bash(git switch:*)"
+            "Bash(git checkout:*)"
+            "Bash(git push:*)"
+            "Bash(git pull:*)"
+            "Bash(git rebase:*)"
+            "Bash(git merge:*)"
+            "Bash(git cherry-pick:*)"
 
             # MCP
             "mcp__Git__commit"
