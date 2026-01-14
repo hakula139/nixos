@@ -6,9 +6,14 @@
   ...
 }:
 
+# ==============================================================================
+# Claude Code Configuration
+# ==============================================================================
+
 let
   proxy = "http://127.0.0.1:7897";
-  mcp = import ./mcp.nix {
+
+  mcp = import ../mcp.nix {
     inherit
       config
       pkgs
@@ -16,19 +21,31 @@ let
       isNixOS
       ;
   };
+
+  statusLineScript = pkgs.writeShellScript "statusline-command" (
+    builtins.readFile ./statusline-command.sh
+  );
 in
 lib.mkMerge [
   mcp.secrets
   {
-    # ============================================================================
-    # Claude Code Configuration
-    # ============================================================================
+    # --------------------------------------------------------------------------
+    # User configuration files
+    # --------------------------------------------------------------------------
+    home.file.".claude/statusline-command.sh" = {
+      source = statusLineScript;
+      executable = true;
+    };
+
+    # --------------------------------------------------------------------------
+    # Program configuration
+    # --------------------------------------------------------------------------
     programs.claude-code = {
       enable = true;
 
-      # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
       # Settings
-      # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
       settings = {
         attribution = {
           commit = "";
@@ -40,6 +57,11 @@ lib.mkMerge [
           HTTPS_PROXY = proxy;
           HTTP_PROXY = proxy;
           NO_PROXY = "localhost,127.0.0.1";
+        };
+
+        statusLine = {
+          type = "command";
+          command = "${config.home.homeDirectory}/.claude/statusline-command.sh";
         };
 
         permissions = {
@@ -97,9 +119,9 @@ lib.mkMerge [
         };
       };
 
-      # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
       # MCP configuration
-      # --------------------------------------------------------------------------
+      # ------------------------------------------------------------------------
       mcpServers = {
         BraveSearch = mcp.servers.braveSearch;
         Context7 = mcp.servers.context7;
