@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Repository Overview
 
@@ -191,6 +191,7 @@ Secrets in `secrets/*.age` are **decrypted at activation time** by agenix and pl
 - **Line width**: Default (100 characters)
 - **Import style**: Use `with pkgs;` in package lists for brevity
 - **Module structure**: Follow existing module patterns (enable option, config block, documentation strings)
+- **Comments**: Only add when needed; avoid verbose / obvious comments (prefer clarity in naming / structure)
 
 ## Testing Changes
 

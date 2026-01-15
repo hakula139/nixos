@@ -32,6 +32,8 @@ lib.mkMerge [
     # --------------------------------------------------------------------------
     # User configuration files
     # --------------------------------------------------------------------------
+    home.file.".claude/CLAUDE.md".source = ./_CLAUDE.md;
+
     home.file.".claude/statusline-command.sh" = {
       source = statusLineScript;
       executable = true;
@@ -86,6 +88,8 @@ lib.mkMerge [
           type = "command";
           command = "${config.home.homeDirectory}/.claude/statusline-command.sh";
         };
+
+        theme = "dark";
 
         permissions = {
           defaultMode = "acceptEdits";
@@ -149,8 +153,7 @@ lib.mkMerge [
             "mcp__Git__checkout"
           ];
 
-          deny = [
-          ];
+          deny = [ ];
         };
       };
 
