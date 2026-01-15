@@ -73,6 +73,15 @@ lib.mkMerge [
           "security-guidance@claude-code-plugins" = true;
         };
 
+        extraKnownMarketplaces = {
+          claude-code-plugins = {
+            source = {
+              source = "github";
+              repo = "anthropics/claude-code";
+            };
+          };
+        };
+
         statusLine = {
           type = "command";
           command = "${config.home.homeDirectory}/.claude/statusline-command.sh";

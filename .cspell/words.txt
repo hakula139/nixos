@@ -1,5 +1,6 @@
 aipopup
 alnum
+anthropics
 autocd
 bradlc
 btop
