@@ -86,7 +86,6 @@ lib.mkMerge [
             "Bash(git show:*)"
 
             # MCP
-            "mcp__BraveSearch__*"
             "mcp__Context7__*"
             "mcp__DeepWiki__*"
             "mcp__Filesystem__*"
@@ -137,7 +136,6 @@ lib.mkMerge [
       # MCP configuration
       # ------------------------------------------------------------------------
       mcpServers = {
-        BraveSearch = mcp.servers.braveSearch;
         Context7 = mcp.servers.context7;
         DeepWiki = mcp.servers.deepwiki;
         Filesystem = mcp.servers.filesystem;
