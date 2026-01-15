@@ -9,7 +9,7 @@
   # Nix Development
   # ----------------------------------------------------------------------------
   nix = with pkgs; [
-    cachix # Cachix client (binary cache)
+    unstable.cachix # Cachix client (binary cache)
     deadnix # Find unused Nix bindings / attributes
     nil # Nix language server (LSP)
     nix-tree # Explore dependency tree of Nix derivations
