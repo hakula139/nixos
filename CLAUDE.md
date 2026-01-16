@@ -187,11 +187,20 @@ Secrets in `secrets/*.age` are **decrypted at activation time** by agenix and pl
 
 ## Code Style
 
+### Nix
+
 - **Formatter**: `nixfmt-rfc-style` (enforced by pre-commit)
 - **Line width**: Default (100 characters)
 - **Import style**: Use `with pkgs;` in package lists for brevity
 - **Module structure**: Follow existing module patterns (enable option, config block, documentation strings)
 - **Comments**: Only add when needed; avoid verbose / obvious comments (prefer clarity in naming / structure)
+
+### Bash Scripts
+
+**Formatting principles** - DRY the logic, but expand the formatting:
+
+- Use **multi-line formatting** for complex commands: `if/else` blocks, multi-argument `printf`, process substitutions
+- Use **descriptive variable names**
 
 ## Testing Changes
 
