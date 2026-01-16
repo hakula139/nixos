@@ -8,12 +8,7 @@
     # Nix formatting
     # --------------------------------------------------------------------------
     {
-      matcher = {
-        tools = [
-          "Edit"
-          "Write"
-        ];
-      };
+      matcher = "Edit|Write";
       hooks = [
         {
           type = "command";
