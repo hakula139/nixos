@@ -12,7 +12,9 @@
 
 let
   proxy = "http://127.0.0.1:7897";
-
+  hooks = import ./hooks.nix;
+  permissions = import ./permissions.nix;
+  plugins = import ./plugins.nix;
   mcp = import ../mcp.nix {
     inherit
       config
@@ -50,6 +52,9 @@ lib.mkMerge [
       # Settings
       # ------------------------------------------------------------------------
       settings = {
+        inherit hooks permissions;
+        inherit (plugins) enabledPlugins extraKnownMarketplaces;
+
         attribution = {
           commit = "";
           pr = "";
@@ -61,65 +66,6 @@ lib.mkMerge [
           HTTP_PROXY = proxy;
           NO_PROXY = "localhost,127.0.0.1";
         };
-
-        enabledPlugins = {
-          # Anthropic plugins
-          "code-review@claude-code-plugins" = true;
-          "commit-commands@claude-code-plugins" = true;
-          "explanatory-output-style@claude-code-plugins" = true;
-          "feature-dev@claude-code-plugins" = true;
-          "frontend-design@claude-code-plugins" = true;
-          "hookify@claude-code-plugins" = true;
-          "learning-output-style@claude-code-plugins" = true;
-          "pr-review-toolkit@claude-code-plugins" = true;
-          "ralph-wiggum@claude-code-plugins" = true;
-          "security-guidance@claude-code-plugins" = true;
-
-          # Wakatime plugins
-          "claude-code-wakatime@wakatime" = true;
-        };
-
-        extraKnownMarketplaces = {
-          claude-code-plugins = {
-            source = {
-              source = "github";
-              repo = "anthropics/claude-code";
-            };
-          };
-          wakatime = {
-            source = {
-              source = "github";
-              repo = "wakatime/claude-code-wakatime";
-            };
-          };
-        };
-
-        hooks = {
-          PostToolUse = [
-            {
-              matcher = {
-                tools = [
-                  "Edit"
-                  "Write"
-                ];
-              };
-              hooks = [
-                {
-                  type = "command";
-                  command = ''
-                    for file in $CLAUDE_FILE_PATHS; do
-                      if [[ "$file" == *.nix ]]; then
-                        nix fmt "$file" 2>/dev/null || true
-                      fi
-                    done
-                  '';
-                }
-              ];
-            }
-          ];
-        };
-
-        permissions = import ./permissions.nix;
 
         statusLine = {
           type = "command";
