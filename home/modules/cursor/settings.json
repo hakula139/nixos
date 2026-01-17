@@ -159,6 +159,7 @@
   "git.terminalGitEditor": true,
   "git.useCommitInputAsStashMessage": true,
   "github.gitProtocol": "ssh",
+  "gitlens.ai.model": "gitkraken",
   "gitlens.gitCommands.skipConfirmations": [
     "fetch:command",
     "stash-push:command",
@@ -221,8 +222,8 @@
     "CloudCone-US-1": "linux",
     "CloudCone-US-2": "linux",
     "CloudCone-US-3": "linux",
-    "Tencent-SG-1": "linux",
-    "Hakula-MacBook": "macOS"
+    "Hakula-MacBook": "macOS",
+    "Tencent-SG-1": "linux"
   },
   "ruff.configurationPreference": "filesystemFirst",
   "scm.defaultViewMode": "tree",
