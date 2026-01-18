@@ -14,29 +14,8 @@ let
   keys = import ../../secrets/keys.nix;
 
   sshCfg = config.hakula.access.ssh;
-
-  builders = [
-    {
-      name = "CloudCone-US-1";
-      ip = "74.48.108.20";
-      port = 35060;
-      sshUser = "root";
-      sshKey = "${config.users.users.hakula.home}/.ssh/CloudCone/id_ed25519";
-      system = "x86_64-linux";
-      hostKey = keys.hosts.us-1;
-      speedFactor = 4;
-    }
-    {
-      name = "CloudCone-US-2";
-      ip = "74.48.189.161";
-      port = 35060;
-      sshUser = "root";
-      sshKey = "${config.users.users.hakula.home}/.ssh/CloudCone/id_ed25519";
-      system = "x86_64-linux";
-      hostKey = keys.hosts.us-2;
-      speedFactor = 2;
-    }
-  ];
+  sshKey = "${config.users.users.hakula.home}/.ssh/CloudCone/id_ed25519";
+  builders = builtins.attrValues shared.builders;
 in
 {
   imports = [
@@ -76,22 +55,7 @@ in
         };
 
       distributedBuilds = true;
-      buildMachines = map (builder: {
-        inherit (builder)
-          system
-          sshUser
-          sshKey
-          speedFactor
-          ;
-        hostName = builder.name;
-        protocol = "ssh-ng";
-        maxJobs = 2;
-        supportedFeatures = [
-          "big-parallel"
-          "kvm"
-          "nixos-test"
-        ];
-      }) builders;
+      buildMachines = shared.mkBuildMachines builders sshKey;
 
       gc = {
         automatic = true;
@@ -300,7 +264,7 @@ in
         HostName ${builder.ip}
         Port ${toString builder.port}
         User ${builder.sshUser}
-        IdentityFile ${builder.sshKey}
+        IdentityFile ${sshKey}
     '') builders;
 
     programs.ssh.knownHosts = lib.listToAttrs (

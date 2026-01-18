@@ -69,4 +69,47 @@ in
     keep-derivations = false;
     download-buffer-size = 1073741824; # 1 GB
   };
+
+  # ----------------------------------------------------------------------------
+  # Remote builders
+  # ----------------------------------------------------------------------------
+  builders = {
+    us-1 = {
+      name = "CloudCone-US-1";
+      ip = "74.48.108.20";
+      port = 35060;
+      sshUser = "root";
+      system = "x86_64-linux";
+      hostKey = keys.hosts.us-1;
+      speedFactor = 4;
+    };
+    us-2 = {
+      name = "CloudCone-US-2";
+      ip = "74.48.189.161";
+      port = 35060;
+      sshUser = "root";
+      system = "x86_64-linux";
+      hostKey = keys.hosts.us-2;
+      speedFactor = 2;
+    };
+  };
+
+  mkBuildMachines =
+    builders: sshKey:
+    map (builder: {
+      inherit (builder)
+        system
+        sshUser
+        speedFactor
+        ;
+      inherit sshKey;
+      hostName = builder.name;
+      protocol = "ssh-ng";
+      maxJobs = 2;
+      supportedFeatures = [
+        "big-parallel"
+        "kvm"
+        "nixos-test"
+      ];
+    }) builders;
 }
