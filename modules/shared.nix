@@ -83,15 +83,6 @@ in
       hostKey = keys.hosts.us-1;
       speedFactor = 4;
     };
-    us-2 = {
-      name = "CloudCone-US-2";
-      ip = "74.48.189.161";
-      port = 35060;
-      sshUser = "root";
-      system = "x86_64-linux";
-      hostKey = keys.hosts.us-2;
-      speedFactor = 2;
-    };
   };
 
   mkBuildMachines =
