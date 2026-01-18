@@ -24,15 +24,6 @@ in
     ./zoxide.nix
   ];
 
-  # ----------------------------------------------------------------------------
-  # Module options
-  # ----------------------------------------------------------------------------
-  options.hakula.zsh = {
-    direnv.enable = lib.mkEnableOption "direnv integration" // {
-      default = true;
-    };
-  };
-
   config.programs.zsh = {
     enable = true;
     enableCompletion = true;
