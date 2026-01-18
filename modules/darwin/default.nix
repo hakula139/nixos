@@ -14,8 +14,8 @@ let
   keys = import ../../secrets/keys.nix;
 
   sshCfg = config.hakula.access.ssh;
-  sshKey = "${config.users.users.hakula.home}/.ssh/CloudCone/id_ed25519";
-  builders = builtins.attrValues shared.builders;
+  servers = builtins.attrValues shared.servers;
+  builders = builtins.filter (s: s.isBuilder) servers;
 in
 {
   imports = [
@@ -39,6 +39,16 @@ in
 
   config = {
     # ----------------------------------------------------------------------------
+    # Secrets (agenix)
+    # ----------------------------------------------------------------------------
+    age.secrets.builder-ssh-key = {
+      file = ../../secrets/shared/builder-ssh-key.age;
+      owner = "hakula";
+      group = "staff";
+      mode = "0400";
+    };
+
+    # ----------------------------------------------------------------------------
     # Nix Configuration
     # ----------------------------------------------------------------------------
     nix = {
@@ -55,7 +65,7 @@ in
         };
 
       distributedBuilds = true;
-      buildMachines = shared.mkBuildMachines builders sshKey;
+      buildMachines = shared.mkBuildMachines builders config.age.secrets.builder-ssh-key.path;
 
       gc = {
         automatic = true;
@@ -259,26 +269,11 @@ in
     # ----------------------------------------------------------------------------
     # SSH Configuration (system-wide)
     # ----------------------------------------------------------------------------
-    programs.ssh.extraConfig = lib.concatMapStringsSep "\n" (builder: ''
-      Host ${builder.name}
-        HostName ${builder.ip}
-        Port ${toString builder.port}
-        User ${builder.sshUser}
-        IdentityFile ${sshKey}
-    '') builders;
+    programs.ssh.extraConfig =
+      shared.mkSshExtraConfig lib servers
+        config.age.secrets.builder-ssh-key.path;
 
-    programs.ssh.knownHosts = lib.listToAttrs (
-      map (builder: {
-        name = builder.name;
-        value = {
-          extraHostNames = [
-            builder.ip
-            "[${builder.ip}]:${toString builder.port}"
-          ];
-          publicKey = builder.hostKey;
-        };
-      }) builders
-    );
+    programs.ssh.knownHosts = shared.mkSshKnownHosts lib servers;
 
     # ----------------------------------------------------------------------------
     # Shell & Environment

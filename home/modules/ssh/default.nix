@@ -1,12 +1,31 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+
+# ==============================================================================
+# SSH Configuration
+# ==============================================================================
 
 let
+  shared = import ../../../modules/shared.nix { inherit pkgs; };
   homeDir = config.home.homeDirectory;
+
+  serverMatchBlocks = lib.mapAttrs' (
+    _: server:
+    lib.nameValuePair server.displayName {
+      host = server.displayName;
+      hostname = server.ip;
+      user = "hakula";
+      port = server.port;
+      identityFile = "${homeDir}/.ssh/${server.provider}/id_ed25519";
+      forwardAgent = true;
+    }
+  ) shared.servers;
 in
 {
-  # ============================================================================
-  # SSH Configuration
-  # ============================================================================
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
@@ -25,38 +44,6 @@ in
         user = "git";
         identityFile = "${homeDir}/.ssh/GitHub/hc492874";
       };
-      "CloudCone-US-1" = {
-        host = "CloudCone-US-1";
-        hostname = "74.48.108.20";
-        user = "hakula";
-        port = 35060;
-        identityFile = "${homeDir}/.ssh/CloudCone/id_ed25519";
-        forwardAgent = true;
-      };
-      "CloudCone-US-2" = {
-        host = "CloudCone-US-2";
-        hostname = "74.48.189.161";
-        user = "hakula";
-        port = 35060;
-        identityFile = "${homeDir}/.ssh/CloudCone/id_ed25519";
-        forwardAgent = true;
-      };
-      "CloudCone-US-3" = {
-        host = "CloudCone-US-3";
-        hostname = "148.135.122.201";
-        user = "hakula";
-        port = 35060;
-        identityFile = "${homeDir}/.ssh/CloudCone/id_ed25519";
-        forwardAgent = true;
-      };
-      "Tencent-SG-1" = {
-        host = "Tencent-SG-1";
-        hostname = "43.134.225.50";
-        user = "hakula";
-        port = 35060;
-        identityFile = "${homeDir}/.ssh/Tencent/id_ed25519";
-        forwardAgent = true;
-      };
       "Hakula-MacBook" = {
         host = "Hakula-MacBook";
         hostname = "hakula-macbook";
@@ -65,6 +52,7 @@ in
         identityFile = "${homeDir}/.ssh/id_ed25519";
         forwardAgent = true;
       };
-    };
+    }
+    // serverMatchBlocks;
   };
 }

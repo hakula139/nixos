@@ -14,9 +14,9 @@ let
   shared = import ../../shared.nix { inherit pkgs; };
   cfg = config.hakula.builders;
 
-  # Filter out current host from builders list
-  availableBuilders = lib.filterAttrs (name: _: name != hostName) shared.builders;
-  builders = builtins.attrValues availableBuilders;
+  allServers = builtins.attrValues shared.servers;
+  servers = builtins.filter (s: s.name != hostName) allServers;
+  builders = builtins.filter (s: s.isBuilder) servers;
 in
 {
   # ----------------------------------------------------------------------------
@@ -49,25 +49,10 @@ in
     # --------------------------------------------------------------------------
     # SSH Configuration (system-wide)
     # --------------------------------------------------------------------------
-    programs.ssh.extraConfig = lib.concatMapStringsSep "\n" (builder: ''
-      Host ${builder.name}
-        HostName ${builder.ip}
-        Port ${toString builder.port}
-        User ${builder.sshUser}
-        IdentityFile ${config.age.secrets.builder-ssh-key.path}
-    '') builders;
+    programs.ssh.extraConfig =
+      shared.mkSshExtraConfig lib servers
+        config.age.secrets.builder-ssh-key.path;
 
-    programs.ssh.knownHosts = lib.listToAttrs (
-      map (builder: {
-        name = builder.name;
-        value = {
-          extraHostNames = [
-            builder.ip
-            "[${builder.ip}]:${toString builder.port}"
-          ];
-          publicKey = builder.hostKey;
-        };
-      }) builders
-    );
+    programs.ssh.knownHosts = shared.mkSshKnownHosts lib servers;
   };
 }

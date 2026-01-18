@@ -119,7 +119,7 @@ in
     # --------------------------------------------------------------------------
     users.defaultUserShell = pkgs.zsh;
 
-    users.users.root.openssh.authorizedKeys.keys = sshCfg.authorizedKeys;
+    users.users.root.openssh.authorizedKeys.keys = sshCfg.authorizedKeys ++ [ keys.builder ];
 
     users.users.hakula = {
       isNormalUser = true;
