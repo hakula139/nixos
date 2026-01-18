@@ -24,21 +24,25 @@ in
   # ----------------------------------------------------------------------------
   options.hakula.builders = {
     enable = lib.mkEnableOption "distributed builds using remote builders";
-
-    sshKey = lib.mkOption {
-      type = lib.types.path;
-      default = "/root/.ssh/id_ed25519";
-      description = "Path to SSH private key for connecting to builders";
-    };
   };
 
   config = lib.mkIf cfg.enable {
+    # --------------------------------------------------------------------------
+    # Secrets (agenix)
+    # --------------------------------------------------------------------------
+    age.secrets.builder-ssh-key = {
+      file = ../../../secrets/shared/builder-ssh-key.age;
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+
     # --------------------------------------------------------------------------
     # Nix Configuration
     # --------------------------------------------------------------------------
     nix = {
       distributedBuilds = true;
-      buildMachines = shared.mkBuildMachines builders cfg.sshKey;
+      buildMachines = shared.mkBuildMachines builders config.age.secrets.builder-ssh-key.path;
       settings.builders-use-substitutes = true;
     };
 
@@ -50,7 +54,7 @@ in
         HostName ${builder.ip}
         Port ${toString builder.port}
         User ${builder.sshUser}
-        IdentityFile ${cfg.sshKey}
+        IdentityFile ${config.age.secrets.builder-ssh-key.path}
     '') builders;
 
     programs.ssh.knownHosts = lib.listToAttrs (
