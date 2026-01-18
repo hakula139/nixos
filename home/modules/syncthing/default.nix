@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }:
@@ -10,9 +9,7 @@
 # ==============================================================================
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
   homeDir = config.home.homeDirectory;
-  configDir = "${homeDir}/.config/syncthing";
   syncDir = "${homeDir}/synced";
 
   claudeCodeSyncDir = "${syncDir}/claude-code";
@@ -24,7 +21,6 @@ in
 {
   services.syncthing = {
     enable = true;
-    extraOptions = lib.mkIf isDarwin [ "-home=${configDir}" ];
 
     settings = {
       devices = {
