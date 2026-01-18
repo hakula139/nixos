@@ -117,12 +117,14 @@ sgid
 shellenv
 shfmt
 signup
+slaac
 spack
 statix
 stdenv
 substituters
 sudoe
 suid
+sysctls
 t3dotgg
 tamasfe
 telegramcidr
