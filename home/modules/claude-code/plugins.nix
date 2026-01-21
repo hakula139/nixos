@@ -7,6 +7,10 @@
   # Enabled plugins
   # ----------------------------------------------------------------------------
   enabledPlugins = {
+    # Official skills
+    "document-skills@anthropic-agent-skills" = true;
+    "example-skills@anthropic-agent-skills" = true;
+
     # Official plugins
     "code-review@claude-code-plugins" = true;
     "commit-commands@claude-code-plugins" = true;
@@ -34,6 +38,12 @@
   # Custom marketplaces
   # ----------------------------------------------------------------------------
   extraKnownMarketplaces = {
+    anthropic-agent-skills = {
+      source = {
+        source = "github";
+        repo = "anthropics/skills";
+      };
+    };
     claude-code-plugins = {
       source = {
         source = "github";
