@@ -21,7 +21,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
     age.secrets.aria2-rpc-secret = {
       file = ../../../secrets/shared/aria2-rpc-secret.age;

@@ -44,7 +44,7 @@ in
 
   config = lib.mkIf (backupCfg.enable && backupTwikooCfg.enable) {
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
     age.secrets.twikoo-access-token = {
       file = ../../../../secrets/shared/twikoo-access-token.age;

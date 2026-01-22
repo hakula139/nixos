@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  secrets,
   ...
 }:
 
@@ -11,7 +12,6 @@
 let
   cfg = config.hakula.claude-code;
   userCfg = config.users.users.${cfg.user};
-  secretsDir = "${userCfg.home}/.secrets";
 in
 {
   # ----------------------------------------------------------------------------
@@ -36,21 +36,15 @@ in
     ];
 
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
-    age.secrets.claude-code-oauth-token = {
-      file = ../../../secrets/shared/claude-code-oauth-token.age;
-      path = "${secretsDir}/claude-code-oauth-token";
-      owner = cfg.user;
-      group = userCfg.group;
-      mode = "0600";
-    };
+    age.secrets.claude-code-oauth-token =
+      secrets.mkSecret "shared" "claude-code-oauth-token" cfg.user
+        userCfg.group;
 
     # --------------------------------------------------------------------------
     # Filesystem layout
     # --------------------------------------------------------------------------
-    systemd.tmpfiles.rules = [
-      "d ${secretsDir} 0700 ${cfg.user} ${userCfg.group} -"
-    ];
+    systemd.tmpfiles.rules = secrets.mkSecretsDir userCfg userCfg.group;
   };
 }

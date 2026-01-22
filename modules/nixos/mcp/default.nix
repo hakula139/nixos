@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  secrets,
   ...
 }:
 
@@ -11,7 +12,7 @@
 let
   cfg = config.hakula.mcp;
   userCfg = config.users.users.${cfg.user};
-  secretsDir = "${userCfg.home}/.secrets";
+  secretsDir = secrets.secretsPath userCfg.home;
 in
 {
   # ----------------------------------------------------------------------------
@@ -36,37 +37,25 @@ in
     ];
 
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
-    age.secrets.brave-api-key = {
-      file = ../../../secrets/shared/brave-api-key.age;
+    age.secrets.brave-api-key = secrets.mkSecret "shared" "brave-api-key" cfg.user userCfg.group // {
       path = "${secretsDir}/brave-api-key";
-      owner = cfg.user;
-      group = userCfg.group;
-      mode = "0400";
     };
 
-    age.secrets.context7-api-key = {
-      file = ../../../secrets/shared/context7-api-key.age;
-      path = "${secretsDir}/context7-api-key";
-      owner = cfg.user;
-      group = userCfg.group;
-      mode = "0400";
-    };
+    age.secrets.context7-api-key =
+      secrets.mkSecret "shared" "context7-api-key" cfg.user userCfg.group
+      // {
+        path = "${secretsDir}/context7-api-key";
+      };
 
-    age.secrets.github-pat = {
-      file = ../../../secrets/shared/github-pat.age;
+    age.secrets.github-pat = secrets.mkSecret "shared" "github-pat" cfg.user userCfg.group // {
       path = "${secretsDir}/github-pat";
-      owner = cfg.user;
-      group = userCfg.group;
-      mode = "0400";
     };
 
     # --------------------------------------------------------------------------
     # Filesystem layout
     # --------------------------------------------------------------------------
-    systemd.tmpfiles.rules = [
-      "d ${secretsDir} 0700 ${cfg.user} ${userCfg.group} -"
-    ];
+    systemd.tmpfiles.rules = secrets.mkSecretsDir userCfg userCfg.group;
   };
 }

@@ -2,6 +2,8 @@
   config,
   pkgs,
   lib,
+  secrets,
+  isNixOS ? false,
   isDesktop ? false,
   ...
 }:
@@ -13,6 +15,8 @@
 let
   tooling = import ../../lib/tooling.nix { inherit pkgs; };
   isLinux = pkgs.stdenv.isLinux;
+  homeDir = config.home.homeDirectory;
+  secretsDir = secrets.secretsPath homeDir;
 in
 {
   # ----------------------------------------------------------------------------
@@ -193,6 +197,21 @@ in
       if command -v corepack &>/dev/null; then
         corepack enable pnpm 2>/dev/null
       fi
+    ''
+  );
+
+  # ----------------------------------------------------------------------------
+  # Secrets Configuration (agenix)
+  # On NixOS: system-level agenix handles decryption, skip this config
+  # On Darwin / standalone: home-manager agenix handles decryption
+  # ----------------------------------------------------------------------------
+  age.identityPaths = lib.mkIf (!isNixOS) [
+    "${homeDir}/.ssh/id_ed25519"
+  ];
+
+  home.activation.ensureSecretsDir = lib.mkIf (!isNixOS) (
+    lib.hm.dag.entryBefore [ "writeBoundary" ] ''
+      install -d -m 0700 "${secretsDir}"
     ''
   );
 }

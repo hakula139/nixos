@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  secrets,
   isNixOS ? false,
   ...
 }:
@@ -13,7 +14,7 @@
 let
   cfg = config.hakula.claude-code;
   homeDir = config.home.homeDirectory;
-  secretsDir = "${homeDir}/.secrets";
+  secretsDir = secrets.secretsPath homeDir;
 in
 {
   # ----------------------------------------------------------------------------
@@ -43,6 +44,7 @@ in
           config
           pkgs
           lib
+          secrets
           isNixOS
           ;
       };
@@ -65,15 +67,11 @@ in
       mcp.secrets
       (lib.mkIf (!isNixOS) {
         # ----------------------------------------------------------------------
-        # Secrets (agenix)
-        # On NixOS: system-level agenix handles decryption (modules/nixos/claude-code)
-        # On Darwin / standalone: home-manager agenix handles decryption
+        # Secrets
         # ----------------------------------------------------------------------
-        age.secrets.claude-code-oauth-token = {
-          file = ../../../secrets/shared/claude-code-oauth-token.age;
-          path = "${secretsDir}/claude-code-oauth-token";
-          mode = "0400";
-        };
+        age.secrets.claude-code-oauth-token =
+          secrets.mkHomeSecret "shared" "claude-code-oauth-token"
+            homeDir;
       })
       {
         # ----------------------------------------------------------------------

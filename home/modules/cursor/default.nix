@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  secrets,
   isNixOS ? false,
   isDesktop ? false,
   ...
@@ -56,6 +57,7 @@ in
           config
           pkgs
           lib
+          secrets
           isNixOS
           isDesktop
           ;

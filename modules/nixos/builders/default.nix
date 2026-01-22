@@ -28,7 +28,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
     age.secrets.builder-ssh-key = {
       file = ../../../secrets/shared/builder-ssh-key.age;

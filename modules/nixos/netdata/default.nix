@@ -46,7 +46,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # ----------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # ----------------------------------------------------------------------------
     age.secrets.qq-smtp-authcode = {
       file = ../../../secrets/shared/qq-smtp-authcode.age;

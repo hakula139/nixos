@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # ----------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # ----------------------------------------------------------------------------
     age.secrets.cachix-auth-token = {
       file = ../../../secrets/shared/cachix-auth-token.age;

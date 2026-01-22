@@ -111,7 +111,7 @@ in
     users.groups.${serviceName} = { };
 
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
     age.secrets.backup-env = {
       file = ../../../secrets/shared/backup-env.age;

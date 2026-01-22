@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  secrets,
   isNixOS ? false,
   ...
 }:
@@ -12,7 +13,7 @@
 
 let
   homeDir = config.home.homeDirectory;
-  secretsDir = "${homeDir}/.secrets";
+  secretsDir = secrets.secretsPath homeDir;
 
   # ----------------------------------------------------------------------------
   # Brave Search
@@ -111,37 +112,13 @@ in
   };
 
   # ----------------------------------------------------------------------------
-  # Secrets (agenix)
-  # On NixOS: system-level agenix handles decryption (modules/nixos/mcp)
-  # On Darwin / standalone: home-manager agenix handles decryption
+  # Secrets
   # ----------------------------------------------------------------------------
   secrets = lib.mkIf (!isNixOS) {
-    age.identityPaths = [
-      "${homeDir}/.ssh/id_ed25519"
-    ];
-
     age.secrets = {
-      brave-api-key = {
-        file = ../../../secrets/shared/brave-api-key.age;
-        path = "${secretsDir}/brave-api-key";
-        mode = "0400";
-      };
-
-      context7-api-key = {
-        file = ../../../secrets/shared/context7-api-key.age;
-        path = "${secretsDir}/context7-api-key";
-        mode = "0400";
-      };
-
-      github-pat = {
-        file = ../../../secrets/shared/github-pat.age;
-        path = "${secretsDir}/github-pat";
-        mode = "0400";
-      };
+      brave-api-key = secrets.mkHomeSecret "shared" "brave-api-key" homeDir;
+      context7-api-key = secrets.mkHomeSecret "shared" "context7-api-key" homeDir;
+      github-pat = secrets.mkHomeSecret "shared" "github-pat" homeDir;
     };
-
-    home.activation.secretsDir = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
-      install -d -m 0700 "${secretsDir}"
-    '';
   };
 }

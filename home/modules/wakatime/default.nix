@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  secrets,
   isNixOS ? false,
   ...
 }:
@@ -11,21 +12,16 @@
 
 let
   homeDir = config.home.homeDirectory;
+  secretsDir = secrets.secretsPath homeDir;
 in
 {
   # ----------------------------------------------------------------------------
-  # Secrets (agenix)
-  # On NixOS: system-level agenix handles decryption (modules/nixos/wakatime)
-  # On Darwin / standalone: home-manager agenix handles decryption
+  # Secrets
   # ----------------------------------------------------------------------------
   config = lib.mkIf (!isNixOS) {
-    age.identityPaths = [
-      "${homeDir}/.ssh/id_ed25519"
-    ];
-
     age.secrets.wakatime-config = {
-      file = ../../../secrets/shared/wakatime-config.age;
-      path = "${homeDir}/.wakatime.cfg";
+      file = secrets.secretFile "shared" "wakatime-config";
+      path = "${secretsDir}/.wakatime.cfg";
       mode = "0600";
     };
   };

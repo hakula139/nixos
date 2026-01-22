@@ -62,7 +62,7 @@ in
       users.groups.dockerhub = { };
 
       # ------------------------------------------------------------------------
-      # Secrets (agenix)
+      # Secrets
       # ------------------------------------------------------------------------
       age.secrets.dockerhub-token = {
         file = cfg.tokenAgeFile;

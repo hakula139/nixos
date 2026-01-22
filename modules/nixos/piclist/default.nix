@@ -50,7 +50,7 @@ in
     users.groups.piclist = { };
 
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
     age.secrets.piclist-config = {
       file = ../../../secrets/shared/piclist-config.json.age;

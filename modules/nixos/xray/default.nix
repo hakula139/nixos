@@ -31,7 +31,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # ----------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # ----------------------------------------------------------------------------
     age.secrets.xray-config = {
       file = ../../../secrets/shared/xray-config.json.age;

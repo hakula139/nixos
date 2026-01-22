@@ -97,7 +97,7 @@ in
     users.groups.nginx = { };
 
     # ----------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # ----------------------------------------------------------------------------
     age.secrets.cloudflare-credentials = {
       file = ../../../secrets/shared/cloudflare-credentials.age;

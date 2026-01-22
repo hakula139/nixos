@@ -52,7 +52,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # --------------------------------------------------------------------------
-    # Secrets (agenix)
+    # Secrets
     # --------------------------------------------------------------------------
     age.secrets.fuclaude-env = {
       file = ../../../secrets/shared/fuclaude-env.age;
