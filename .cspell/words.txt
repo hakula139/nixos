@@ -2,9 +2,14 @@ aipopup
 alnum
 anthropics
 autocd
+autocmd
+bdelete
+bnext
+bprevious
 bradlc
 btop
 cachix
+catppuccin
 ccache
 ccagent
 chgrp
@@ -47,6 +52,7 @@ gsub
 hakula
 hediet
 hitoolbox
+hlsearch
 hookify
 horiz
 iface
@@ -63,6 +69,7 @@ khtml
 kubeconfig
 kubectx
 lancidr
+lcount
 libkrb
 libuuid
 linkify
@@ -74,6 +81,7 @@ mkcd
 msdos
 msmtp
 msmtprc
+nbsp
 nixfmt
 nixgc
 nixos
@@ -83,6 +91,7 @@ nixup
 nlsv
 nslookup
 nvim
+pcall
 pcdn
 pcpu
 pcpull
@@ -119,6 +128,7 @@ sess
 sgid
 shellenv
 shfmt
+showcmd
 signup
 slaac
 spack
@@ -129,6 +139,7 @@ sudoe
 suid
 sysctls
 t3dotgg
+tabdo
 tamasfe
 telegramcidr
 tmp
