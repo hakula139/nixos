@@ -99,9 +99,12 @@ in
         # Extension management
         # ------------------------------------------------------------------------
         home.activation.cursorExtensions = lib.mkIf cfg.extensions.enable (
+          let
+            homeDir = config.home.homeDirectory;
+          in
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             cursor_server_path="$(
-              find "$HOME/.cursor-server/bin" -type d -name "remote-cli" 2>/dev/null | sort | tail -n 1 || true
+              find "${homeDir}/.cursor-server/bin" -type d -name "remote-cli" 2>/dev/null | sort | tail -n 1 || true
             )"
 
             export PATH="${lib.concatStringsSep ":" paths}''${cursor_server_path:+:$cursor_server_path}:$PATH"
