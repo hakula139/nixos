@@ -4,6 +4,7 @@
   lib,
   secrets,
   isNixOS ? false,
+  isDesktop ? false,
   ...
 }:
 
@@ -37,7 +38,7 @@ in
     let
       hooks = import ./hooks.nix;
       permissions = import ./permissions.nix;
-      plugins = import ./plugins.nix;
+      plugins = import ./plugins.nix { inherit lib isDesktop; };
 
       mcp = import ../mcp {
         inherit
