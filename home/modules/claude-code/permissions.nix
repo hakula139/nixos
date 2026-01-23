@@ -22,8 +22,10 @@
     "Bash(cat:*)"
     "Bash(file:*)"
     "Bash(head:*)"
+    "Bash(ldd:*)"
     "Bash(less:*)"
     "Bash(more:*)"
+    "Bash(readelf:*)"
     "Bash(stat:*)"
     "Bash(tail:*)"
 
@@ -209,6 +211,7 @@
     "Bash(nix store path-info:*)"
     "Bash(nix why-depends:*)"
     "Bash(nix-instantiate:*)"
+    "Bash(nvd:*)"
 
     # --------------------------------------------------------------------------
     # Containers - Read-only
