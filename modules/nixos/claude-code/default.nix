@@ -6,11 +6,11 @@
 }:
 
 # ==============================================================================
-# MCP (Model Context Protocol)
+# Claude Code (AI Code Assistant)
 # ==============================================================================
 
 let
-  cfg = config.hakula.mcp;
+  cfg = config.hakula.claude-code;
   userCfg = config.users.users.${cfg.user};
   secretsDir = secrets.secretsPath userCfg.home;
 in
@@ -18,13 +18,13 @@ in
   # ----------------------------------------------------------------------------
   # Module options
   # ----------------------------------------------------------------------------
-  options.hakula.mcp = {
-    enable = lib.mkEnableOption "MCP secrets";
+  options.hakula.claude-code = {
+    enable = lib.mkEnableOption "Claude Code secrets";
 
     user = lib.mkOption {
       type = lib.types.str;
       default = "hakula";
-      description = "User to store MCP secrets for";
+      description = "User to store Claude Code secrets for";
     };
   };
 
@@ -32,32 +32,18 @@ in
     assertions = [
       {
         assertion = builtins.hasAttr cfg.user config.users.users;
-        message = "hakula.mcp.user (${cfg.user}) must exist in config.users.users.*";
+        message = "hakula.claude-code.user (${cfg.user}) must exist in config.users.users.*";
       }
     ];
 
     # --------------------------------------------------------------------------
     # Secrets
     # --------------------------------------------------------------------------
-    age.secrets.brave-api-key = secrets.mkSecret {
-      name = "brave-api-key";
+    age.secrets.claude-code-oauth-token = secrets.mkSecret {
+      name = "claude-code-oauth-token";
       owner = cfg.user;
       group = userCfg.group;
-      path = "${secretsDir}/brave-api-key";
-    };
-
-    age.secrets.context7-api-key = secrets.mkSecret {
-      name = "context7-api-key";
-      owner = cfg.user;
-      group = userCfg.group;
-      path = "${secretsDir}/context7-api-key";
-    };
-
-    age.secrets.github-pat = secrets.mkSecret {
-      name = "github-pat";
-      owner = cfg.user;
-      group = userCfg.group;
-      path = "${secretsDir}/github-pat";
+      path = "${secretsDir}/claude-code-oauth-token";
     };
 
     # --------------------------------------------------------------------------
