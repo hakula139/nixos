@@ -205,6 +205,7 @@
     "Bash(nix log:*)"
     "Bash(nix path-info:*)"
     "Bash(nix print-dev-env:*)"
+    "Bash(nix profile list:*)"
     "Bash(nix repl:*)"
     "Bash(nix search:*)"
     "Bash(nix store ls:*)"
