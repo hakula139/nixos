@@ -115,6 +115,8 @@ in
               NO_PROXY = "localhost,127.0.0.1";
             };
 
+            model = "opus";
+
             statusLine = {
               type = "command";
               command = "${homeDir}/.claude/statusline-command.sh";
