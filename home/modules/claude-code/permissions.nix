@@ -76,6 +76,7 @@
     # Shell & Environment
     # --------------------------------------------------------------------------
     "Bash(basename:*)"
+    "Bash(command:*)"
     "Bash(dirname:*)"
     "Bash(echo:*)"
     "Bash(env:*)"
