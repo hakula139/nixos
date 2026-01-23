@@ -148,6 +148,12 @@ in
     programs.zsh.enable = true;
     environment.shells = [ pkgs.zsh ];
 
+    # /bin/bash symlink for scripts with #!/bin/bash shebangs
+    system.activationScripts.binbash.text = ''
+      mkdir -p /bin
+      ln -sfn ${pkgs.bash}/bin/bash /bin/bash
+    '';
+
     environment.variables = {
       LANG = "en_US.UTF-8";
       LC_ALL = "en_US.UTF-8";
