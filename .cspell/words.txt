@@ -33,6 +33,7 @@ disko
 drblury
 dreamin
 dropdb
+dscacheutil
 dups
 e2fsprogs
 eamodio
@@ -81,6 +82,7 @@ mkcd
 msdos
 msmtp
 msmtprc
+myip
 nbsp
 nixfmt
 nixgc
@@ -145,6 +147,7 @@ telegramcidr
 tmp
 tmpfiles
 toolsai
+tulanp
 twikoo
 usernamehw
 vadimcn
