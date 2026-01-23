@@ -101,7 +101,7 @@ in
         home.activation.cursorExtensions = lib.mkIf cfg.extensions.enable (
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             cursor_server_path="$(
-              ls -1d "$HOME/.cursor-server/bin/"*"/bin/remote-cli" 2>/dev/null | sort | tail -n 1 || true
+              find "$HOME/.cursor-server/bin" -type d -name "remote-cli" 2>/dev/null | sort | tail -n 1 || true
             )"
 
             export PATH="${lib.concatStringsSep ":" paths}''${cursor_server_path:+:$cursor_server_path}:$PATH"
