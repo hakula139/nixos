@@ -6,6 +6,6 @@
     enable = true;
     proxy.enable = true;
   };
-
   hakula.cursor.extensions.prune = false;
+  hakula.mihomo.enable = true;
 }

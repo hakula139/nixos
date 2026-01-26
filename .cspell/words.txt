@@ -78,6 +78,7 @@ lldb
 marp
 mechatroner
 meslo
+mihomo
 mirrorange
 mkcd
 msdos
