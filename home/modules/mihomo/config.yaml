@@ -1,0 +1,39 @@
+# ==============================================================================
+# Mihomo Base Configuration
+# ==============================================================================
+
+# General Settings
+allow-lan: true
+ipv6: true
+log-level: info
+mixed-port: __PORT__
+mode: rule
+tcp-concurrent: true
+unified-delay: true
+
+# Profile Settings
+profile:
+  store-selected: true
+
+# DNS Configuration
+dns:
+  enable: true
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+  default-nameserver:
+    - 223.5.5.5
+    - 8.8.8.8
+  nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+  prefer-h3: true
