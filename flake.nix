@@ -126,7 +126,6 @@
                   inherit inputs secrets;
                   isNixOS = true;
                   isDesktop = false;
-                  useProxy = false;
                 };
               };
             }
@@ -166,7 +165,6 @@
                   inherit inputs secrets;
                   isNixOS = false;
                   isDesktop = true;
-                  useProxy = true;
                 };
               };
             }
@@ -259,6 +257,7 @@
         # ----------------------------------------------------------------------
         hakula-devvm = mkHome {
           configPath = ./hosts/hakula-devvm;
+          isDesktop = false;
         };
       };
 
