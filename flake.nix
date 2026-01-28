@@ -11,6 +11,12 @@
     # Nixpkgs unstable - for bleeding edge packages
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # NixOS image generation (for Docker images)
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # macOS system configuration
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-25.11";
@@ -49,9 +55,10 @@
       self,
       nixpkgs,
       nixpkgs-unstable,
-      disko,
-      home-manager,
+      nixos-generators,
       nix-darwin,
+      home-manager,
+      disko,
       agenix,
       git-hooks-nix,
       ...
@@ -188,6 +195,44 @@
             isNixOS = false;
           };
         };
+
+      mkDocker =
+        {
+          configPath,
+        }:
+        nixos-generators.nixosGenerate {
+          system = "x86_64-linux";
+          format = "docker";
+          specialArgs = {
+            inherit inputs secrets;
+          };
+          modules = [
+            {
+              nixpkgs.hostPlatform = "x86_64-linux";
+              nixpkgs.overlays = overlays;
+            }
+            agenix.nixosModules.default
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.hakula = {
+                  imports = [
+                    ./home/hakula.nix
+                  ];
+                };
+                backupFileExtension = "bak";
+                extraSpecialArgs = {
+                  inherit inputs secrets;
+                  isNixOS = true;
+                  isDesktop = false;
+                };
+              };
+            }
+            configPath
+          ];
+        };
     in
     {
       # ========================================================================
@@ -251,13 +296,17 @@
         hakula-work = mkHome {
           configPath = ./hosts/hakula-work;
         };
+      };
 
+      # ========================================================================
+      # Docker Images (for air-gapped deployment)
+      # ========================================================================
+      packages.x86_64-linux = {
         # ----------------------------------------------------------------------
-        # Hakula's DevVM (Isolated Corporate Server)
+        # Hakula's DevVM (Docker Image)
         # ----------------------------------------------------------------------
-        hakula-devvm = mkHome {
+        hakula-devvm-docker = mkDocker {
           configPath = ./hosts/hakula-devvm;
-          isDesktop = false;
         };
       };
 

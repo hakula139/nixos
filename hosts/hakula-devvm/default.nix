@@ -1,31 +1,34 @@
+{ ... }:
+
 {
-  # ============================================================================
-  # Home Manager Settings
-  # ============================================================================
-  home = {
-    username = "hakula_chen";
-    homeDirectory = "/home/hakula_chen";
-    stateVersion = "25.11";
-  };
+  imports = [
+    ../_profiles/docker
+  ];
 
   # ============================================================================
-  # Home Manager Modules
+  # Container Configuration
   # ============================================================================
-  hakula.zsh.fzfTab.enable = false;
+  networking.hostName = "hakula-devvm";
 
   # ============================================================================
-  # SSH Configuration
+  # Home Manager Overrides
   # ============================================================================
-  programs.ssh.matchBlocks = {
-    "github.com" = {
-      hostname = "github-proxy.jqdomain.com";
-      forwardAgent = true;
+  home-manager.users.hakula = {
+    hakula.zsh.fzfTab.enable = false;
+
+    programs.ssh.matchBlocks = {
+      "github.com" = {
+        hostname = "github-proxy.jqdomain.com";
+        forwardAgent = true;
+      };
     };
+
+    services.ssh-agent.enable = false;
+    services.syncthing.enable = false;
   };
 
   # ============================================================================
-  # Services
+  # System State
   # ============================================================================
-  services.ssh-agent.enable = false;
-  services.syncthing.enable = false;
+  system.stateVersion = "25.11";
 }
