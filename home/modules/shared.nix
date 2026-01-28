@@ -22,7 +22,7 @@ in
   # ----------------------------------------------------------------------------
   # Services (shared)
   # ----------------------------------------------------------------------------
-  services.ssh-agent.enable = lib.mkIf isLinux true;
+  services.ssh-agent.enable = lib.mkIf isLinux (lib.mkDefault true);
 
   # ----------------------------------------------------------------------------
   # Files (shared)

@@ -1,5 +1,3 @@
-{ lib, ... }:
-
 {
   # ============================================================================
   # Home Manager Settings
@@ -14,6 +12,7 @@
   # Home Manager Modules
   # ============================================================================
   hakula.cursor.extensions.prune = false;
+  hakula.zsh.fzfTab.enable = false;
 
   # ============================================================================
   # SSH Configuration
@@ -28,6 +27,6 @@
   # ============================================================================
   # Services
   # ============================================================================
-  services.ssh-agent.enable = lib.mkForce false;
-  services.syncthing.enable = lib.mkForce false;
+  services.ssh-agent.enable = false;
+  services.syncthing.enable = false;
 }
