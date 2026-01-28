@@ -34,9 +34,8 @@ in
   # Home Manager Settings
   # ----------------------------------------------------------------------------
   home = {
-    username = "hakula";
-    homeDirectory = if isDarwin then "/Users/hakula" else "/home/hakula";
-    stateVersion = "25.05";
+    username = lib.mkDefault "hakula";
+    homeDirectory = lib.mkDefault (if isDarwin then "/Users/hakula" else "/home/hakula");
   };
 
   # ----------------------------------------------------------------------------

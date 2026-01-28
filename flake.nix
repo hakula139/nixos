@@ -253,6 +253,13 @@
         hakula-work = mkHome {
           configPath = ./hosts/hakula-work;
         };
+
+        # ----------------------------------------------------------------------
+        # Hakula's DevVM (Isolated Corporate Server)
+        # ----------------------------------------------------------------------
+        hakula-devvm = mkHome {
+          configPath = ./hosts/hakula-devvm;
+        };
       };
 
       # ========================================================================

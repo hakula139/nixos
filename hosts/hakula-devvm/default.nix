@@ -3,20 +3,19 @@
   # Home Manager Settings
   # ============================================================================
   home = {
-    stateVersion = "25.05";
+    username = "hakula_chen";
+    homeDirectory = "/home/hakula_chen";
+    stateVersion = "25.11";
   };
 
   # ============================================================================
   # Home Manager Modules
   # ============================================================================
-  hakula.claude-code = {
-    enable = true;
-    proxy.enable = true;
-  };
   hakula.cursor.extensions.prune = false;
-  hakula.mihomo = {
-    enable = true;
-    port = 7897;
-    controllerPort = 59386;
-  };
+
+  # ============================================================================
+  # Services
+  # ============================================================================
+  services.ssh-agent.enable = false;
+  services.syncthing.enable = false;
 }

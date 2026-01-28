@@ -29,6 +29,7 @@ davidanson
 dbaeumer
 dbengine
 debugpy
+devvm
 direnv
 disko
 drblury
