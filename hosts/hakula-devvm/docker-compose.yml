@@ -38,6 +38,9 @@ services:
     volumes:
       - hakula-home:/home/hakula
 
+      - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
+      - /etc/ssh/ssh_host_ed25519_key.pub:/etc/ssh/ssh_host_ed25519_key.pub:ro
+
     tmpfs:
       - /tmp
 

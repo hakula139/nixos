@@ -82,6 +82,7 @@ linkify
 lldb
 localectl
 marp
+mcp
 mechatroner
 meslo
 metacubex

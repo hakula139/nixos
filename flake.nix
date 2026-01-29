@@ -98,8 +98,14 @@
           hooks = {
             check-added-large-files.enable = true;
             check-yaml.enable = true;
-            end-of-file-fixer.enable = true;
-            trim-trailing-whitespace.enable = true;
+            end-of-file-fixer = {
+              enable = true;
+              excludes = [ "\\.age$" ];
+            };
+            trim-trailing-whitespace = {
+              enable = true;
+              excludes = [ "\\.age$" ];
+            };
             nixfmt-rfc-style.enable = true;
           };
         };
