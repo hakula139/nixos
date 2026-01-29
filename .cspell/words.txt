@@ -29,6 +29,7 @@ davidanson
 dbaeumer
 dbengine
 debugpy
+devvm
 direnv
 disko
 drblury
@@ -65,6 +66,7 @@ ints
 ipcidr
 jnoortheen
 journalctl
+jqdomain
 kdelpf
 kdelrs
 keyclu
@@ -173,4 +175,5 @@ whereis
 wimpysworld
 xtls
 yzhang
+zstd
 zstyle
