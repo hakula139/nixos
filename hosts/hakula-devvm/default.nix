@@ -14,8 +14,6 @@
   # Home Manager Overrides
   # ============================================================================
   home-manager.users.hakula = {
-    hakula.zsh.fzfTab.enable = false;
-
     programs.ssh.matchBlocks = {
       "github.com" = {
         hostname = "github-proxy.jqdomain.com";
