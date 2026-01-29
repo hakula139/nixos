@@ -17,6 +17,7 @@ chgrp
 cidr
 cloudreve
 cncidr
+condarc
 coreutils
 cpp
 cppcheck

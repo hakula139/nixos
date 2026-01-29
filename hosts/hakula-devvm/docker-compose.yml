@@ -40,6 +40,16 @@ services:
 
       - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
       - /etc/ssh/ssh_host_ed25519_key.pub:/etc/ssh/ssh_host_ed25519_key.pub:ro
+      - /usr/local/share/ca-certificates:/usr/local/share/ca-certificates:ro
+      - ~/.cargo/config.toml:/home/hakula/.cargo/config.toml:ro
+      - ~/.condarc:/home/hakula/.condarc:ro
+      - ~/.config/containers/registries.conf:/home/hakula/.config/containers/registries.conf:ro
+      - ~/.config/go/env:/home/hakula/.config/go/env:ro
+      - ~/.config/pip/pip.conf:/home/hakula/.config/pip/pip.conf:ro
+      - ~/.docker/config.json:/home/hakula/.docker/config.json:ro
+      - ~/.kube:/home/hakula/.kube:ro
+      - ~/.npmrc:/home/hakula/.npmrc:ro
+      - ~/.ssh:/home/hakula/.ssh
 
     tmpfs:
       - /tmp
