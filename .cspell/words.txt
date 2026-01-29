@@ -62,6 +62,7 @@ horiz
 iface
 inetutils
 inodes
+inotify
 ints
 ipcidr
 jnoortheen
@@ -100,6 +101,7 @@ nixpkgs
 nixsw
 nixup
 nlsv
+nofile
 nslookup
 nvim
 pcall
@@ -158,9 +160,11 @@ telegramcidr
 timedatectl
 tmp
 tmpfiles
+tmpfs
 toolsai
 tulanp
 twikoo
+ulimits
 usernamehw
 utun
 vadimcn

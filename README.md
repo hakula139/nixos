@@ -111,11 +111,8 @@ nix build '.#packages.x86_64-linux.hakula-devvm-docker'
 # Import the filesystem tarball as a Docker image
 docker import result/tarball/nixos-system-x86_64-linux.tar.xz nixos:latest
 
-# Run the container
-docker run -d --name hakula-devvm \
-  --restart unless-stopped \
-  -v ~/workspace:/home/hakula/workspace \
-  nixos:latest /init
+# Start the container
+docker compose -f hosts/hakula-devvm/docker-compose.yml up -d
 ```
 
 Connect via VS Code / Cursor using the **Dev Containers: Attach to Running Container** command.

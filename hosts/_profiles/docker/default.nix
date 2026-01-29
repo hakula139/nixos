@@ -1,4 +1,8 @@
-{ lib, ... }:
+{ config, lib, ... }:
+
+let
+  username = config.hakula.user.name;
+in
 
 # ==============================================================================
 # Docker Container Profile
@@ -28,8 +32,12 @@
   # ============================================================================
   # User Overrides
   # ============================================================================
-  users.users.hakula = {
-    createHome = false;
-    linger = false;
-  };
+  users.users.${username}.linger = false;
+
+  # ============================================================================
+  # Directory Management
+  # ============================================================================
+  systemd.tmpfiles.rules = [
+    "d /nix/var/nix/profiles/per-user/${username} 0755 ${username} root -"
+  ];
 }
