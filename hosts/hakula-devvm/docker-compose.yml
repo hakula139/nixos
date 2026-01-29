@@ -12,11 +12,15 @@ services:
     privileged: true
     stop_grace_period: 20s
 
+    labels:
+      devcontainer.metadata: '[{"remoteUser": "hakula"}]'
+
     # -------------------------------------------------------------------------
     # Environment
     # -------------------------------------------------------------------------
     environment:
-      PATH: /run/wrappers/bin:/root/.nix-profile/bin:/nix/profile/bin:/root/.local/state/nix/profile/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
+      USER: hakula
+      PATH: /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
 
     # -------------------------------------------------------------------------
     # Network
