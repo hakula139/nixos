@@ -12,17 +12,13 @@ services:
     privileged: true
     stop_grace_period: 20s
 
-    labels:
-      devcontainer.metadata: '[{"remoteUser": "hakula"}]'
-
     # -------------------------------------------------------------------------
     # Environment
     # -------------------------------------------------------------------------
     environment:
-      USER: hakula
+      USER: root
+      HOME: /home/hakula
       PATH: /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
-      HTTP_PROXY: ${http_proxy:-}
-      HTTPS_PROXY: ${http_proxy:-}
       http_proxy: ${http_proxy:-}
       https_proxy: ${http_proxy:-}
       no_proxy: ${no_proxy:-}
