@@ -19,13 +19,6 @@
   hakula.mcp.enable = true;
 
   # ============================================================================
-  # User Overrides
-  # ============================================================================
-  # Match the host user's UID/GID so bind-mounted files are accessible.
-  users.users.hakula.uid = 1001;
-  users.groups.hakula.gid = 1001;
-
-  # ============================================================================
   # Home Manager Overrides
   # ============================================================================
   home-manager.users.hakula = {
