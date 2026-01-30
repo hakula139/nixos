@@ -143,15 +143,16 @@ in
     # --------------------------------------------------------------------------
     users.defaultUserShell = pkgs.zsh;
 
-    users.users.root.openssh.authorizedKeys.keys = lib.mkDefault (
-      sshCfg.authorizedKeys ++ [ keys.builder ]
-    );
-
-    users.users.${cfg.user.name} = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      openssh.authorizedKeys.keys = lib.mkDefault sshCfg.authorizedKeys;
-      linger = lib.mkDefault true;
+    users.users = {
+      root.openssh.authorizedKeys.keys = lib.mkDefault (sshCfg.authorizedKeys ++ [ keys.builder ]);
+    }
+    // lib.optionalAttrs (cfg.user.name != "root") {
+      ${cfg.user.name} = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" ];
+        openssh.authorizedKeys.keys = lib.mkDefault sshCfg.authorizedKeys;
+        linger = lib.mkDefault true;
+      };
     };
 
     security.sudo.wheelNeedsPassword = false;

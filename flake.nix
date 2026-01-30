@@ -213,6 +213,7 @@
       mkDocker =
         {
           configPath,
+          username ? "hakula",
           enableDevToolchains ? false,
         }:
         nixos-generators.nixosGenerate {
@@ -232,7 +233,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-                users.hakula = {
+                users.${username} = {
                   imports = [
                     ./home/hakula.nix
                   ];
@@ -322,6 +323,7 @@
         # ----------------------------------------------------------------------
         hakula-devvm-docker = mkDocker {
           configPath = ./hosts/hakula-devvm;
+          username = "root";
           enableDevToolchains = true;
         };
       };

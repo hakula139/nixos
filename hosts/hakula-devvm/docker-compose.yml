@@ -16,8 +16,6 @@ services:
     # Environment
     # -------------------------------------------------------------------------
     environment:
-      USER: root
-      HOME: /home/hakula
       PATH: /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin
       http_proxy: ${http_proxy:-}
       https_proxy: ${http_proxy:-}
@@ -32,23 +30,23 @@ services:
     # Storage
     # -------------------------------------------------------------------------
     volumes:
-      - hakula-home:/home/hakula
+      - devvm-root:/root
 
       - /etc/resolv.conf:/etc/resolv.conf:ro
       - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
       - /etc/ssh/ssh_host_ed25519_key.pub:/etc/ssh/ssh_host_ed25519_key.pub:ro
       - /usr/local/share/ca-certificates:/usr/local/share/ca-certificates:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - ~/.cargo/config.toml:/home/hakula/.cargo/config.toml:ro
-      - ~/.condarc:/home/hakula/.condarc:ro
-      - ~/.config/containers/registries.conf:/home/hakula/.config/containers/registries.conf:ro
-      - ~/.config/go/env:/home/hakula/.config/go/env:ro
-      - ~/.config/pip/pip.conf:/home/hakula/.config/pip/pip.conf:ro
-      - ~/.docker/config.json:/home/hakula/.docker/config.json:ro
-      - ~/.kube:/home/hakula/.kube:ro
-      - ~/.npmrc:/home/hakula/.npmrc:ro
-      - ~/.ssh:/home/hakula/.ssh
-      - ~/workspace:/home/hakula/workspace
+      - ~/.cargo/config.toml:/root/.cargo/config.toml:ro
+      - ~/.condarc:/root/.condarc:ro
+      - ~/.config/containers/registries.conf:/root/.config/containers/registries.conf:ro
+      - ~/.config/go/env:/root/.config/go/env:ro
+      - ~/.config/pip/pip.conf:/root/.config/pip/pip.conf:ro
+      - ~/.docker/config.json:/root/.docker/config.json:ro
+      - ~/.kube:/root/.kube:ro
+      - ~/.npmrc:/root/.npmrc:ro
+      - ~/.ssh:/root/.ssh
+      - ~/workspace:/root/workspace
 
     tmpfs:
       - /tmp
@@ -67,4 +65,4 @@ services:
         hard: 966085
 
 volumes:
-  hakula-home:
+  devvm-root:

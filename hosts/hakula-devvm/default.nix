@@ -14,22 +14,19 @@
   # /etc/resolv.conf — see docker-compose.yml volumes.
 
   # ============================================================================
+  # User Configuration
+  # ============================================================================
+  hakula.user.name = "root";
+
+  # ============================================================================
   # Credentials
   # ============================================================================
   hakula.mcp.enable = true;
 
   # ============================================================================
-  # Environment
-  # ============================================================================
-  # Rootless Docker maps container root to the host user, so running as root
-  # inside the container is safe and avoids bind-mount permission issues.
-  # Use hakula's per-user profile so root gets the full HM environment.
-  environment.profiles = [ "/etc/profiles/per-user/hakula" ];
-
-  # ============================================================================
   # Home Manager Overrides
   # ============================================================================
-  home-manager.users.hakula = {
+  home-manager.users.root = {
     # SSH config comes from bind-mounted host ~/.ssh/config.
     programs.ssh.enable = lib.mkForce false;
 
