@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   imports = [
@@ -8,14 +8,10 @@
   # ============================================================================
   # Networking
   # ============================================================================
-  networking = {
-    hostName = "hakula-devvm";
-    nameservers = [
-      "10.0.0.5"
-      "10.0.0.6"
-    ];
-    search = [ "saljiut.jqdomain.com" ];
-  };
+  networking.hostName = "hakula-devvm";
+
+  # DNS config (nameservers, search domain) comes from bind-mounted host
+  # /etc/resolv.conf — see docker-compose.yml volumes.
 
   # ============================================================================
   # Credentials
@@ -25,6 +21,7 @@
   # ============================================================================
   # User Overrides
   # ============================================================================
+  # Match the host user's UID/GID so bind-mounted files are accessible.
   users.users.hakula.uid = 1001;
   users.groups.hakula.gid = 1001;
 
@@ -32,12 +29,8 @@
   # Home Manager Overrides
   # ============================================================================
   home-manager.users.hakula = {
-    programs.ssh.matchBlocks = {
-      "github.com" = {
-        hostname = "github-proxy.jqdomain.com";
-        forwardAgent = true;
-      };
-    };
+    # SSH config comes from bind-mounted host ~/.ssh/config.
+    programs.ssh.enable = lib.mkForce false;
 
     services.ssh-agent.enable = false;
     services.syncthing.enable = false;

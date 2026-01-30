@@ -68,7 +68,6 @@ ints
 ipcidr
 jnoortheen
 journalctl
-jqdomain
 kdelpf
 kdelrs
 keyclu
@@ -134,13 +133,13 @@ qdisc
 raku
 recents
 rerere
+resolv
 resolvectl
 retag
 revealjs
 rprx
 rustc
 ryantm
-saljiut
 sarasa
 sess
 sgid
