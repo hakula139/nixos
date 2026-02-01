@@ -29,6 +29,7 @@ in
   # Font packages
   # ----------------------------------------------------------------------------
   fonts = with pkgs; [
+    maple-mono.NF-CN
     nerd-fonts.jetbrains-mono
     sarasa-gothic
     source-han-sans

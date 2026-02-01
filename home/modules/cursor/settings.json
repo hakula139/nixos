@@ -107,11 +107,11 @@
   "debug.javascript.unmapMissingSources": true,
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.copyWithSyntaxHighlighting": false,
-  "editor.fontFamily": "Sarasa Mono SC Nerd, Sarasa Mono SC, monospace",
+  "editor.fontFamily": "Maple Mono NF CN, Sarasa Mono SC, monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 16,
   "editor.formatOnType": false,
-  "editor.inlayHints.fontFamily": "Sarasa Mono SC Nerd, Sarasa Mono SC, monospace",
+  "editor.inlayHints.fontFamily": "Maple Mono NF CN, Sarasa Mono SC, monospace",
   "editor.inlineSuggest.enabled": true,
   "editor.quickSuggestions": {
     "comments": "on",
@@ -246,7 +246,7 @@
   "terminal.external.osxExec": "Warp.app",
   "terminal.integrated.defaultProfile.linux": "zsh",
   "terminal.integrated.defaultProfile.osx": "zsh",
-  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font, MesloLGS NF, Sarasa Term SC Nerd, Sarasa Term SC, monospace",
+  "terminal.integrated.fontFamily": "Maple Mono NF CN, JetBrainsMono Nerd Font, Sarasa Term SC, monospace",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.profiles.linux": {
     "bash": {
