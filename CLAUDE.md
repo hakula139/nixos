@@ -75,6 +75,17 @@ cd secrets
 agenix -e <secret-name>.age -i ~/.ssh/<private-key>
 ```
 
+#### Re-keying Secrets
+
+When adding or changing host / user keys in `secrets/keys.nix`, all `.age` files must be re-encrypted with the updated recipient list. Run from an **interactive terminal** (not from scripts or Claude Code's Bash tool):
+
+```bash
+cd secrets
+agenix -r -i ~/.ssh/<private-key>
+```
+
+**Warning**: `agenix -r` must run in an interactive terminal. The agenix script checks `[ -t 0 ]` and overrides `EDITOR` to `cp -- /dev/stdin` when stdin is not a TTY, which silently empties all secrets before re-encrypting them.
+
 ## Architecture
 
 ### Flake Structure (`flake.nix`)
