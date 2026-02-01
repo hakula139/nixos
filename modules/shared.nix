@@ -75,7 +75,7 @@ in
   # ----------------------------------------------------------------------------
   servers = {
     us-1 = {
-      ip = "74.48.108.20";
+      ip = "2607:f130:0:10d::80";
       port = 35060;
       name = "us-1";
       displayName = "CloudCone-US-1";
@@ -86,7 +86,7 @@ in
       speedFactor = 4;
     };
     us-2 = {
-      ip = "74.48.189.161";
+      ip = "2607:f130:0:17d::956:243a";
       port = 35060;
       name = "us-2";
       displayName = "CloudCone-US-2";
@@ -95,7 +95,7 @@ in
       isBuilder = false;
     };
     us-3 = {
-      ip = "148.135.122.201";
+      ip = "2607:f130:0:f0::77";
       port = 35060;
       name = "us-3";
       displayName = "CloudCone-US-3";
@@ -104,7 +104,7 @@ in
       isBuilder = false;
     };
     us-4 = {
-      ip = "64.186.229.64";
+      ip = "2605:52c0:2:3408:be24:11ff:fe23:41a2";
       port = 35060;
       name = "us-4";
       displayName = "DMIT-US-4";
