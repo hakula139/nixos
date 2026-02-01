@@ -107,11 +107,11 @@
   "debug.javascript.unmapMissingSources": true,
   "diffEditor.ignoreTrimWhitespace": false,
   "editor.copyWithSyntaxHighlighting": false,
-  "editor.fontFamily": "Sarasa Mono SC, monospace",
+  "editor.fontFamily": "Sarasa Mono SC Nerd, Sarasa Mono SC, monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 16,
   "editor.formatOnType": false,
-  "editor.inlayHints.fontFamily": "Sarasa Mono SC, monospace",
+  "editor.inlayHints.fontFamily": "Sarasa Mono SC Nerd, Sarasa Mono SC, monospace",
   "editor.inlineSuggest.enabled": true,
   "editor.quickSuggestions": {
     "comments": "on",

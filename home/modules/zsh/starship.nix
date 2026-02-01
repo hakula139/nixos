@@ -82,7 +82,7 @@
       python = {
         format = "[$symbol$virtualenv]($style) ";
         style = "bold yellow";
-        symbol = " ";
+        symbol = " ";
         detect_extensions = [ ];
         detect_files = [ ];
         detect_folders = [ ];
@@ -91,7 +91,7 @@
       nodejs = {
         format = "[$symbol$version]($style) ";
         style = "bold green";
-        symbol = " ";
+        symbol = " ";
         detect_extensions = [ ];
         detect_files = [ "package.json" ];
         detect_folders = [ "node_modules" ];
@@ -109,31 +109,31 @@
       golang = {
         format = "[$symbol$version]($style) ";
         style = "bold cyan";
-        symbol = " ";
+        symbol = " ";
       };
 
       gradle = {
         format = "[$symbol$version]($style) ";
         style = "bold green";
-        symbol = " ";
+        symbol = " ";
       };
 
       haskell = {
         format = "[$symbol$version]($style) ";
         style = "bold purple";
-        symbol = " ";
+        symbol = " ";
       };
 
       java = {
         format = "[$symbol$version]($style) ";
         style = "bold red";
-        symbol = " ";
+        symbol = " ";
       };
 
       rust = {
         format = "[$symbol$version]($style) ";
         style = "bold red";
-        symbol = " ";
+        symbol = " ";
       };
 
       # ------------------------------------------------------------------------
@@ -142,7 +142,7 @@
       docker_context = {
         format = "[$symbol$context]($style) ";
         style = "bold blue";
-        symbol = " ";
+        symbol = " ";
         only_with_files = false;
       };
 
@@ -173,9 +173,9 @@
       };
 
       nix_shell = {
-        format = "[$symbol$state( \\($name\\))]($style) ";
+        format = "[$symbol($state )(\\($name\\))]($style) ";
         style = "bold blue";
-        symbol = " ";
+        symbol = " ";
         impure_msg = "";
         pure_msg = "pure";
       };
