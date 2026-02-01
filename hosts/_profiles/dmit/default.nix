@@ -5,11 +5,11 @@
 }:
 
 # ==============================================================================
-# Tencent Lighthouse Hardware Profile
+# DMIT Hardware Profile
 # ==============================================================================
 # This module contains shared boot loader, hardware, and disk configuration
-# for all Tencent Lighthouse instances. Import this from your instance-specific
-# host configuration.
+# for all DMIT instances. Import this from your instance-specific host
+# configuration.
 # ==============================================================================
 
 {

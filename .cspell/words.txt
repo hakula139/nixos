@@ -33,6 +33,7 @@ debugpy
 devvm
 direnv
 disko
+dmit
 drblury
 dreamin
 dropdb
@@ -172,6 +173,7 @@ utun
 vadimcn
 vhost
 vimcmd
+virtio
 virtualenv
 vlang
 vless
