@@ -59,6 +59,7 @@ gvisor
 hakula
 hediet
 hitoolbox
+hkcu
 hlsearch
 hookify
 horiz
@@ -183,6 +184,7 @@ waka
 wakatime
 whereis
 wimpysworld
+wslpath
 xtls
 yzhang
 zstd
