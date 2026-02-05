@@ -258,7 +258,7 @@
           };
           toplevel = nixosConfig.config.system.build.toplevel;
         in
-        pkgs.dockerTools.buildLayeredImage {
+        pkgs.dockerTools.buildLayeredImageWithNixDb {
           inherit name tag;
           contents = [ toplevel ];
           config = {

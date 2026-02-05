@@ -98,7 +98,7 @@ nixsw hakula-work
 
 ## Docker Images (for air-gapped deployment)
 
-For environments where Nix cannot be installed natively, NixOS Docker images can be built using [`dockerTools.buildLayeredImage`](https://ryantm.github.io/nixpkgs/builders/images/dockertools/#ssec-pkgs-dockerTools-buildLayeredImage). This creates multi-layer images (up to 100 layers) for efficient incremental updates via layer caching.
+For environments where Nix cannot be installed natively, NixOS Docker images can be built using [`dockerTools.buildLayeredImageWithNixDb`](https://ryantm.github.io/nixpkgs/builders/images/dockertools/#ssec-pkgs-dockerTools-buildLayeredImage). This creates multi-layer images (up to 100 layers) for efficient incremental updates via layer caching, and includes the Nix database for Home Manager activation.
 
 ### Build Docker Image
 
