@@ -12,9 +12,6 @@ let
   notify = import ./notify.nix { inherit pkgs lib; };
 in
 {
-  # ----------------------------------------------------------------------------
-  # Post Tool Use - Formatting and validation
-  # ----------------------------------------------------------------------------
   PostToolUse = [
     # Shell formatting and linting
     {
@@ -51,45 +48,44 @@ in
     }
   ];
 
-  # ----------------------------------------------------------------------------
-  # Notification - Permission requests and idle reminders
-  # ----------------------------------------------------------------------------
   Notification = [
+    # Permission prompt - notify when Claude Code needs approval
     {
+      matcher = "permission_prompt";
       hooks = [
         {
           type = "command";
           command = ''
-            input="$(cat)"
             project="$(basename "$PWD")"
-            message="$(echo "$input" | ${pkgs.jq}/bin/jq -r '.message // "Notification"')"
-            "${notify.notifyScript}" "Claude Code" "[$project] $message"
+            "${notify.notifyScript}" "Claude Code" "[$project] Permission requested"
+          '';
+        }
+      ];
+    }
+    # Idle prompt - notify when Claude Code is waiting for input
+    {
+      matcher = "idle_prompt";
+      hooks = [
+        {
+          type = "command";
+          command = ''
+            project="$(basename "$PWD")"
+            "${notify.notifyScript}" "Claude Code" "[$project] Waiting for input"
           '';
         }
       ];
     }
   ];
 
-  # ----------------------------------------------------------------------------
-  # Stop - Notifications when Claude needs input or completes
-  # ----------------------------------------------------------------------------
   Stop = [
+    # Response complete - notify when Claude Code finishes responding
     {
-      matcher = ".*";
       hooks = [
         {
           type = "command";
           command = ''
-            reason="$CLAUDE_STOP_HOOK_REASON"
             project="$(basename "$PWD")"
-            case "$reason" in
-              user_input_needed)
-                "${notify.notifyScript}" "Claude Code" "[$project] Waiting for input"
-                ;;
-              end_turn)
-                "${notify.notifyScript}" "Claude Code" "[$project] Task completed"
-                ;;
-            esac
+            "${notify.notifyScript}" "Claude Code" "[$project] Response complete"
           '';
         }
       ];
