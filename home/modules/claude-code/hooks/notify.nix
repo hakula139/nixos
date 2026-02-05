@@ -44,7 +44,7 @@ let
       fi
     ''}
     ${lib.optionalString isDarwin ''
-      osascript -e "display notification \"$body\" with title \"$title\""
+      osascript -e "display notification \"$body\" with title \"$title\" sound name \"Glass\""
     ''}
   '';
 in
