@@ -21,7 +21,7 @@ let
   # https://github.com/shanselman/toasty
   toasty = pkgs.fetchurl {
     url = "https://github.com/shanselman/toasty/releases/download/v0.5/toasty-x64.exe";
-    hash = "sha256-DTlIB4JCcjfGbDFsvN+T32KuvjC4yb/KHu0xZzzT1WQ=";
+    hash = "sha256-DTlIB4JCcjfGbDFss9+T8rYqvjC4yb/KHu0xZz3NFWQ=";
   };
 
   # Cross-platform notification script
