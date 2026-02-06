@@ -48,14 +48,15 @@ let
     ''}
   '';
 
-  # Project-scoped notification: prepends "[project-name]" to the message
+  # Project-scoped notification: prepends "[project-name #tty]" to the message
   projectNotifyScript = pkgs.writeShellScript "claude-project-notify" ''
     set -euo pipefail
 
     message="''${1:-}"
     project="$(basename "$PWD")"
+    tty_num="$(ps -o tty= -p $$ 2>/dev/null | grep -oE '[0-9]+$' || echo '?')"
 
-    "${notifyScript}" "Claude Code" "[$project] $message"
+    "${notifyScript}" "Claude Code" "[$project #$tty_num] $message"
   '';
 in
 {
