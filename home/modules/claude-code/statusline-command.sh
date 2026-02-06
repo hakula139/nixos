@@ -4,8 +4,8 @@ set -euo pipefail
 # ==============================================================================
 # Claude Code Status Line Command
 # ==============================================================================
-# Row 1: [dir] [git]
-# Row 2: [Model] Ctx: X% | Sess: $X.XX | Block: $X.XX (XhYm left, $X.XX/h) | Today: $X.XX | HH:MM
+# Row 1: #tty <directory> <git>
+# Row 2: [Model] | Ctx: X% (XXk/200k) | Sess: $X.XX | Block: $X.XX (XhYm left, $X.XX/h) | Today: $X.XX | HH:MM
 # ==============================================================================
 
 readonly RED='\033[0;31m'
@@ -242,7 +242,10 @@ main() {
   local cwd
   cwd="$(echo "${input}" | jq -r '.workspace.current_dir')"
 
-  # Row 1: directory + git
+  # Row 1: tty + directory + git
+  local tty_num
+  tty_num="$(ps -o tty= -p $$ 2>/dev/null | grep -oE '[0-9]+$' || echo '?')"
+
   local dir_name
   if [[ "${cwd}" == "${HOME}" ]]; then
     dir_name="~"
@@ -252,7 +255,8 @@ main() {
 
   local row1
   row1="$(
-    printf '%b%s%b%s' \
+    printf '%b#%s%b %b%s%b%s' \
+      "${DIM}" "${tty_num}" "${RESET}" \
       "${BOLD_BLUE}" "${dir_name}" "${RESET}" \
       "$(format_git_info "${cwd}")"
   )"
