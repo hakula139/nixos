@@ -5,9 +5,8 @@
 }:
 
 # ==============================================================================
-# Claude Code Notification Support
+# Cross-Platform Notification Support
 # ==============================================================================
-# Cross-platform notification wrapper:
 # - macOS: osascript
 # - Linux: notify-send
 # - WSL: toasty
@@ -28,11 +27,11 @@ let
     } $out/bin/toasty.exe
   '';
 
-  # Cross-platform notification script
-  notifyScript = pkgs.writeShellScript "claude-notify" ''
+  # Cross-platform notification script: notify <title> [body]
+  notifyScript = pkgs.writeShellScript "notify" ''
     set -euo pipefail
 
-    title="''${1:-Claude Code}"
+    title="''${1:-Notification}"
     body="''${2:-}"
 
     ${lib.optionalString isLinux ''
@@ -48,17 +47,19 @@ let
     ''}
   '';
 
-  # Project-scoped notification: prepends "[project-name #tty]" to the message
-  projectNotifyScript = pkgs.writeShellScript "claude-project-notify" ''
+  # Project-scoped notification: projectNotify <title> <message>
+  # Prepends "[project-name #tty]" to the message body.
+  mkProjectNotifyScript = pkgs.writeShellScript "project-notify" ''
     set -euo pipefail
 
-    message="''${1:-}"
+    title="''${1:-Notification}"
+    message="''${2:-}"
     project="$(basename "$PWD")"
     tty_num="$(ps -o tty= -p $$ 2>/dev/null | grep -oE '[0-9]+$' || echo '?')"
 
-    "${notifyScript}" "Claude Code" "[$project #$tty_num] $message"
+    "${notifyScript}" "$title" "[$project #$tty_num] $message"
   '';
 in
 {
-  inherit notifyScript projectNotifyScript;
+  inherit notifyScript mkProjectNotifyScript;
 }
