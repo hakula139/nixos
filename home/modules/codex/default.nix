@@ -95,8 +95,7 @@ in
           # --------------------------------------------------------------------
           settings = {
             model = "gpt-5.3-codex";
-            approval_policy = "on-failure";
-            sandbox_mode = "danger-full-access";
+            model_reasoning_effort = "high";
             personality = "pragmatic";
 
             notify = [
@@ -104,6 +103,13 @@ in
               "Codex"
               "Response complete"
             ];
+
+            # ------------------------------------------------------------------
+            # Security
+            # ------------------------------------------------------------------
+            approval_policy = "never";
+            sandbox_mode = "danger-full-access";
+            web_search = "cached";
 
             # ------------------------------------------------------------------
             # MCP servers

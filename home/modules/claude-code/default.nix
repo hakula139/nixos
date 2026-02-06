@@ -124,6 +124,14 @@ in
             inherit hooks permissions;
             inherit (plugins) enabledPlugins extraKnownMarketplaces;
 
+            model = "claude-opus-4-6";
+
+            theme = "dark";
+            statusLine = {
+              type = "command";
+              command = "${homeDir}/.claude/statusline-command.sh";
+            };
+
             attribution = {
               commit = "";
               pr = "";
@@ -140,19 +148,10 @@ in
               HTTPS_PROXY = cfg.proxy.url;
               NO_PROXY = builtins.concatStringsSep "," cfg.proxy.noProxy;
             };
-
-            model = "claude-opus-4-6";
-
-            statusLine = {
-              type = "command";
-              command = "${homeDir}/.claude/statusline-command.sh";
-            };
-
-            theme = "dark";
           };
 
           # --------------------------------------------------------------------
-          # MCP configuration
+          # MCP servers
           # --------------------------------------------------------------------
           mcpServers = {
             DeepWiki = mcp.servers.deepwiki;
