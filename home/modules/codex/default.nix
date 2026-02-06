@@ -109,6 +109,7 @@ in
             # MCP servers
             # ------------------------------------------------------------------
             mcp_servers = {
+              Context7.command = mcp.servers.context7.command;
               DeepWiki.command = mcp.servers.deepwiki.command;
               Filesystem.command = mcp.servers.filesystem.command;
               Git.command = mcp.servers.git.command;
