@@ -55,17 +55,25 @@ in
       };
 
       codexPkg = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex;
+      noProxy = builtins.concatStringsSep "," cfg.proxy.noProxy;
 
-      codexBin = pkgs.writeShellScriptBin "codex" (
-        lib.optionalString cfg.proxy.enable ''
-          export HTTP_PROXY="${cfg.proxy.url}"
-          export HTTPS_PROXY="${cfg.proxy.url}"
-          export NO_PROXY="${builtins.concatStringsSep "," cfg.proxy.noProxy}"
-        ''
-        + ''
-          exec ${codexPkg}/bin/codex "$@"
-        ''
-      );
+      codexBin =
+        if cfg.proxy.enable then
+          pkgs.symlinkJoin {
+            # Keep codex version in the derivation name so Home Manager
+            # detects this as a modern codex and renders config.toml.
+            name = "codex-${codexPkg.version}";
+            paths = [ codexPkg ];
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              wrapProgram $out/bin/codex \
+                --set HTTP_PROXY ${lib.escapeShellArg cfg.proxy.url} \
+                --set HTTPS_PROXY ${lib.escapeShellArg cfg.proxy.url} \
+                --set NO_PROXY ${lib.escapeShellArg noProxy}
+            '';
+          }
+        else
+          codexPkg;
     in
     lib.mkMerge [
       mcp.secrets
