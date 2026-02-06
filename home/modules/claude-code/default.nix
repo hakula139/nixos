@@ -71,17 +71,22 @@ in
         )
       );
 
+      claudeCodePkg = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code;
       oauthTokenFile = "${secretsDir}/claude-code-oauth-token";
-      claudeCodeBin = pkgs.writeShellScriptBin "claude" (
-        lib.optionalString cfg.auth.useOAuthToken ''
-          if [ -f "${oauthTokenFile}" ]; then
-            export CLAUDE_CODE_OAUTH_TOKEN="$(cat ${oauthTokenFile})"
-          fi
-        ''
-        + ''
-          exec ${inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.claude-code}/bin/claude "$@"
-        ''
-      );
+
+      claudeCodeBin =
+        if cfg.auth.useOAuthToken then
+          pkgs.symlinkJoin {
+            name = "claude-code-${claudeCodePkg.version}";
+            paths = [ claudeCodePkg ];
+            nativeBuildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+              wrapProgram $out/bin/claude \
+                --run '[ -f "${oauthTokenFile}" ] && export CLAUDE_CODE_OAUTH_TOKEN="$(cat ${oauthTokenFile})"'
+            '';
+          }
+        else
+          claudeCodePkg;
     in
     lib.mkMerge [
       mcp.secrets
