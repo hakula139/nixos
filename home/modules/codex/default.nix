@@ -98,18 +98,21 @@ in
             model_reasoning_effort = "high";
             personality = "pragmatic";
 
-            notify = [
-              "${notify.mkProjectNotifyScript}"
-              "Codex"
-              "Response complete"
-            ];
-
             # ------------------------------------------------------------------
             # Security
             # ------------------------------------------------------------------
             approval_policy = "never";
             sandbox_mode = "danger-full-access";
             web_search = "cached";
+
+            # ------------------------------------------------------------------
+            # Notifications
+            # ------------------------------------------------------------------
+            notify = [
+              "${notify.mkProjectNotifyScript}"
+              "Codex"
+              "Response complete"
+            ];
 
             # ------------------------------------------------------------------
             # MCP servers
@@ -120,6 +123,15 @@ in
               Filesystem.command = mcp.servers.filesystem.command;
               Git.command = mcp.servers.git.command;
               GitHub.command = mcp.servers.github.command;
+            };
+
+            # ------------------------------------------------------------------
+            # Experimental features
+            # ------------------------------------------------------------------
+            features = {
+              apps = true;
+              collab = true;
+              shell_snapshot = true;
             };
           };
         };
