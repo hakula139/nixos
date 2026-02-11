@@ -29,6 +29,21 @@ in
       useOAuthToken = lib.mkEnableOption "long-lived OAuth token for authentication";
     };
 
+    agents = {
+      enabledAgents = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "architect"
+          "implementer"
+          "researcher"
+          "reviewer"
+          "tester"
+          "codex-worker"
+        ];
+        description = "List of custom agents to enable";
+      };
+    };
+
     proxy = {
       enable = lib.mkEnableOption "HTTP proxy for Claude Code";
 
@@ -54,6 +69,12 @@ in
       hooks = import ./hooks { inherit pkgs lib; };
       permissions = import ./permissions.nix;
       plugins = import ./plugins.nix { inherit lib enableDevToolchains; };
+
+      agents = import ./agents {
+        inherit lib;
+        inherit (cfg.agents) enabledAgents;
+        codexEnabled = config.hakula.codex.enable;
+      };
 
       mcp = import ../mcp {
         inherit
@@ -117,6 +138,7 @@ in
         programs.claude-code = {
           enable = true;
           package = claudeCodeBin;
+          inherit agents;
 
           # --------------------------------------------------------------------
           # Settings

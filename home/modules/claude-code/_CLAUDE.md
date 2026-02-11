@@ -140,3 +140,38 @@ Use for delegating **self-contained, multi-step coding tasks** to an autonomous 
 - Treat Codex as a peer with its own knowledge cutoffs and blind spots — verify claims before accepting them, especially regarding recent APIs, library versions, or best practices
 - When confident Codex is wrong, say so directly and provide evidence (own knowledge, web search, docs)
 - If a disagreement warrants discussion, resume the session via `codex-reply` with the evidence and let the user decide when there's genuine ambiguity
+
+## Agent Team Workflow
+
+Custom agents are available for delegation when tasks benefit from specialization or parallelism.
+
+### Available Agents
+
+- **architect** — Architecture review, design critique, pattern analysis. Read-only.
+- **implementer** — Code writing, feature implementation, refactoring. Has write access.
+- **researcher** — Fast codebase exploration and documentation lookup. Uses haiku for speed.
+- **reviewer** — Code quality, security, and bug detection. Read-only.
+- **tester** — Test writing and execution, failure analysis. Has write access.
+- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work.
+
+### When to Use Agents
+
+Use the Task tool to delegate to agents when:
+
+- A task benefits from **parallel work** (e.g., researcher gathers context while implementer writes code)
+- The task is **self-contained** and doesn't need back-and-forth with the user
+- You want a **focused perspective** (e.g., architect reviews design before implementation begins)
+- **Context is getting large** — offload independent sub-tasks to preserve main context
+
+### When NOT to Use Agents
+
+- Simple, single-step operations you can handle directly
+- Tasks requiring continuous user interaction
+- When the overhead of delegation exceeds the benefit
+
+### Coordination Patterns
+
+**Sequential pipeline**: researcher → architect → implementer → reviewer → tester
+**Parallel exploration**: Launch multiple researchers to explore different areas simultaneously
+**Review gate**: Always run reviewer after implementer completes significant changes
+**Codex offloading**: Use codex-worker for orthogonal tasks that benefit from a separate context window
