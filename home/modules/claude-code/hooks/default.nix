@@ -11,8 +11,22 @@
 let
   notify = import ../../notify { inherit pkgs lib; };
   projectNotify = "${notify.mkProjectNotifyScript} 'Claude Code'";
+  enforceMcpScript = pkgs.writeShellScript "enforce-mcp" (builtins.readFile ./enforce-mcp.sh);
 in
 {
+  PreToolUse = [
+    # Enforce MCP tool usage over Bash equivalents
+    {
+      matcher = "Bash";
+      hooks = [
+        {
+          type = "command";
+          command = "${enforceMcpScript}";
+        }
+      ];
+    }
+  ];
+
   PostToolUse = [
     # Shell formatting and linting
     {
