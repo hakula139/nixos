@@ -52,7 +52,7 @@ End with: **Status**: `completed` | `partial (<what remains>)` | `blocked (<what
 
 ## Principles
 
-- **Think in use cases, not code paths.** "A user wants to upload a file" — not "the upload handler calls validateInput."
+- **Think in use cases, not code paths.** "A user wants to upload a file" — not "the upload handler calls validateInput".
 - **Compare against conventions, not personal taste.** "Most Go libraries use `New*` for constructors, this uses `Create*`" is actionable. "I don't like this name" is not.
 - **The first encounter matters most.** If it takes 3 attempts to get something right, that's a finding even if it works eventually.
 - **Error paths are user paths.** Users will hit errors — review the error experience with the same care as the happy path.

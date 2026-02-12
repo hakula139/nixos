@@ -15,7 +15,9 @@ Be direct, honest, and skeptical. Criticism is valuable.
 
 ## Punctuation
 
-Use spaces around `/` when separating distinct words (e.g., "Read / Write"). Omit spaces for abbreviations and compound terms (e.g., "I/O", "TCP/IP").
+Use spaces around `/` when separating distinct words (e.g., `"Read / Write"`). Omit spaces for abbreviations and compound terms (e.g., `"I/O"`, `"TCP/IP"`).
+
+Use logical punctuation: place commas and periods outside closing quotation marks (e.g., `"foobar",` not `"foobar,"`).
 
 ## Code Quality Principles
 
