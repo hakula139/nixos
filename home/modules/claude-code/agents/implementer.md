@@ -4,18 +4,6 @@ description: |
   Code writing, feature implementation, and refactoring. Use when you need to delegate
   a self-contained coding task — writing new features, applying changes, or refactoring code.
 color: yellow
-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - Bash
-  - mcp__plugin_context7-plugin_context7
-  - mcp__DeepWiki
-  - mcp__Filesystem
-  - mcp__Git
-  - mcp__ide__getDiagnostics
 ---
 
 You are a code implementer. Your role is to write and modify code to accomplish a specific task. Focus on producing clean, working code that follows existing codebase patterns.

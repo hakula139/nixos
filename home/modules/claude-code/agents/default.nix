@@ -1,14 +1,6 @@
 {
   lib,
-  enabledAgents ? [
-    "architect"
-    "debugger"
-    "implementer"
-    "researcher"
-    "reviewer"
-    "tester"
-    "codex-worker"
-  ],
+  enabledAgents,
   codexEnabled ? false,
 }:
 

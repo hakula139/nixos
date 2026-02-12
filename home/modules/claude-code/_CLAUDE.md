@@ -175,13 +175,15 @@ Custom agents are available for delegation when tasks benefit from specializatio
 
 ### Available Agents
 
-- **architect** — Architecture review, design critique, pattern analysis. Read-only. Has web search, Context7, DeepWiki, and Fetcher MCP (fallback web fetcher) for research.
-- **implementer** — Code writing, feature implementation, refactoring. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
-- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering across files and external sources. Has Fetcher MCP as fallback for blocked sites.
-- **reviewer** — Code quality, security, and bug detection. Read-only. Has web search for verifying security patterns, Fetcher MCP (fallback web fetcher), optional Codex second opinion, and IDE diagnostics.
-- **debugger** — Hypothesis-driven debugging and root cause analysis. Read-only. Has web search, Context7, Git, GitHub, Fetcher MCP (fallback web fetcher), and IDE diagnostics.
-- **tester** — Test writing and execution, failure analysis. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
-- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Bash restricted to verification only.
+All agents inherit the full tool set from the parent session (MCP servers, web access, IDE diagnostics, etc.). Behavioral boundaries are enforced by each agent's prompt, not tool restrictions. The exception is **codex-worker**, which has an explicit restricted tool list to force delegation to Codex.
+
+- **architect** — Architecture review, design critique, pattern analysis. Read-only (by prompt, not tool restriction).
+- **implementer** — Code writing, feature implementation, refactoring.
+- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering.
+- **reviewer** — Code quality, security, and bug detection. Read-only. Optional Codex second opinion when Codex MCP is available.
+- **debugger** — Hypothesis-driven debugging and root cause analysis. Read-only.
+- **tester** — Test writing and execution, failure analysis.
+- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Restricted tool list: Read, Grep, Glob, Bash, Codex MCP, Git MCP, IDE diagnostics.
 
 ### Subagents vs Agent Teams
 
@@ -228,6 +230,33 @@ Agents inherit the parent model (opus) by default. Only override when a lighter 
 **Implement-review loop**: Spawn implementer and reviewer as teammates. The implementer messages the reviewer directly after making changes; the reviewer sends issues back without routing through the lead.
 **Research swarm**: Spawn multiple researchers to investigate different aspects of a problem. They share findings with each other via `SendMessage` and converge on an answer.
 **Multi-hypothesis debugging**: Spawn multiple debuggers, each investigating a different hypothesis. They share confirming / contradicting evidence with each other and converge on a root cause.
+
+### Team Presets
+
+Pre-configured team compositions for common workflows. Use these as starting points when the user requests team-based work.
+
+- **Review** — Thorough multi-angle code review before merging significant changes.
+  - Teammates: 2-3 reviewer instances, each given a specific lens (e.g., "security focus", "correctness focus", "style / consistency focus") in their task description.
+  - The lead synthesizes findings into a single unified report.
+  - Model: opus for all reviewers.
+
+- **Debug** — Parallel hypothesis investigation for unclear bugs.
+  - Teammates: 2-3 debugger instances, each assigned a distinct hypothesis to investigate.
+  - Debuggers share confirming / contradicting evidence with each other via `SendMessage`.
+  - The lead evaluates convergence and reports the most likely root cause.
+  - Model: opus for all debuggers.
+
+- **Feature** — End-to-end feature development with review gate.
+  - Teammates: researcher + architect + implementer + reviewer.
+  - Pipeline: researcher gathers context → architect designs approach → implementer writes code → reviewer validates.
+  - Use task dependencies (`addBlockedBy`) to enforce ordering.
+  - Model: haiku for researcher, opus for architect / implementer / reviewer.
+
+- **Refactor** — Safe large-scale restructuring.
+  - Teammates: architect + implementer + reviewer.
+  - Architect analyzes current structure and proposes changes → implementer executes → reviewer verifies no regressions.
+  - File ownership is critical: partition files between implementer instances if the refactor spans many files.
+  - Model: opus for all.
 
 ### File Ownership in Teams
 
