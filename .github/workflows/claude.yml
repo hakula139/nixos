@@ -91,7 +91,9 @@ jobs:
 
             1. A brief summary of what the PR changes (scope, affected modules / hosts)
             2. Overall assessment grouped by severity — omit empty groups
-          claude_args: '--max-turns 20'
+          claude_args: |
+            --max-turns 20
+            --allowedTools "Bash(gh:*)"
           show_full_output: true
 
   claude:
