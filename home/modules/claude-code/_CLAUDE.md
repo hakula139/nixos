@@ -182,7 +182,7 @@ All agents inherit the full tool set from the parent session (MCP servers, web a
 - **architect** — Architecture review, design critique, pattern analysis. Read-only (by prompt, not tool restriction).
 - **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Restricted tool list: Read, Grep, Glob, Bash, Codex MCP, Git MCP, IDE diagnostics.
 - **implementer** — Code writing, feature implementation, refactoring.
-- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering.
+- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering. Read-only.
 - **reviewer** — Code quality, security, and bug detection. Read-only. Optional Codex second opinion when Codex MCP is available.
 - **debugger** — Hypothesis-driven debugging and root cause analysis. Read-only.
 - **tester** — Test writing and execution, failure analysis.
@@ -274,6 +274,7 @@ All agents follow a shared output contract:
 - **File references**: All code-reading agents include `file:line` references for traceability
 - **Escalation**: Agents report blockers rather than producing low-quality output or failing silently. This includes both task-level issues (scope too broad, ambiguous requirements) and infrastructure issues (tool failures, MCP timeouts, unreachable services). Always include the specific error or symptom — "Codex MCP returned timeout after 30s" is actionable; "couldn't complete the task" is not.
 - **Prior context**: Agents build on upstream findings instead of re-investigating
+- **Scratch files**: Agents that need working memory across tool calls write to `/tmp/claude-code/<project>/<agent>/<topic>.md`. The orchestrator can direct a replacement agent to read another's scratch files at this path if work needs to be picked up
 
 In **team mode**, agents additionally:
 

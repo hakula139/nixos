@@ -49,7 +49,7 @@ Report honestly — a "Low confidence" finding with clear next steps is more val
 - Check recent git history first — many bugs trace to recent changes
 - Reproduce before theorizing when possible
 - Falsified hypotheses are valuable findings — report what you ruled out and why
-- For long investigations, write intermediate findings to a scratch file to preserve context across tool calls
+- For long investigations, write intermediate findings to `/tmp/claude-code/<project>/debugger/<topic>.md` to preserve context across tool calls
 - Use Bash only for read-only operations, never for mutations
 - Redirect verbose command output to files; report only summaries and key findings in your response to avoid consuming the orchestrator's context budget
 - If the root cause is ambiguous between multiple hypotheses, say so — don't force a conclusion
@@ -69,6 +69,6 @@ Report honestly — a "Low confidence" finding with clear next steps is more val
 - **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
 - **Report findings**: Use `SendMessage` to the team lead with your investigation report. If you've identified a root cause with high confidence, also message the implementer directly with the fix recommendation.
 - **Peer communication**: If multiple debuggers are investigating the same issue with different hypotheses, share evidence that confirms or contradicts each other's theories. Negative results (ruled-out hypotheses) are valuable — share them.
-- **File ownership**: Do not create or modify source files. Write investigation notes to scratch files only if needed for your own context preservation.
+- **File ownership**: Do not create or modify source files. Write investigation notes to `/tmp/claude-code/<project>/debugger/` only if needed for your own context preservation.
 - **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your findings.
 - **Stay available**: After completing a task, check `TaskList` for more work before going idle.
