@@ -13,9 +13,16 @@
     # --------------------------------------------------------------------------
     # General
     # --------------------------------------------------------------------------
+    "Bash(* --version)"
+
+    # --------------------------------------------------------------------------
+    # Documentation
+    # --------------------------------------------------------------------------
     "Bash(* --help)"
     "Bash(* --help *)"
-    "Bash(* --version)"
+    "Bash(man *)"
+    "mcp__DeepWiki"
+    "mcp__plugin_context7-plugin_context7"
 
     # --------------------------------------------------------------------------
     # Filesystem - Navigation
@@ -25,6 +32,7 @@
     "Bash(ls *)"
     "Bash(pwd *)"
     "Bash(tree *)"
+    "mcp__Filesystem"
 
     # --------------------------------------------------------------------------
     # Filesystem - Reading
@@ -126,35 +134,18 @@
     "Bash(busctl *)"
     "Bash(hostnamectl status *)"
     "Bash(localectl status *)"
-    "Bash(loginctl list-sessions *)"
-    "Bash(loginctl list-users *)"
+    "Bash(loginctl list-*)"
     "Bash(loginctl session-status *)"
-    "Bash(loginctl show-session *)"
-    "Bash(loginctl show-user *)"
+    "Bash(loginctl show-*)"
     "Bash(loginctl user-status *)"
     "Bash(networkctl *)"
     "Bash(resolvectl *)"
-    "Bash(systemctl --user is-active *)"
-    "Bash(systemctl --user is-enabled *)"
-    "Bash(systemctl --user is-failed *)"
-    "Bash(systemctl --user list-dependencies *)"
-    "Bash(systemctl --user list-jobs *)"
-    "Bash(systemctl --user list-sockets *)"
-    "Bash(systemctl --user list-timers *)"
-    "Bash(systemctl --user list-unit-files *)"
-    "Bash(systemctl --user list-units *)"
+    "Bash(systemctl --user is-*)"
+    "Bash(systemctl --user list-*)"
     "Bash(systemctl --user show *)"
     "Bash(systemctl --user status *)"
-    "Bash(systemctl is-active *)"
-    "Bash(systemctl is-enabled *)"
-    "Bash(systemctl is-failed *)"
-    "Bash(systemctl is-system-running *)"
-    "Bash(systemctl list-dependencies *)"
-    "Bash(systemctl list-jobs *)"
-    "Bash(systemctl list-sockets *)"
-    "Bash(systemctl list-timers *)"
-    "Bash(systemctl list-unit-files *)"
-    "Bash(systemctl list-units *)"
+    "Bash(systemctl is-*)"
+    "Bash(systemctl list-*)"
     "Bash(systemctl show *)"
     "Bash(systemctl status *)"
     "Bash(timedatectl show *)"
@@ -177,6 +168,7 @@
     "Bash(ss *)"
     "Bash(wget *)"
     "Bash(whois *)"
+    "mcp__Fetcher"
     "WebFetch"
     "WebSearch"
 
@@ -195,26 +187,30 @@
     "Bash(git add *)"
     "Bash(git blame *)"
     "Bash(git branch *)"
-    "Bash(git config --get *)"
-    "Bash(git config --list *)"
     "Bash(git describe *)"
     "Bash(git diff *)"
     "Bash(git log *)"
-    "Bash(git ls-files *)"
-    "Bash(git ls-remote *)"
-    "Bash(git ls-tree *)"
+    "Bash(git ls-*)"
     "Bash(git name-rev *)"
     "Bash(git remote *)"
-    "Bash(git rev-list *)"
-    "Bash(git rev-parse *)"
+    "Bash(git rev-*)"
     "Bash(git shortlog *)"
     "Bash(git show *)"
-    "Bash(git stash list *)"
-    "Bash(git stash show *)"
     "Bash(git status *)"
-    "Bash(git submodule status *)"
     "Bash(git tag *)"
     "Bash(git worktree list *)"
+    "mcp__Git__git_branch"
+    "mcp__Git__git_diff"
+    "mcp__Git__git_diff_staged"
+    "mcp__Git__git_diff_unstaged"
+    "mcp__Git__git_log"
+    "mcp__Git__git_show"
+    "mcp__Git__git_status"
+
+    # --------------------------------------------------------------------------
+    # GitHub
+    # --------------------------------------------------------------------------
+    "mcp__GitHub"
 
     # --------------------------------------------------------------------------
     # Development
@@ -245,10 +241,12 @@
     "Bash(shellcheck *)"
     "Bash(uv *)"
     "Bash(uvx *)"
+    "mcp__ide"
 
     # --------------------------------------------------------------------------
     # Nix
     # --------------------------------------------------------------------------
+    "Bash(deadnix *)"
     "Bash(nix build *)"
     "Bash(nix derivation show *)"
     "Bash(nix eval *)"
@@ -263,7 +261,6 @@
     "Bash(nix log *)"
     "Bash(nix path-info *)"
     "Bash(nix print-dev-env *)"
-    "Bash(nix profile list *)"
     "Bash(nix repl *)"
     "Bash(nix search *)"
     "Bash(nix store ls *)"
@@ -271,7 +268,10 @@
     "Bash(nix why-depends *)"
     "Bash(nix-instantiate *)"
     "Bash(nix-prefetch-url *)"
+    "Bash(nix-tree *)"
+    "Bash(nom *)"
     "Bash(nvd *)"
+    "Bash(statix *)"
 
     # --------------------------------------------------------------------------
     # Containers
@@ -325,39 +325,9 @@
     "Edit(//tmp/**)"
 
     # --------------------------------------------------------------------------
-    # MCP
+    # Codex
     # --------------------------------------------------------------------------
     "mcp__Codex"
-    "mcp__DeepWiki"
-    "mcp__Fetcher"
-    "mcp__Filesystem"
-    "mcp__Git"
-    "mcp__GitHub__get_commit"
-    "mcp__GitHub__get_file_contents"
-    "mcp__GitHub__get_label"
-    "mcp__GitHub__get_latest_release"
-    "mcp__GitHub__get_me"
-    "mcp__GitHub__get_release_by_tag"
-    "mcp__GitHub__get_tag"
-    "mcp__GitHub__get_team_members"
-    "mcp__GitHub__get_teams"
-    "mcp__GitHub__issue_read"
-    "mcp__GitHub__list_branches"
-    "mcp__GitHub__list_commits"
-    "mcp__GitHub__list_issue_types"
-    "mcp__GitHub__list_issues"
-    "mcp__GitHub__list_pull_requests"
-    "mcp__GitHub__list_releases"
-    "mcp__GitHub__list_tags"
-    "mcp__GitHub__pull_request_read"
-    "mcp__GitHub__search_code"
-    "mcp__GitHub__search_issues"
-    "mcp__GitHub__search_pull_requests"
-    "mcp__GitHub__search_repositories"
-    "mcp__GitHub__search_users"
-    "mcp__ide"
-    "mcp__plugin_context7-plugin_context7__resolve-library-id"
-    "mcp__plugin_context7-plugin_context7__query-docs"
   ];
 
   # ============================================================================
@@ -386,13 +356,9 @@
     # systemd
     # --------------------------------------------------------------------------
     "Bash(hostnamectl set-hostname *)"
-    "Bash(localectl set-keymap *)"
-    "Bash(localectl set-locale *)"
-    "Bash(localectl set-x11-keymap *)"
-    "Bash(loginctl kill-session *)"
-    "Bash(loginctl kill-user *)"
-    "Bash(loginctl terminate-session *)"
-    "Bash(loginctl terminate-user *)"
+    "Bash(localectl set-*)"
+    "Bash(loginctl kill-*)"
+    "Bash(loginctl terminate-*)"
     "Bash(systemctl --user daemon-reload *)"
     "Bash(systemctl --user disable *)"
     "Bash(systemctl --user enable *)"
@@ -415,10 +381,7 @@
     "Bash(systemctl start *)"
     "Bash(systemctl stop *)"
     "Bash(systemctl unmask *)"
-    "Bash(timedatectl set-local-rtc *)"
-    "Bash(timedatectl set-ntp *)"
-    "Bash(timedatectl set-time *)"
-    "Bash(timedatectl set-timezone *)"
+    "Bash(timedatectl set-*)"
 
     # --------------------------------------------------------------------------
     # Network
@@ -464,10 +427,38 @@
     "Bash(git tag -d *)"
     "Bash(git worktree add *)"
     "Bash(git worktree remove *)"
+    "mcp__Git__git_add"
+    "mcp__Git__git_checkout"
+    "mcp__Git__git_commit"
+    "mcp__Git__git_create_branch"
+    "mcp__Git__git_reset"
+
+    # --------------------------------------------------------------------------
+    # GitHub
+    # --------------------------------------------------------------------------
+    "mcp__GitHub__add_comment_to_pending_review"
+    "mcp__GitHub__add_issue_comment"
+    "mcp__GitHub__assign_copilot_to_issue"
+    "mcp__GitHub__create_branch"
+    "mcp__GitHub__create_or_update_file"
+    "mcp__GitHub__create_pull_request"
+    "mcp__GitHub__create_repository"
+    "mcp__GitHub__delete_file"
+    "mcp__GitHub__fork_repository"
+    "mcp__GitHub__issue_write"
+    "mcp__GitHub__merge_pull_request"
+    "mcp__GitHub__pull_request_review_write"
+    "mcp__GitHub__push_files"
+    "mcp__GitHub__request_copilot_review"
+    "mcp__GitHub__sub_issue_write"
+    "mcp__GitHub__update_pull_request"
+    "mcp__GitHub__update_pull_request_branch"
 
     # --------------------------------------------------------------------------
     # Nix
     # --------------------------------------------------------------------------
+    "Bash(agenix *)"
+    "Bash(cachix *)"
     "Bash(darwin-rebuild *)"
     "Bash(home-manager *)"
     "Bash(nix bundle *)"
@@ -547,32 +538,15 @@
     "Bash(podman rmi *)"
     "Bash(podman run *)"
     "Bash(podman stop *)"
-
-    # --------------------------------------------------------------------------
-    # MCP
-    # --------------------------------------------------------------------------
-    "mcp__GitHub__add_comment_to_pending_review"
-    "mcp__GitHub__add_issue_comment"
-    "mcp__GitHub__assign_copilot_to_issue"
-    "mcp__GitHub__create_branch"
-    "mcp__GitHub__create_or_update_file"
-    "mcp__GitHub__create_pull_request"
-    "mcp__GitHub__create_repository"
-    "mcp__GitHub__delete_file"
-    "mcp__GitHub__fork_repository"
-    "mcp__GitHub__issue_write"
-    "mcp__GitHub__merge_pull_request"
-    "mcp__GitHub__pull_request_review_write"
-    "mcp__GitHub__push_files"
-    "mcp__GitHub__request_copilot_review"
-    "mcp__GitHub__sub_issue_write"
-    "mcp__GitHub__update_pull_request"
-    "mcp__GitHub__update_pull_request_branch"
   ];
 
   # ============================================================================
   # Deny - Always blocked
   # ============================================================================
 
-  deny = [ ];
+  deny = [
+    # agenix -r silently empties all secrets when stdin is not a TTY
+    "Bash(agenix -r *)"
+    "Bash(agenix --rekey *)"
+  ];
 }
