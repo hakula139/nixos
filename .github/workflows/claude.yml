@@ -67,7 +67,7 @@ jobs:
           github_token: ${{ github.token }}
           prompt: ${{ steps.prompt.outputs.content }}
           claude_args: |
-            --max-turns 20
+            --max-turns 40
             --allowedTools "Bash(gh:*)"
 
   claude:
