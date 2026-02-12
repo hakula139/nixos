@@ -51,24 +51,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read review prompt
-        id: prompt
-        run: |
-          {
-            echo 'content<<EOF'
-            cat .github/prompts/review.md
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-
       - name: Review PR with Claude
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
-          prompt: ${{ steps.prompt.outputs.content }}
-          claude_args: |
-            --max-turns 40
-            --allowedTools "Read,Grep,Glob,Bash(gh:*)"
+          plugins: 'code-review@claude-code-plugins'
+          prompt: 'Review this pull request using the code-review plugin and post comments on the PR.'
 
   claude:
     if: >-
