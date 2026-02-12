@@ -21,7 +21,6 @@ on:
     types:
       - opened
       - edited
-      - assigned
 
 concurrency:
   group: >-
