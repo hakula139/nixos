@@ -86,6 +86,7 @@ jobs:
             1. A brief summary of what the PR changes (scope, affected modules / hosts)
             2. Overall assessment grouped by severity — omit empty groups
           claude_args: '--max-turns 10'
+          show_full_output: true
 
   claude:
     if: >-
@@ -111,3 +112,4 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
+          show_full_output: true
