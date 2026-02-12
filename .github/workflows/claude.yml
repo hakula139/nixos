@@ -64,7 +64,7 @@ jobs:
             Run /code-review to review this pull request.
           claude_args: |
             --max-turns 40
-            --allowedTools "Bash(gh:*)" "Bash(git:*)" "Skill(code-review:*)" "Task"
+            --allowedTools "Bash(gh *)" "Bash(git *)" "Skill(code-review:code-review)" "Task"
 
   claude:
     if: >-
