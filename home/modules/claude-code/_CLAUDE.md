@@ -178,12 +178,13 @@ Custom agents are available for delegation when tasks benefit from specializatio
 All agents inherit the full tool set from the parent session (MCP servers, web access, IDE diagnostics, etc.). Behavioral boundaries are enforced by each agent's prompt, not tool restrictions. The exception is **codex-worker**, which has an explicit restricted tool list to force delegation to Codex.
 
 - **architect** — Architecture review, design critique, pattern analysis. Read-only (by prompt, not tool restriction).
+- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Restricted tool list: Read, Grep, Glob, Bash, Codex MCP, Git MCP, IDE diagnostics.
 - **implementer** — Code writing, feature implementation, refactoring.
 - **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering.
 - **reviewer** — Code quality, security, and bug detection. Read-only. Optional Codex second opinion when Codex MCP is available.
 - **debugger** — Hypothesis-driven debugging and root cause analysis. Read-only.
 - **tester** — Test writing and execution, failure analysis.
-- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Restricted tool list: Read, Grep, Glob, Bash, Codex MCP, Git MCP, IDE diagnostics.
+- **usability-reviewer** — Usability and clarity review from a non-expert perspective. Evaluates user-facing surfaces (APIs, docs, error messages, CLI help text) for intuitiveness — does NOT overlap with the reviewer's focus on internal code quality. Read-only.
 
 ### Subagents vs Agent Teams
 
@@ -212,7 +213,7 @@ Use the Task tool to delegate to agents when:
 
 Agents inherit the parent model (opus) by default. Only override when a lighter model suffices:
 
-- **opus** (default): architect, implementer, reviewer, debugger — tasks requiring deep reasoning, nuanced judgment, or complex analysis
+- **opus** (default): architect, implementer, reviewer, usability-reviewer, debugger — tasks requiring deep reasoning, nuanced judgment, or complex analysis
 - **sonnet**: tester — test writing is more pattern-following; speed matters in iterative test cycles
 - **haiku**: researcher (simple lookups), codex-worker (delegation only)
 
@@ -236,7 +237,7 @@ Agents inherit the parent model (opus) by default. Only override when a lighter 
 Pre-configured team compositions for common workflows. Use these as starting points when the user requests team-based work.
 
 - **Review** — Thorough multi-angle code review before merging significant changes.
-  - Teammates: 2-3 reviewer instances, each given a specific lens (e.g., "security focus", "correctness focus", "style / consistency focus") in their task description.
+  - Teammates: 2-3 reviewer instances, each given a specific lens (e.g., "security focus", "correctness focus", "style / consistency focus") in their task description. For user-facing changes, include a usability-reviewer instance alongside the code reviewers.
   - The lead synthesizes findings into a single unified report.
   - Model: opus for all reviewers.
 

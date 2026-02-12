@@ -16,6 +16,7 @@ let
     researcher = builtins.readFile ./researcher.md;
     reviewer = builtins.readFile ./reviewer.md;
     tester = builtins.readFile ./tester.md;
+    usability-reviewer = builtins.readFile ./usability-reviewer.md;
   }
   // lib.optionalAttrs codexEnabled {
     codex-worker = builtins.readFile ./codex-worker.md;

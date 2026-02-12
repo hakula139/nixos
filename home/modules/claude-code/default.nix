@@ -40,6 +40,7 @@ in
             "researcher"
             "reviewer"
             "tester"
+            "usability-reviewer"
           ]
         );
         default = [
@@ -50,6 +51,7 @@ in
           "researcher"
           "reviewer"
           "tester"
+          "usability-reviewer"
         ];
         description = "List of custom agents to enable";
       };
