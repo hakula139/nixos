@@ -14,6 +14,7 @@
 #
 # Allows through:
 # - git subcommands without MCP equivalents (ls-files, blame, stash, etc.)
+# - git commit --amend (no MCP equivalent)
 # - git branch -d/-D, git reset --hard (destructive, no MCP equivalent)
 # - All non-git, non-gh Bash commands
 # ==============================================================================
@@ -62,7 +63,13 @@ if [[ "$COMMAND" =~ ^[[:space:]]*git[[:space:]]+(.*) ]]; then
       deny "Use mcp__Git__git_branch or git_create_branch instead."
       ;;
     checkout) deny "Use mcp__Git__git_checkout or git_create_branch instead." ;;
-    commit) deny "Use mcp__Git__git_commit instead." ;;
+    commit)
+      # Allow git commit --amend (no MCP equivalent)
+      if [[ "$COMMAND" =~ --amend ]]; then
+        exit 0
+      fi
+      deny "Use mcp__Git__git_commit instead."
+      ;;
     diff) deny "Use mcp__Git__git_diff / git_diff_unstaged / git_diff_staged instead." ;;
     log) deny "Use mcp__Git__git_log instead." ;;
     reset)
