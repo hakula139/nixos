@@ -64,6 +64,21 @@ Avoid:
 
 Prefer MCP tools over equivalent shell commands or web searches. MCPs provide structured interfaces, better error handling, and work within the configured permission model.
 
+### Context7
+
+Use for looking up **library and framework documentation** — API references, code examples, and usage patterns. Provides up-to-date docs that may be newer than your training data.
+
+**Workflow** (always two steps):
+
+1. `resolve-library-id` — Find the Context7-compatible library ID for a package name
+2. `query-docs` — Fetch documentation using the resolved library ID
+
+**Tips:**
+
+- Always resolve the library ID first; don't guess IDs
+- Be specific in queries (e.g., "How to set up authentication with JWT in Express.js" not just "auth")
+- Limit to 3 calls per question — use the best result you have after that
+
 ### DeepWiki
 
 Use when exploring or asking questions about GitHub repositories — understanding project architecture, finding documentation, or getting context about how a codebase works. Particularly useful for unfamiliar open-source projects.
