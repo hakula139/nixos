@@ -42,6 +42,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: write
       id-token: write
     steps:
       - name: Checkout repository
@@ -73,15 +74,20 @@ jobs:
             - Do not nitpick formatting — nixfmt handles that.
             - Check existing patterns in the codebase before suggesting alternatives.
 
-            ## Output format
+            ## Posting the review
 
-            Use inline review comments for specific issues, each with a severity:
+            You MUST post your review to the PR using GitHub tools — do not just output text.
+
+            - For line-specific issues: use inline review comments on the relevant lines via the GitHub review API.
+            - For the top-level summary: post a PR comment using `gh pr comment`.
+
+            Each inline comment should include a severity prefix:
 
             - **Critical**: Bugs, security vulnerabilities, data loss risks
             - **Warning**: Logic errors, missing guards, potential edge-case issues
             - **Suggestion**: Style inconsistencies, minor improvements
 
-            Use a top-level summary comment that includes:
+            The top-level summary comment should include:
 
             1. A brief summary of what the PR changes (scope, affected modules / hosts)
             2. Overall assessment grouped by severity — omit empty groups
