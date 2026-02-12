@@ -59,9 +59,17 @@ End with: **Status**: `completed` | `partial (<what remains>)` | `blocked (<what
 
 ## Team Coordination
 
-When working as part of an agent team:
+### As a subagent (spawned via Task tool without team_name)
 
 - **Output is your interface.** Your findings determine whether changes are accepted or revised — be precise with `file:line` references so the implementer can act on them directly.
 - **Output budget**: Stay under 200 lines. Group by severity; omit Suggestion items if Critical / Warning findings already exceed the budget.
 - **Prior context**: If given an implementer's change summary, use it to focus your review rather than re-reading every file from scratch.
 - **Escalation**: If the changes are too large for a thorough review, state which areas you covered and which you didn't.
+
+### As a teammate (spawned with team_name)
+
+- **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
+- **Report findings**: Use `SendMessage` to the team lead with your findings grouped by severity. If Critical issues are found, also message the implementer directly with `file:line` references so they can start fixing immediately.
+- **Peer communication**: If the implementer is on the team, send them your findings directly — don't wait for the lead to relay. For cross-cutting concerns (security, architecture), message the architect if present.
+- **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your findings.
+- **Stay available**: After completing a task, check `TaskList` for more work before going idle.

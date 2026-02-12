@@ -49,9 +49,17 @@ Use Bash only for verification commands (checking file existence, running quick 
 
 ## Team Coordination
 
-When working as part of an agent team:
+### As a subagent (spawned via Task tool without team_name)
 
 - **Output is your interface.** Your report bridges between Codex's work and the rest of the team — include enough verified detail for downstream agents (reviewer, tester) to act on.
 - **Output budget**: Stay under 150 lines. Summarize Codex's output; don't relay it verbatim.
 - **Prior context**: If given specific requirements from an architect or researcher, include them directly in the Codex prompt.
 - **Escalation**: If Codex produces output you can't confidently verify, flag the specific areas of uncertainty rather than approving everything.
+
+### As a teammate (spawned with team_name)
+
+- **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
+- **Report results**: Use `SendMessage` to the team lead with a verified summary of what Codex produced. Include the `threadId` so follow-up is possible.
+- **Peer communication**: If your delegated work affects other teammates (e.g., Codex modified files another teammate owns), message them directly with the changes.
+- **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your verified results.
+- **Stay available**: After completing a task, check `TaskList` for more work before going idle.

@@ -47,9 +47,17 @@ Return a concise report:
 
 ## Team Coordination
 
-When working as part of an agent team:
+### As a subagent (spawned via Task tool without team_name)
 
 - **Output is your interface.** Your report is consumed by the orchestrator or downstream agents — keep it structured and actionable.
 - **Output budget**: Stay under 200 lines. Prioritize findings by impact; summarize lower-priority items as one-line bullets.
 - **Prior context**: If given context from another agent's work, build on it — don't re-investigate established findings.
 - **Escalation**: If the scope is too broad for a single review pass, say so and recommend decomposition.
+
+### As a teammate (spawned with team_name)
+
+- **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
+- **Report findings**: Use `SendMessage` to the team lead with your structured assessment. Include specific recommendations the implementer can act on.
+- **Peer communication**: If your review identifies constraints or requirements for other teammates (implementer, tester), message them directly with actionable guidance.
+- **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your findings.
+- **Stay available**: After completing a task, check `TaskList` for more work before going idle.

@@ -10,6 +10,8 @@ tools:
   - Grep
   - Glob
   - Bash
+  - mcp__plugin_context7-plugin_context7
+  - mcp__DeepWiki
   - mcp__Git
   - mcp__ide__getDiagnostics
 ---
@@ -51,9 +53,17 @@ End with: **Status**: `completed` | `partial (<what remains>)` | `blocked (<what
 
 ## Team Coordination
 
-When working as part of an agent team:
+### As a subagent (spawned via Task tool without team_name)
 
 - **Output is your interface.** Your results determine whether the implementation is accepted — be precise about what passed, what failed, and why.
 - **Output budget**: Stay under 150 lines. Report pass / fail summaries and failure details only; don't dump full test output.
 - **Prior context**: If given an implementer's change summary, focus testing on the changed areas rather than running unrelated test suites.
 - **Escalation**: If tests require infrastructure not available (databases, network services, specific runtimes), state what's missing rather than skipping silently.
+
+### As a teammate (spawned with team_name)
+
+- **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
+- **Report results**: Use `SendMessage` to the team lead with pass / fail summaries. If failures are found, also message the implementer directly with failure details and root cause analysis so they can start fixing immediately.
+- **Peer communication**: If the implementer is on the team, wait for their change summary before testing. Message them directly with any failures rather than routing through the lead.
+- **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your results.
+- **Stay available**: After completing a task, check `TaskList` for more work before going idle.

@@ -143,16 +143,24 @@ Use for delegating **self-contained, multi-step coding tasks** to an autonomous 
 
 ## Agent Team Workflow
 
-Custom agents are available for delegation when tasks benefit from specialization or parallelism.
+Custom agents are available for delegation when tasks benefit from specialization or parallelism. Agents support two modes: **subagents** (lightweight, report back only) and **Agent Teams** (full peer coordination).
 
 ### Available Agents
 
 - **architect** — Architecture review, design critique, pattern analysis. Read-only. Has web search, Context7, and DeepWiki for research.
 - **implementer** — Code writing, feature implementation, refactoring. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
-- **researcher** — Fast codebase exploration and documentation lookup. Uses haiku for speed. Has the broadest tool set for gathering context.
+- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering across files and external sources.
 - **reviewer** — Code quality, security, and bug detection. Read-only. Has web search for verifying security patterns, optional Codex second opinion, and IDE diagnostics.
-- **tester** — Test writing and execution, failure analysis. Has write access and IDE diagnostics for diagnosing failures.
+- **tester** — Test writing and execution, failure analysis. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
 - **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Bash restricted to verification only.
+
+### Subagents vs Agent Teams
+
+**Subagents** (`Task` tool without `team_name`): Focused, independent workers that report results back to the orchestrator only. Cheaper, simpler, and sufficient when agents don't need to communicate with each other.
+
+**Agent Teams** (`TeamCreate` + `Task` with `team_name`): Full peer-to-peer coordination via shared task list and `SendMessage`. Use when agents need to share findings, challenge each other's conclusions, or hand off work directly (e.g., reviewer sends issues to implementer without routing through the lead).
+
+**Decision rule**: If agents need to talk to each other → Agent Team. If they just report back → subagents.
 
 ### When to Use Agents
 
@@ -176,12 +184,28 @@ Use the Task tool to delegate to agents when:
 **Review gate**: Always run reviewer after implementer completes significant changes
 **Codex offloading**: Use codex-worker for orthogonal tasks that benefit from a separate context window
 
+### Agent Team Patterns
+
+**Parallel review**: Spawn multiple reviewers with different lenses (security, performance, correctness) to review the same code simultaneously. The lead synthesizes findings.
+**Implement-review loop**: Spawn implementer and reviewer as teammates. The implementer messages the reviewer directly after making changes; the reviewer sends issues back without routing through the lead.
+**Research swarm**: Spawn multiple researchers to investigate different aspects of a problem. They share findings with each other via `SendMessage` and converge on an answer.
+
+### File Ownership in Teams
+
+When running Agent Teams, avoid file conflicts by assigning distinct file sets to each teammate. Two teammates editing the same file leads to overwrites. The lead should partition work so each teammate owns different files.
+
 ### Agent Output Contract
 
-All agents follow a shared output contract for team coordination:
+All agents follow a shared output contract:
 
 - **Status line**: Every report ends with `Status: completed | partial (<what remains>) | blocked (<what's needed>)`
 - **Output budget**: Agents cap their output (150-200 lines) to preserve orchestrator context
 - **File references**: All code-reading agents include `file:line` references for traceability
 - **Escalation**: Agents report when a task exceeds scope rather than producing low-quality output
 - **Prior context**: Agents build on upstream findings instead of re-investigating
+
+In **team mode**, agents additionally:
+
+- **Claim tasks** from the shared task list via `TaskList` / `TaskUpdate`
+- **Send findings** to the lead and relevant peers via `SendMessage`
+- **Stay available** by checking `TaskList` for more work after completing a task
