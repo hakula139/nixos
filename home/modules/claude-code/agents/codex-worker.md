@@ -3,6 +3,8 @@ name: codex-worker
 description: |
   Delegates self-contained tasks to OpenAI Codex MCP for independent parallel execution.
   Use for orthogonal tasks that benefit from a separate context window and autonomous work.
+color: white
+model: haiku
 tools:
   - Read
   - Grep
@@ -61,5 +63,6 @@ Use Bash only for verification commands (checking file existence, running quick 
 - **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
 - **Report results**: Use `SendMessage` to the team lead with a verified summary of what Codex produced. Include the `threadId` so follow-up is possible.
 - **Peer communication**: If your delegated work affects other teammates (e.g., Codex modified files another teammate owns), message them directly with the changes.
+- **File ownership**: Ensure the Codex prompt specifies which files it may modify. If Codex needs to change files owned by another teammate, coordinate via message first.
 - **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your verified results.
 - **Stay available**: After completing a task, check `TaskList` for more work before going idle.

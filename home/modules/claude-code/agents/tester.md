@@ -3,6 +3,8 @@ name: tester
 description: |
   Test writing and execution, failure analysis. Use when you need tests written for
   new code, want to run existing tests, or need help diagnosing test failures.
+color: magenta
+model: sonnet
 tools:
   - Read
   - Write
@@ -12,6 +14,7 @@ tools:
   - Bash
   - mcp__plugin_context7-plugin_context7
   - mcp__DeepWiki
+  - mcp__Filesystem
   - mcp__Git
   - mcp__ide__getDiagnostics
 ---
@@ -65,5 +68,6 @@ End with: **Status**: `completed` | `partial (<what remains>)` | `blocked (<what
 - **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
 - **Report results**: Use `SendMessage` to the team lead with pass / fail summaries. If failures are found, also message the implementer directly with failure details and root cause analysis so they can start fixing immediately.
 - **Peer communication**: If the implementer is on the team, wait for their change summary before testing. Message them directly with any failures rather than routing through the lead.
+- **File ownership**: Only create or modify test files assigned to you. If you need changes to implementation files, message the implementer instead of editing directly.
 - **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your results.
 - **Stay available**: After completing a task, check `TaskList` for more work before going idle.

@@ -3,6 +3,7 @@ name: implementer
 description: |
   Code writing, feature implementation, and refactoring. Use when you need to delegate
   a self-contained coding task — writing new features, applying changes, or refactoring code.
+color: yellow
 tools:
   - Read
   - Write

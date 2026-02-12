@@ -35,6 +35,7 @@ in
           lib.types.enum [
             "architect"
             "codex-worker"
+            "debugger"
             "implementer"
             "researcher"
             "reviewer"
@@ -44,6 +45,7 @@ in
         default = [
           "architect"
           "codex-worker"
+          "debugger"
           "implementer"
           "researcher"
           "reviewer"

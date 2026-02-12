@@ -179,6 +179,7 @@ Custom agents are available for delegation when tasks benefit from specializatio
 - **implementer** — Code writing, feature implementation, refactoring. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
 - **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering across files and external sources. Has Fetcher MCP as fallback for blocked sites.
 - **reviewer** — Code quality, security, and bug detection. Read-only. Has web search for verifying security patterns, Fetcher MCP (fallback web fetcher), optional Codex second opinion, and IDE diagnostics.
+- **debugger** — Hypothesis-driven debugging and root cause analysis. Read-only. Has web search, Context7, Git, GitHub, Fetcher MCP (fallback web fetcher), and IDE diagnostics.
 - **tester** — Test writing and execution, failure analysis. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
 - **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Bash restricted to verification only.
 
@@ -205,18 +206,28 @@ Use the Task tool to delegate to agents when:
 - Tasks requiring continuous user interaction
 - When the overhead of delegation exceeds the benefit
 
+### Model Selection
+
+Agents inherit the parent model (opus) by default. Only override when a lighter model suffices:
+
+- **opus** (default): architect, implementer, reviewer, debugger — tasks requiring deep reasoning, nuanced judgment, or complex analysis
+- **sonnet**: tester — test writing is more pattern-following; speed matters in iterative test cycles
+- **haiku**: researcher (simple lookups), codex-worker (delegation only)
+
 ### Coordination Patterns
 
 **Sequential pipeline**: researcher → architect → implementer → reviewer → tester
 **Parallel exploration**: Launch multiple researchers to explore different areas simultaneously
 **Review gate**: Always run reviewer after implementer completes significant changes
 **Codex offloading**: Use codex-worker for orthogonal tasks that benefit from a separate context window
+**Bug investigation**: Spawn debugger(s) to investigate — optionally multiple with different hypotheses in parallel
 
 ### Agent Team Patterns
 
 **Parallel review**: Spawn multiple reviewers with different lenses (security, performance, correctness) to review the same code simultaneously. The lead synthesizes findings.
 **Implement-review loop**: Spawn implementer and reviewer as teammates. The implementer messages the reviewer directly after making changes; the reviewer sends issues back without routing through the lead.
 **Research swarm**: Spawn multiple researchers to investigate different aspects of a problem. They share findings with each other via `SendMessage` and converge on an answer.
+**Multi-hypothesis debugging**: Spawn multiple debuggers, each investigating a different hypothesis. They share confirming / contradicting evidence with each other and converge on a root cause.
 
 ### File Ownership in Teams
 

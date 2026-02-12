@@ -2,6 +2,7 @@
   lib,
   enabledAgents ? [
     "architect"
+    "debugger"
     "implementer"
     "researcher"
     "reviewer"
@@ -18,6 +19,7 @@
 let
   allAgents = {
     architect = builtins.readFile ./architect.md;
+    debugger = builtins.readFile ./debugger.md;
     implementer = builtins.readFile ./implementer.md;
     researcher = builtins.readFile ./researcher.md;
     reviewer = builtins.readFile ./reviewer.md;

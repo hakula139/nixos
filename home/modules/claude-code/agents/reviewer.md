@@ -3,6 +3,7 @@ name: reviewer
 description: |
   Code quality review, security analysis, and bug detection. Use after implementation
   to get a focused review of recent changes, or to audit existing code for issues.
+color: green
 tools:
   - Read
   - Grep
@@ -14,6 +15,7 @@ tools:
   - mcp__Codex
   - mcp__plugin_context7-plugin_context7
   - mcp__DeepWiki
+  - mcp__Filesystem
   - mcp__Git
   - mcp__GitHub
   - mcp__ide__getDiagnostics
@@ -72,5 +74,6 @@ End with: **Status**: `completed` | `partial (<what remains>)` | `blocked (<what
 - **Claim tasks**: Use `TaskList` to find available work, `TaskUpdate` to claim and track it.
 - **Report findings**: Use `SendMessage` to the team lead with your findings grouped by severity. If Critical issues are found, also message the implementer directly with `file:line` references so they can start fixing immediately.
 - **Peer communication**: If the implementer is on the team, send them your findings directly — don't wait for the lead to relay. For cross-cutting concerns (security, architecture), message the architect if present.
+- **File ownership**: Do not create or modify files. If your review identifies needed fixes, describe them in your findings for the implementer.
 - **Mark completion**: Use `TaskUpdate` to mark tasks as completed after sending your findings.
 - **Stay available**: After completing a task, check `TaskList` for more work before going idle.
