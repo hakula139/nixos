@@ -65,6 +65,7 @@ jobs:
           claude_args: |
             --max-turns 40
             --allowedTools "Bash(gh *)" "Bash(git *)" "Skill(code-review:code-review)" "Task"
+          show_full_output: true
 
   claude:
     if: >-
