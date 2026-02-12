@@ -272,7 +272,7 @@ All agents follow a shared output contract:
 - **Status line**: Every report ends with `Status: completed | partial (<what remains>) | blocked (<what's needed>)`
 - **Output budget**: Agents cap their output (150-200 lines) to preserve orchestrator context
 - **File references**: All code-reading agents include `file:line` references for traceability
-- **Escalation**: Agents report when a task exceeds scope rather than producing low-quality output
+- **Escalation**: Agents report blockers rather than producing low-quality output or failing silently. This includes both task-level issues (scope too broad, ambiguous requirements) and infrastructure issues (tool failures, MCP timeouts, unreachable services). Always include the specific error or symptom — "Codex MCP returned timeout after 30s" is actionable; "couldn't complete the task" is not.
 - **Prior context**: Agents build on upstream findings instead of re-investigating
 
 In **team mode**, agents additionally:
