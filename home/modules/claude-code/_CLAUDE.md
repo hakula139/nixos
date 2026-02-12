@@ -147,12 +147,12 @@ Custom agents are available for delegation when tasks benefit from specializatio
 
 ### Available Agents
 
-- **architect** — Architecture review, design critique, pattern analysis. Read-only.
-- **implementer** — Code writing, feature implementation, refactoring. Has write access.
-- **researcher** — Fast codebase exploration and documentation lookup. Uses haiku for speed.
-- **reviewer** — Code quality, security, and bug detection. Read-only.
-- **tester** — Test writing and execution, failure analysis. Has write access.
-- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work.
+- **architect** — Architecture review, design critique, pattern analysis. Read-only. Has web search, Context7, and DeepWiki for research.
+- **implementer** — Code writing, feature implementation, refactoring. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
+- **researcher** — Fast codebase exploration and documentation lookup. Uses haiku for speed. Has the broadest tool set for gathering context.
+- **reviewer** — Code quality, security, and bug detection. Read-only. Has web search for verifying security patterns, optional Codex second opinion, and IDE diagnostics.
+- **tester** — Test writing and execution, failure analysis. Has write access and IDE diagnostics for diagnosing failures.
+- **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Bash restricted to verification only.
 
 ### When to Use Agents
 
@@ -175,3 +175,13 @@ Use the Task tool to delegate to agents when:
 **Parallel exploration**: Launch multiple researchers to explore different areas simultaneously
 **Review gate**: Always run reviewer after implementer completes significant changes
 **Codex offloading**: Use codex-worker for orthogonal tasks that benefit from a separate context window
+
+### Agent Output Contract
+
+All agents follow a shared output contract for team coordination:
+
+- **Status line**: Every report ends with `Status: completed | partial (<what remains>) | blocked (<what's needed>)`
+- **Output budget**: Agents cap their output (150-200 lines) to preserve orchestrator context
+- **File references**: All code-reading agents include `file:line` references for traceability
+- **Escalation**: Agents report when a task exceeds scope rather than producing low-quality output
+- **Prior context**: Agents build on upstream findings instead of re-investigating

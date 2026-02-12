@@ -31,14 +31,23 @@ in
 
     agents = {
       enabledAgents = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+        type = lib.types.listOf (
+          lib.types.enum [
+            "architect"
+            "codex-worker"
+            "implementer"
+            "researcher"
+            "reviewer"
+            "tester"
+          ]
+        );
         default = [
           "architect"
+          "codex-worker"
           "implementer"
           "researcher"
           "reviewer"
           "tester"
-          "codex-worker"
         ];
         description = "List of custom agents to enable";
       };

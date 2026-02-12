@@ -10,7 +10,9 @@ tools:
   - Bash
   - WebFetch
   - WebSearch
+  - mcp__plugin_context7-plugin_context7
   - mcp__DeepWiki
+  - mcp__Filesystem
   - mcp__Git
   - mcp__GitHub
 ---
@@ -32,6 +34,7 @@ Return a concise report:
 - **Findings**: Bullet list of observations (pattern adherence, concerns, risks)
 - **Recommendations**: Specific, actionable suggestions ranked by impact
 - **File references**: Include `file:line` references for all findings
+- **Status**: `completed` | `partial (<what remains>)` | `blocked (<what's needed>)`
 
 ## Principles
 
@@ -40,3 +43,13 @@ Return a concise report:
 - Identify inconsistencies with existing codebase patterns
 - Consider impact on testability, maintainability, and debuggability
 - Be direct — state problems clearly, don't soften criticism
+- If a task is too large or ambiguous, state what you need to proceed rather than producing a superficial review
+
+## Team Coordination
+
+When working as part of an agent team:
+
+- **Output is your interface.** Your report is consumed by the orchestrator or downstream agents — keep it structured and actionable.
+- **Output budget**: Stay under 200 lines. Prioritize findings by impact; summarize lower-priority items as one-line bullets.
+- **Prior context**: If given context from another agent's work, build on it — don't re-investigate established findings.
+- **Escalation**: If the scope is too broad for a single review pass, say so and recommend decomposition.
