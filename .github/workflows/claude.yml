@@ -47,7 +47,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Review PR with Claude
         uses: anthropics/claude-code-action@v1
@@ -85,7 +85,7 @@ jobs:
 
             1. A brief summary of what the PR changes (scope, affected modules / hosts)
             2. Overall assessment grouped by severity — omit empty groups
-          claude_args: '--max-turns 10'
+          claude_args: '--max-turns 20'
           show_full_output: true
 
   claude:
@@ -105,7 +105,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Run Claude Code
         uses: anthropics/claude-code-action@v1
