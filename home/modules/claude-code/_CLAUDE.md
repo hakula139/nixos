@@ -175,10 +175,10 @@ Custom agents are available for delegation when tasks benefit from specializatio
 
 ### Available Agents
 
-- **architect** — Architecture review, design critique, pattern analysis. Read-only. Has web search, Context7, and DeepWiki for research.
+- **architect** — Architecture review, design critique, pattern analysis. Read-only. Has web search, Context7, DeepWiki, and Fetcher MCP (fallback web fetcher) for research.
 - **implementer** — Code writing, feature implementation, refactoring. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
-- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering across files and external sources.
-- **reviewer** — Code quality, security, and bug detection. Read-only. Has web search for verifying security patterns, optional Codex second opinion, and IDE diagnostics.
+- **researcher** — Codebase exploration and documentation lookup. Focused on fast context gathering across files and external sources. Has Fetcher MCP as fallback for blocked sites.
+- **reviewer** — Code quality, security, and bug detection. Read-only. Has web search for verifying security patterns, Fetcher MCP (fallback web fetcher), optional Codex second opinion, and IDE diagnostics.
 - **tester** — Test writing and execution, failure analysis. Has write access, Context7 / DeepWiki for API docs, and IDE diagnostics.
 - **codex-worker** — Delegates self-contained tasks to Codex MCP for independent parallel work. Bash restricted to verification only.
 
