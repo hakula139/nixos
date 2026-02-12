@@ -61,10 +61,10 @@ jobs:
           plugins: |
             code-review@claude-plugins-official
           prompt: |
-            Review this pull request using the code-review plugin and post comments on the PR.
+            Run /code-review to review this pull request.
           claude_args: |
             --max-turns 40
-            --allowedTools "Bash(gh:*)" "Skill(code-review:*)"
+            --allowedTools "Bash(gh:*)" "Bash(git:*)" "Skill(code-review:*)" "Task"
 
   claude:
     if: >-
