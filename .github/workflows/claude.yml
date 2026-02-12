@@ -57,8 +57,13 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
           plugin_marketplaces: 'https://github.com/anthropics/claude-plugins-official.git'
-          plugins: 'code-review@claude-plugins-official'
-          prompt: 'Review this pull request using the code-review plugin and post comments on the PR.'
+          plugins: |
+            code-review@claude-plugins-official
+          prompt: |
+            Review this pull request using the code-review plugin and post comments on the PR.
+          claude_args: |
+            --max-turns 40
+            --allowedTools "Bash(gh:*)"
 
   claude:
     if: >-
