@@ -68,7 +68,7 @@ jobs:
           prompt: ${{ steps.prompt.outputs.content }}
           claude_args: |
             --max-turns 40
-            --allowedTools "Bash(gh:*)"
+            --allowedTools "Read,Grep,Glob,Bash(gh:*)"
 
   claude:
     if: >-
