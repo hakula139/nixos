@@ -72,6 +72,7 @@ jobs:
             --allowedTools "Bash(gh pr view *)"
             --allowedTools "Bash(gh api *)"
             --allowedTools "mcp__github_inline_comment__create_inline_comment"
+          show_full_output: 'true'
 
   claude:
     if: >-
