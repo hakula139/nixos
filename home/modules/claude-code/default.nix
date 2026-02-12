@@ -188,6 +188,7 @@ in
           # --------------------------------------------------------------------
           mcpServers = {
             DeepWiki = mcp.servers.deepwiki;
+            Fetcher = mcp.servers.fetcher;
             Filesystem = mcp.servers.filesystem;
             Git = mcp.servers.git;
             GitHub = mcp.servers.github;

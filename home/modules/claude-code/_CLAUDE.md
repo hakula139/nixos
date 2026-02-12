@@ -68,41 +68,6 @@ Avoid:
 
 Prefer MCP tools over equivalent Bash commands or web searches. MCPs provide structured interfaces, better error handling, and work within the configured permission model.
 
-### DeepWiki (`mcp__DeepWiki__*`)
-
-Use when exploring or asking questions about GitHub repositories — understanding project architecture, finding documentation, or getting context about how a codebase works. Particularly useful for unfamiliar open-source projects.
-
-### Filesystem (`mcp__Filesystem__*`)
-
-Available for file operations with built-in directory sandboxing. Use when the native Read / Write / Edit tools are insufficient or when you need operations like `move_file`, `directory_tree`, or `search_files` with glob patterns.
-
-### Git (`mcp__Git__*`)
-
-Prefer MCP Git tools for all git operations, both in the current working directory and in other repositories. They accept a `repo_path` parameter, keeping the working directory unchanged and avoiding `git -C` which bypasses Bash permission patterns.
-
-### GitHub (`mcp__GitHub__*`)
-
-Use for all GitHub API interactions — issues, pull requests, code search, repository management, and reviews. Prefer over `gh` CLI commands as MCP provides structured responses and proper pagination.
-
-**Tool selection:**
-
-- `list_*` tools for broad retrieval of all items (all issues, all PRs, all branches)
-- `search_*` tools for targeted queries with specific criteria or keywords
-
-**Read operations** (auto-approved): `get_*`, `list_*`, `search_*`, `issue_read`, `pull_request_read`
-
-**Write operations** (require confirmation): `create_*`, `update_*`, `delete_*`, `merge_*`, `push_*`, issue / PR modifications
-
-**Common workflows:**
-
-- Always call `get_me` first to understand current user context
-- Use `search_issues` before creating new issues to avoid duplicates
-- For PR reviews: `pull_request_review_write` (create pending) → `add_comment_to_pending_review` → `pull_request_review_write` (submit)
-
-### IDE (`mcp__ide__*`)
-
-Use `getDiagnostics` to check for language server errors / warnings in files. Use `executeCode` for running Python code in Jupyter kernels when working with notebooks.
-
 ### Codex (`mcp__Codex__*`)
 
 Use for delegating **self-contained, multi-step coding tasks** to an autonomous agent powered by GPT-5.3-codex. Codex runs with full shell access and its own MCP servers (Context7, DeepWiki, Filesystem, Git, GitHub), making it capable of independent exploration, code generation, and command execution.
@@ -140,6 +105,69 @@ Use for delegating **self-contained, multi-step coding tasks** to an autonomous 
 - Treat Codex as a peer with its own knowledge cutoffs and blind spots — verify claims before accepting them, especially regarding recent APIs, library versions, or best practices
 - When confident Codex is wrong, say so directly and provide evidence (own knowledge, web search, docs)
 - If a disagreement warrants discussion, resume the session via `codex-reply` with the evidence and let the user decide when there's genuine ambiguity
+
+### DeepWiki (`mcp__DeepWiki__*`)
+
+Use when exploring or asking questions about GitHub repositories — understanding project architecture, finding documentation, or getting context about how a codebase works. Particularly useful for unfamiliar open-source projects.
+
+### Fetcher (`mcp__Fetcher__*`)
+
+**Fallback web fetcher** using Playwright headless browser. Use **only** when the native `WebFetch` tool fails with 403 or other blocking errors (Reddit, Wikipedia, npm, and other sites that reject the default `axios` user agent).
+
+**Do NOT use as the primary fetch tool.** `WebFetch` is faster and lighter. Fetcher spawns a full Chromium instance per request — only reach for it after `WebFetch` has already failed on the target URL.
+
+**Tools:**
+
+- `fetch_url` — Fetch a single URL. Key parameters:
+  - `url` (required): Target URL
+  - `timeout`: Page load timeout in ms (default: 30000)
+  - `waitUntil`: Navigation completion event — `load` | `domcontentloaded` | `networkidle` | `commit` (default: `load`)
+  - `extractContent`: Intelligently extract main content (default: true). Set to `false` for complete page content
+  - `returnHtml`: Return HTML instead of Markdown (default: false)
+  - `waitForNavigation`: Wait for additional navigation after initial load — useful for sites with anti-bot verification (default: false)
+  - `navigationTimeout`: Max wait for additional navigation in ms (default: 10000)
+  - `maxLength`: Max returned content length in characters (default: no limit)
+  - `disableMedia`: Block images, stylesheets, fonts, media (default: true)
+- `fetch_urls` — Batch fetch multiple URLs in parallel using multi-tab concurrency. Same parameters as `fetch_url` but takes `urls` (array) instead of `url`
+- `browser_install` — Install Playwright Chromium binary. Use when fetch fails due to missing browser
+
+**Handling tricky sites:**
+
+- Anti-bot / CAPTCHA sites: Use `waitForNavigation: true` with increased `navigationTimeout`
+- Slow-loading sites: Increase `timeout` (e.g., 60000)
+- Failed content extraction: Set `extractContent: false` to get the full page
+- Need raw HTML: Set `returnHtml: true`
+
+### Filesystem (`mcp__Filesystem__*`)
+
+Available for file operations with built-in directory sandboxing. Use when the native Read / Write / Edit tools are insufficient or when you need operations like `move_file`, `directory_tree`, or `search_files` with glob patterns.
+
+### Git (`mcp__Git__*`)
+
+Prefer MCP Git tools for all git operations, both in the current working directory and in other repositories. They accept a `repo_path` parameter, keeping the working directory unchanged and avoiding `git -C` which bypasses Bash permission patterns.
+
+### GitHub (`mcp__GitHub__*`)
+
+Use for all GitHub API interactions — issues, pull requests, code search, repository management, and reviews. Prefer over `gh` CLI commands as MCP provides structured responses and proper pagination.
+
+**Tool selection:**
+
+- `list_*` tools for broad retrieval of all items (all issues, all PRs, all branches)
+- `search_*` tools for targeted queries with specific criteria or keywords
+
+**Read operations** (auto-approved): `get_*`, `list_*`, `search_*`, `issue_read`, `pull_request_read`
+
+**Write operations** (require confirmation): `create_*`, `update_*`, `delete_*`, `merge_*`, `push_*`, issue / PR modifications
+
+**Common workflows:**
+
+- Always call `get_me` first to understand current user context
+- Use `search_issues` before creating new issues to avoid duplicates
+- For PR reviews: `pull_request_review_write` (create pending) → `add_comment_to_pending_review` → `pull_request_review_write` (submit)
+
+### IDE (`mcp__ide__*`)
+
+Use `getDiagnostics` to check for language server errors / warnings in files. Use `executeCode` for running Python code in Jupyter kernels when working with notebooks.
 
 ## Agent Team Workflow
 
