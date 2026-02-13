@@ -22,6 +22,11 @@ The architecture emphasizes modularity, with shared base configuration in `modul
 nh os switch .
 # or with alias: nixsw
 
+# NixOS servers (multi-server deployment from workstation via Colmena)
+colmena apply                  # all servers in parallel
+colmena apply --on us-4        # single server
+colmena apply --on @cloudcone  # by provider tag
+
 # macOS (after bootstrap)
 nh darwin switch .
 # or with alias: nixsw
@@ -68,7 +73,7 @@ nix flake check
 nix develop -c zsh
 
 # Available tools include:
-# - Nix: cachix, deadnix, nh, nixd, nix-tree, nixfmt-rfc-style, nom, nvd, statix
+# - Nix: cachix, colmena, deadnix, nh, nixd, nix-tree, nixfmt, nom, nvd, statix
 # - Secrets: age, agenix
 ```
 
@@ -96,6 +101,7 @@ agenix -r -i ~/.ssh/<private-key>
 
 The flake uses a **builder function pattern** to reduce duplication:
 
+- `serverSharedModules`: Common NixOS modules (agenix, disko, Home Manager) shared by `mkServer` and Colmena
 - `mkServer`: Creates NixOS configurations with agenix, disko, and Home Manager integrated
 - `mkDarwin`: Creates Darwin configurations with agenix and Home Manager integrated
 - `mkHome`: Creates standalone Home Manager configurations for non-NixOS Linux
@@ -107,6 +113,7 @@ The flake uses a **builder function pattern** to reduce duplication:
 **Key outputs**:
 
 - `nixosConfigurations.*`: Server configurations (us-1, us-2, us-3, us-4, sg-1)
+- `colmena`: Multi-server deployment with per-node SSH config and provider tags (builds on target)
 - `darwinConfigurations.hakula-macbook`: macOS configuration
 - `homeConfigurations.hakula-linux`: Standalone Home Manager for generic Linux
 - `packages.x86_64-linux.hakula-devvm-docker`: Docker image for air-gapped deployment
@@ -161,6 +168,7 @@ The flake uses a **builder function pattern** to reduce duplication:
 ├── lib/
 │   ├── caches.nix               # Binary cache configuration
 │   ├── secrets.nix              # Secrets helper library
+│   ├── servers.nix              # Server inventory (IP, port, provider, keys)
 │   └── tooling.nix              # Shared development tools
 ├── secrets/                     # agenix-encrypted secrets
 │   ├── keys.nix                 # SSH public keys for age encryption
@@ -192,6 +200,7 @@ Each module typically exports an `enable` option and service-specific configurat
 - `binaryCaches`: Binary cache substituters and public keys from `lib/caches.nix`
 - `nixTooling`: Development tools from `lib/tooling.nix`
 - `nixSettings`: Experimental features, buffer sizes
+- `servers`: Server inventory imported from `lib/servers.nix` (IP, port, provider, host keys, builder config)
 
 Host configurations import `shared.nix` and extend with platform/host-specific settings.
 

@@ -30,6 +30,8 @@ nix run github:nix-community/nixos-anywhere -- --flake '.#us-1' root@<host>
 
 ### Apply NixOS Configuration
 
+On a single server (run on the server itself):
+
 ```bash
 nh os switch .
 ```
@@ -39,6 +41,34 @@ After setting up the alias:
 ```bash
 nixsw
 ```
+
+### Multi-Server Deployment
+
+Deploy to all servers in parallel from the workstation using [Colmena](https://github.com/zhaofengli/colmena):
+
+```bash
+colmena apply
+```
+
+Deploy to a single server:
+
+```bash
+colmena apply --on us-4
+```
+
+Deploy by provider tag:
+
+```bash
+colmena apply --on @cloudcone
+```
+
+Build without activating:
+
+```bash
+colmena build
+```
+
+Each server builds its own configuration locally (`buildOnTarget = true`), so no cross-compilation is needed. Server inventory is defined in `lib/servers.nix`.
 
 ## macOS
 
