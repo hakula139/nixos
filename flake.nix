@@ -105,6 +105,8 @@
               excludes = [ "\\.age$" ];
             };
             nixfmt.enable = true;
+            statix.enable = true;
+            deadnix.enable = true;
           };
         };
 
