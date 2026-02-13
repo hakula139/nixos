@@ -51,8 +51,8 @@ sudo nix run nix-darwin/nix-darwin-25.11#darwin-rebuild -- switch --flake '.#hak
 git ls-files '*.nix' -z | xargs -0 nix fmt
 
 # Lint with statix (anti-patterns) and deadnix (unused bindings)
-nix develop -c statix check .
-nix develop -c deadnix --fail .
+statix check .
+deadnix --fail .
 
 # Enable pre-commit hooks locally
 nix develop -c zsh
