@@ -143,7 +143,7 @@ in
 
       # Nix aliases
       nixup = "nix flake update";
-      nixgc = "nh clean all";
+      nixgc = "nh clean all --keep-since 7d";
       nixopt = "nix-store --optimise";
 
       # Git extras
