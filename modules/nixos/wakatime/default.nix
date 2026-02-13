@@ -41,7 +41,7 @@ in
     age.secrets.wakatime-config = secrets.mkSecret {
       name = "wakatime-config";
       owner = cfg.user;
-      group = userCfg.group;
+      inherit (userCfg) group;
       path = "${userCfg.home}/.wakatime.cfg";
     };
   };

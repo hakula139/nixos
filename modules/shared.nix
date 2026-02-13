@@ -144,7 +144,7 @@ in
     lib: servers:
     lib.listToAttrs (
       map (server: {
-        name = server.name;
+        inherit (server) name;
         value = {
           extraHostNames = [
             server.displayName

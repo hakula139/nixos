@@ -47,7 +47,7 @@ in
       secrets.mkSecret {
         name = "claude-code-oauth-token";
         owner = cfg.user;
-        group = userCfg.group;
+        inherit (userCfg) group;
         path = "${secretsDir}/claude-code-oauth-token";
       }
     );

@@ -45,8 +45,7 @@ in
   config = lib.mkMerge [
     {
       hakula.dockerHub.ociLogin = lib.optionalAttrs (cfg.username != null && cfg.tokenAgeFile != null) {
-        registry = cfg.registry;
-        username = cfg.username;
+        inherit (cfg) registry username;
         passwordFile = config.age.secrets.dockerhub-token.path;
       };
     }

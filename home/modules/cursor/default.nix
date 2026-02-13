@@ -13,13 +13,13 @@
 # ==============================================================================
 
 let
+  inherit (pkgs.stdenv) isDarwin;
   cfg = config.hakula.cursor;
-  isDarwin = pkgs.stdenv.isDarwin;
 
   settings = import ./settings.nix { inherit pkgs; };
   ext = import ./extensions.nix {
     inherit lib;
-    prune = cfg.extensions.prune;
+    inherit (cfg.extensions) prune;
   };
 
   # ----------------------------------------------------------------------------
@@ -100,8 +100,8 @@ in
         # ------------------------------------------------------------------------
         home.activation.cursorExtensions = lib.mkIf cfg.extensions.enable (
           let
+            inherit (config.home) username;
             homeDir = config.home.homeDirectory;
-            username = config.home.username;
           in
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             cursor_server_path="$(

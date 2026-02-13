@@ -10,8 +10,8 @@
 # ==============================================================================
 
 let
+  inherit (pkgs.stdenv) isLinux;
   caches = import ../../../lib/caches.nix;
-  isLinux = pkgs.stdenv.isLinux;
 
   nixConf = ''
     experimental-features = nix-command flakes
