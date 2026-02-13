@@ -166,7 +166,7 @@ in
             // lib.optionalAttrs cfg.proxy.enable {
               HTTP_PROXY = cfg.proxy.url;
               HTTPS_PROXY = cfg.proxy.url;
-              NO_PROXY = builtins.concatStringsSep "," cfg.proxy.noProxy;
+              NO_PROXY = lib.concatStringsSep "," cfg.proxy.noProxy;
             };
           };
 

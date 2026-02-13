@@ -40,7 +40,7 @@ in
       };
 
       codexPkg = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex;
-      noProxy = builtins.concatStringsSep "," cfg.proxy.noProxy;
+      noProxy = lib.concatStringsSep "," cfg.proxy.noProxy;
 
       codexBin =
         if cfg.proxy.enable then

@@ -10,7 +10,7 @@
 # ==============================================================================
 
 let
-  shared = import ../../../modules/shared.nix { inherit pkgs; };
+  shared = import ../../../modules/shared.nix { inherit pkgs lib; };
   homeDir = config.home.homeDirectory;
 
   serverMatchBlocks = lib.mapAttrs' (

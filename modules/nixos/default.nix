@@ -12,7 +12,7 @@
 # ==============================================================================
 
 let
-  shared = import ../shared.nix { inherit pkgs; };
+  shared = import ../shared.nix { inherit pkgs lib; };
 
   cfg = config.hakula;
   sshCfg = cfg.access.ssh;
@@ -47,7 +47,7 @@ in
   # ----------------------------------------------------------------------------
   options.hakula.access.ssh.authorizedKeys = lib.mkOption {
     type = lib.types.listOf lib.types.str;
-    default = builtins.attrValues keys.users;
+    default = lib.attrValues keys.users;
     description = "SSH public keys authorized for user login";
   };
 

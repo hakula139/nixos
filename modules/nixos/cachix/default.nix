@@ -30,7 +30,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = builtins.hasAttr cfg.user config.users.users;
+        assertion = lib.hasAttr cfg.user config.users.users;
         message = "hakula.cachix.user (${cfg.user}) must exist in config.users.users.*";
       }
     ];
