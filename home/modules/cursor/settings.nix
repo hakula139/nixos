@@ -2,7 +2,7 @@
   pkgs,
   isDarwin,
   isNixOS,
-  hostName,
+  configName,
   homeDir,
   ...
 }:
@@ -28,7 +28,7 @@ let
     else
       "homeConfigurations";
 
-  flakeConfig = "(${flake}).${configAttr}.${hostName}";
+  flakeConfig = "(${flake}).${configAttr}.${configName}";
 
   hmOptionsExpr =
     if isDarwin || isNixOS then

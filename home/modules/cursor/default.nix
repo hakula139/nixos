@@ -19,7 +19,9 @@ let
 
   settings = import ./settings.nix {
     inherit pkgs isDarwin isNixOS;
-    hostName = if osConfig != null then osConfig.networking.hostName else "hakula-linux";
+    configName = lib.toLower (
+      if osConfig != null then osConfig.networking.hostName else "hakula-linux"
+    );
     homeDir = config.home.homeDirectory;
   };
 
