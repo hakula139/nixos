@@ -340,10 +340,10 @@
       # ========================================================================
       homeConfigurations = {
         # ----------------------------------------------------------------------
-        # Hakula's Work PC (WSL)
+        # Hakula's Generic Linux (standalone Home Manager)
         # ----------------------------------------------------------------------
-        hakula-work = mkHome {
-          configPath = ./hosts/hakula-work;
+        hakula-linux = mkHome {
+          configPath = ./hosts/hakula-linux;
         };
       };
 

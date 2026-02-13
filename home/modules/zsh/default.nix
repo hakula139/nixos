@@ -202,7 +202,7 @@ in
     # Generic Linux (non-NixOS) aliases
     // lib.optionalAttrs (isLinux && !isNixOS) {
       # Home Manager aliases
-      nixsw = "nh home switch . -c hakula-work";
+      nixsw = "nh home switch . -c hakula-linux";
       nixlist = "home-manager generations | head -n 10";
       nixroll = "home-manager switch --rollback";
     }

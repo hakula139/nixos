@@ -3,6 +3,7 @@
   pkgs,
   lib,
   secrets,
+  osConfig ? null,
   isNixOS ? false,
   isDesktop ? false,
   ...
@@ -16,7 +17,12 @@ let
   inherit (pkgs.stdenv) isDarwin;
   cfg = config.hakula.cursor;
 
-  settings = import ./settings.nix { inherit pkgs; };
+  settings = import ./settings.nix {
+    inherit pkgs isDarwin isNixOS;
+    hostName = if osConfig != null then osConfig.networking.hostName else "hakula-linux";
+    homeDir = config.home.homeDirectory;
+  };
+
   ext = import ./extensions.nix {
     inherit lib;
     inherit (cfg.extensions) prune;

@@ -12,7 +12,7 @@
     unstable.cachix # Cachix client (binary cache)
     deadnix # Find unused Nix bindings / attributes
     nh # Nix CLI wrapper with nom / nvd integration
-    nil # Nix language server (LSP)
+    unstable.nixd # Nix language server (LSP)
     nix-tree # Explore dependency tree of Nix derivations
     nixfmt # Nix formatter
     nom # nix-output-monitor (pretty build output)

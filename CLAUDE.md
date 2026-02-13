@@ -8,7 +8,7 @@ This is a **flake-based NixOS / nix-darwin configuration** managing multiple sys
 
 - **5 NixOS servers** (us-1, us-2, us-3, us-4, sg-1) on x86_64-linux
 - **1 macOS workstation** (hakula-macbook) on aarch64-darwin
-- **1 generic Linux** (hakula-work) using standalone Home Manager
+- **1 generic Linux** (hakula-linux) using standalone Home Manager
 - **1 Docker image** (hakula-devvm) for air-gapped deployment
 
 The architecture emphasizes modularity, with shared base configuration in `modules/shared.nix` and per-host customization in `hosts/`.
@@ -18,17 +18,17 @@ The architecture emphasizes modularity, with shared base configuration in `modul
 ### Building and Deployment
 
 ```bash
-# NixOS servers
-sudo nixos-rebuild switch --flake '.#us-1'
-# or with alias: nixsw us-1
+# NixOS servers (run on the server itself)
+nh os switch .
+# or with alias: nixsw
 
 # macOS (after bootstrap)
-sudo darwin-rebuild switch --flake '.#hakula-macbook'
-# or with alias: nixsw hakula-macbook
+nh darwin switch .
+# or with alias: nixsw
 
 # Generic Linux (Home Manager standalone)
-home-manager switch --flake '.#hakula-work'
-# or with alias: nixsw hakula-work
+nh home switch . -c hakula-linux
+# or with alias: nixsw
 
 # Update all dependencies
 nix flake update
@@ -68,7 +68,7 @@ nix flake check
 nix develop -c zsh
 
 # Available tools include:
-# - Nix: cachix, deadnix, nil, nix-tree, nixfmt-rfc-style, nom, nvd, statix
+# - Nix: cachix, deadnix, nh, nixd, nix-tree, nixfmt-rfc-style, nom, nvd, statix
 # - Secrets: age, agenix
 ```
 
@@ -108,7 +108,7 @@ The flake uses a **builder function pattern** to reduce duplication:
 
 - `nixosConfigurations.*`: Server configurations (us-1, us-2, us-3, us-4, sg-1)
 - `darwinConfigurations.hakula-macbook`: macOS configuration
-- `homeConfigurations.hakula-work`: Standalone Home Manager for generic Linux
+- `homeConfigurations.hakula-linux`: Standalone Home Manager for generic Linux
 - `packages.x86_64-linux.hakula-devvm-docker`: Docker image for air-gapped deployment
 - `checks.*.pre-commit`: Pre-commit hook validation
 - `devShells.default`: Development environment with pre-commit hooks
@@ -133,7 +133,7 @@ The flake uses a **builder function pattern** to reduce duplication:
 │   ├── us-4/                    # DMIT server
 │   ├── sg-1/                    # Tencent Lighthouse server
 │   ├── hakula-macbook/          # macOS workstation
-│   ├── hakula-work/             # Work PC (WSL)
+│   ├── hakula-linux/             # Generic Linux (standalone Home Manager)
 │   └── hakula-devvm/            # DevVM (Docker image for air-gapped deployment)
 ├── modules/
 │   ├── shared.nix               # Cross-platform base config
@@ -148,6 +148,7 @@ The flake uses a **builder function pattern** to reduce duplication:
 │       ├── git/                 # Git configuration
 │       ├── mcp/                 # MCP server definitions (shared)
 │       ├── mihomo/              # Mihomo proxy client
+│       ├── lib/                 # Shared helper functions (e.g., proxy options)
 │       ├── nix/                 # User-level nix.conf for standalone HM
 │       ├── notify/              # Cross-platform notification support
 │       ├── ssh/                 # SSH client config
@@ -254,14 +255,14 @@ age.secrets.my-secret = secrets.mkHomeSecret {
 2. **Build Matrix**: Builds 8 configurations in parallel
    - NixOS servers: `us-1`, `us-2`, `us-3`, `us-4`, `sg-1` (x86_64-linux)
    - macOS: `hakula-macbook` (aarch64-darwin)
-   - Generic Linux: `hakula-work` (x86_64-linux)
+   - Generic Linux: `hakula-linux` (x86_64-linux)
    - Docker: `hakula-devvm-docker` (x86_64-linux)
 
 **Cachix integration**: Builds are cached in the "hakula" cache. Uploads to Cachix happen on `main` branch or when the actor is `hakula139`.
 
 **Linting** (enforced in CI):
 
-- `statix`: Catches Nix anti-patterns (W20 `repeated_keys` suppressed via `.statix.toml` — flat key style is intentional)
+- `statix`: Catches Nix anti-patterns (W20 `repeated_keys` suppressed via `statix.toml` — flat key style is intentional)
 - `deadnix`: Detects unused bindings (`--fail` mode)
 
 **Pre-commit hooks** run in CI via `nix flake check`:
@@ -305,7 +306,7 @@ For host-specific testing:
 # Build without activating (faster feedback)
 nix build '.#nixosConfigurations.us-4.config.system.build.toplevel'
 nix build '.#darwinConfigurations.hakula-macbook.system'
-nix build '.#homeConfigurations.hakula-work.activationPackage'
+nix build '.#homeConfigurations.hakula-linux.activationPackage'
 nix build '.#packages.x86_64-linux.hakula-devvm-docker'
 ```
 
@@ -364,6 +365,6 @@ nix build '.#packages.x86_64-linux.hakula-devvm-docker'
 Some hosts use **HTTP proxy** (`http://127.0.0.1:7897`) for Claude Code, Codex, and other tools. This is configured per-host via `hakula.claude-code.proxy.enable` and `hakula.codex.proxy.enable` in the host's `default.nix`. Currently enabled on:
 
 - `hakula-macbook`
-- `hakula-work`
+- `hakula-linux`
 
 When working with network operations on these hosts, be aware that tools may route through this proxy.

@@ -101,6 +101,7 @@ nbsp
 networkctl
 networkd
 niks3
+nixd
 nixfmt
 nixgc
 nixos
