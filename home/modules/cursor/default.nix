@@ -59,7 +59,6 @@ in
           lib
           secrets
           isNixOS
-          isDesktop
           ;
       };
 
