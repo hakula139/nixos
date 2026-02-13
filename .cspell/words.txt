@@ -86,6 +86,7 @@ lldb
 localectl
 marp
 mcp
+mcpjson
 mechatroner
 meslo
 metacubex
