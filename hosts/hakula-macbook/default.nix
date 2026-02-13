@@ -15,8 +15,8 @@
   # ============================================================================
   networking = {
     inherit hostName;
+    localHostName = hostName;
     computerName = displayName;
-    localHostName = displayName;
   };
 
   # ============================================================================
