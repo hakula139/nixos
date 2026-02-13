@@ -371,11 +371,12 @@
         system:
         let
           pkgs = pkgsFor system;
+          tooling = import ./lib/tooling.nix { inherit pkgs; };
           preCommitCheck = preCommitCheckFor system;
         in
         {
           default = pkgs.mkShell {
-            buildInputs = preCommitCheck.enabledPackages;
+            buildInputs = preCommitCheck.enabledPackages ++ tooling.nix ++ tooling.secrets;
             inherit (preCommitCheck) shellHook;
           };
         }
