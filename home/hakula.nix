@@ -37,6 +37,7 @@ in
     ./modules/nix
     ./modules/ssh
     ./modules/syncthing
+    ./modules/tmux
     ./modules/wakatime
     ./modules/zsh
   ];
