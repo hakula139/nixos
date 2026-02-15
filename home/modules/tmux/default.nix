@@ -87,6 +87,11 @@
       # New windows inherit current path
       bind c new-window -c "#{pane_current_path}"
 
+      # Mouse wheel: enter copy mode without half-page jump, scroll 1 line at a time
+      bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'copy-mode -e'"
+      bind -T copy-mode WheelUpPane select-pane \; send-keys -X -N 1 scroll-up
+      bind -T copy-mode WheelDownPane select-pane \; send-keys -X -N 1 scroll-down
+
       # Renumber windows when one is closed
       set -g renumber-windows on
 
