@@ -34,6 +34,7 @@
         extraConfig = ''
           set -g @catppuccin_flavor "mocha"
           set -g @catppuccin_window_status_style "rounded"
+          set -g @catppuccin_date_time_text " %H:%M"
         '';
       }
 
@@ -106,9 +107,13 @@
       # Longer display time for pane indicators
       set -g display-panes-time 2000
 
-      # Status bar: catppuccin session indicator on the right
-      set -g status-left ""
-      set -g status-right "#{E:@catppuccin_status_session}"
+      # Status bar
+      set -g status-left-length 100
+      set -g status-right-length 100
+      set -g status-left "#{E:@catppuccin_status_session}"
+      set -g status-right "#{E:@catppuccin_status_directory}"
+      set -ag status-right "#{E:@catppuccin_status_host}"
+      set -ag status-right "#{E:@catppuccin_status_date_time}"
     '';
   };
 }
