@@ -92,6 +92,14 @@
       bind -T copy-mode WheelUpPane select-pane \; send-keys -X -N 1 scroll-up
       bind -T copy-mode WheelDownPane select-pane \; send-keys -X -N 1 scroll-down
 
+      # Refresh VS Code / Cursor env vars on reattach (prevents stale auth tokens)
+      set -ga update-environment " VSCODE_GIT_ASKPASS_NODE"
+      set -ga update-environment " VSCODE_GIT_ASKPASS_EXTRA_ARGS"
+      set -ga update-environment " VSCODE_GIT_ASKPASS_MAIN"
+      set -ga update-environment " VSCODE_GIT_IPC_HANDLE"
+      set -ga update-environment " VSCODE_IPC_HOOK_CLI"
+      set -ga update-environment " GIT_ASKPASS"
+
       # Renumber windows when one is closed
       set -g renumber-windows on
 
