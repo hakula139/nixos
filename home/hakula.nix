@@ -37,9 +37,8 @@ in
     ./modules/nix
     ./modules/ssh
     ./modules/syncthing
-    ./modules/tmux
+    ./modules/terminal
     ./modules/wakatime
-    ./modules/zsh
   ];
 
   # ----------------------------------------------------------------------------
@@ -69,6 +68,8 @@ in
   # ----------------------------------------------------------------------------
   # Custom Modules
   # ----------------------------------------------------------------------------
+  hakula.tmux.enable = true;
+
   hakula.cursor = {
     enable = true;
     extensions = {

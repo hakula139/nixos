@@ -15,15 +15,6 @@ let
   cfg = config.hakula.zsh;
 in
 {
-  imports = [
-    ./direnv.nix
-    ./fzf.nix
-    ./neovim.nix
-    ./starship.nix
-    ./tools.nix
-    ./zoxide.nix
-  ];
-
   # ----------------------------------------------------------------------------
   # Module options
   # ----------------------------------------------------------------------------
