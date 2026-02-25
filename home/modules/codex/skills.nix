@@ -41,13 +41,23 @@ in
   inherit enabledSkills;
 
   # ----------------------------------------------------------------------------
-  # Symlink skills into ~/.agents/skills/
+  # Activation script
   # ----------------------------------------------------------------------------
-  homeFiles = lib.mapAttrs' (name: src: {
-    name = ".agents/skills/${name}";
-    value = {
-      source = src;
-      recursive = true;
-    };
-  }) enabledSkills;
+  activation = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    skillsDir="$HOME/.agents/skills"
+    install -d "$skillsDir"
+
+    # Remove stale symlinks
+    for entry in "$skillsDir"/*; do
+      [[ -L "$entry" ]] && rm "$entry"
+    done
+
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: src: ''
+        # Remove residual directory from previous home.file management
+        [[ -d "$skillsDir/${name}" ]] && rm -rf "$skillsDir/${name}"
+        ln -sfn ${lib.escapeShellArg (toString src)} "$skillsDir/${name}"
+      '') enabledSkills
+    )}
+  '';
 }
