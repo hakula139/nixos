@@ -39,6 +39,8 @@ in
           ;
       };
 
+      skills = import ./skills.nix { inherit lib inputs; };
+
       codexPkg = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex;
       noProxy = lib.concatStringsSep "," cfg.proxy.noProxy;
 
@@ -63,6 +65,11 @@ in
     lib.mkMerge [
       mcp.secrets
       {
+        # ----------------------------------------------------------------------
+        # Skills
+        # ----------------------------------------------------------------------
+        home.file = skills.homeFiles;
+
         # ----------------------------------------------------------------------
         # Program configuration
         # ----------------------------------------------------------------------
