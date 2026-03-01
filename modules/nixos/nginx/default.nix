@@ -28,6 +28,7 @@ let
   cloudreveUpstream = "http://127.0.0.1:${toString config.hakula.services.cloudreve.port}";
   cloveUpstream = "http://127.0.0.1:${toString config.hakula.services.clove.port}";
   fuclaudeUpstream = "http://127.0.0.1:${toString config.hakula.services.fuclaude.port}";
+  peertubeUpstream = "http://127.0.0.1:${toString config.hakula.services.peertube.port}";
   piclistUpstream = "http://127.0.0.1:${toString config.hakula.services.piclist.port}";
   umamiUpstream = "http://127.0.0.1:${toString config.hakula.services.umami.port}";
 
@@ -61,6 +62,12 @@ let
     proxy_buffering off;
     proxy_request_buffering off;
     proxy_max_temp_file_size 0;
+  '';
+
+  longTimeoutExtraConfig = ''
+    client_body_timeout 300s;
+    proxy_send_timeout 600s;
+    proxy_read_timeout 600s;
   '';
 
   noCacheExtraConfig = ''
@@ -216,10 +223,7 @@ in
       virtualHosts."claude.hakula.xyz" = lib.mkIf config.hakula.services.fuclaude.enable (
         cloudflareVhostConfig
         // {
-          extraConfig = cloudflareVhostConfig.extraConfig + ''
-            proxy_read_timeout 600s;
-            proxy_send_timeout 600s;
-          '';
+          extraConfig = cloudflareVhostConfig.extraConfig + longTimeoutExtraConfig;
           locations."/" = {
             proxyPass = "${fuclaudeUpstream}/";
             proxyWebsockets = true;
@@ -238,13 +242,7 @@ in
       virtualHosts."cloud.hakula.xyz" = lib.mkIf config.hakula.services.cloudreve.enable (
         cloudflareVhostConfig
         // {
-          extraConfig = cloudflareVhostConfig.extraConfig + ''
-            client_body_timeout 300s;
-            client_header_timeout 60s;
-            proxy_connect_timeout 60s;
-            proxy_send_timeout 600s;
-            proxy_read_timeout 600s;
-          '';
+          extraConfig = cloudflareVhostConfig.extraConfig + longTimeoutExtraConfig;
           locations."= /index.html" = {
             proxyPass = "${cloudreveUpstream}/index.html";
             extraConfig = noCacheExtraConfig;
@@ -313,6 +311,22 @@ in
         // {
           locations."/" = {
             proxyPass = "${umamiUpstream}/";
+          };
+        }
+      );
+
+      # PeerTube (video streaming)
+      virtualHosts."v.hakula.xyz" = lib.mkIf config.hakula.services.peertube.enable (
+        cloudflareVhostConfig
+        // {
+          extraConfig = cloudflareVhostConfig.extraConfig + longTimeoutExtraConfig;
+          locations."/" = {
+            proxyPass = "${peertubeUpstream}/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              ${noBufferingExtraConfig}
+              client_max_body_size 0;
+            '';
           };
         }
       );
